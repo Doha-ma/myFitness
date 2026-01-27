@@ -18,7 +18,12 @@ class CoachController extends Controller
             ->get()
             ->sum('enrollments_count');
 
-        $classes = $coach->classesAsCoach()->with('schedules')->get();
+        // Load classes with enrollment counts for dynamic display
+        // Enrollment counts update automatically via Eloquent relationships
+        $classes = $coach->classesAsCoach()
+            ->with('schedules')
+            ->withCount('enrollments')
+            ->get();
 
         return view('coach.dashboard', compact(
             'totalClasses',

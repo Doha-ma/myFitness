@@ -48,6 +48,8 @@ Route::middleware(['auth', 'role:receptionist'])->prefix('receptionist')->name('
     Route::get('/payments', [ReceptionistController::class, 'paymentsIndex'])->name('payments.index');
     Route::get('/payments/create', [ReceptionistController::class, 'paymentsCreate'])->name('payments.create');
     Route::post('/payments', [ReceptionistController::class, 'paymentsStore'])->name('payments.store');
+    // PDF invoice generation route
+    Route::get('/payments/{payment}/invoice', [ReceptionistController::class, 'paymentsInvoice'])->name('payments.invoice');
 });
 
 // Coach Routes

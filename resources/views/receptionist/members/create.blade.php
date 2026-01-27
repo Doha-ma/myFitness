@@ -111,6 +111,44 @@
             </div>
         </div>
 
+        {{-- Course selection section - allows selecting multiple courses for enrollment --}}
+        <div class="mb-6">
+            <label class="block text-gray-800 font-semibold mb-2">🏋️ Cours à s'abonner (optionnel)</label>
+            <p class="text-sm text-gray-600 mb-3">Sélectionnez un ou plusieurs cours auxquels ce membre souhaite s'abonner</p>
+            @if(isset($classes) && $classes->isEmpty())
+                <div class="bg-yellow-50 border-2 border-yellow-300 text-yellow-800 px-4 py-3 rounded-lg">
+                    <p class="text-sm">⚠️ Aucun cours disponible pour le moment. Les cours doivent être créés par les coachs.</p>
+                </div>
+            @elseif(isset($classes))
+                <div class="border-2 border-gray-300 rounded-lg p-4 max-h-64 overflow-y-auto">
+                    @foreach($classes as $class)
+                        <label class="flex items-center p-3 mb-2 hover:bg-gray-50 rounded-lg cursor-pointer border border-gray-200">
+                            <input type="checkbox" name="classes[]" value="{{ $class->id }}" 
+                                   class="mr-3 w-5 h-5 accent-orange-500"
+                                   {{ in_array($class->id, old('classes', [])) ? 'checked' : '' }}>
+                            <div class="flex-1">
+                                <p class="font-semibold text-gray-800">{{ $class->name }}</p>
+                                <p class="text-sm text-gray-600">
+                                    Coach: {{ $class->coach->name ?? 'N/A' }} | 
+                                    Capacité: {{ $class->capacity }} | 
+                                    Durée: {{ $class->duration }} min
+                                </p>
+                                @if($class->description)
+                                    <p class="text-xs text-gray-500 mt-1">{{ Str::limit($class->description, 60) }}</p>
+                                @endif
+                            </div>
+                        </label>
+                    @endforeach
+                </div>
+            @endif
+            @error('classes')
+                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+            @enderror
+            @error('classes.*')
+                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+            @enderror
+        </div>
+
         <div class="flex gap-4 pt-4">
             <button type="submit" class="btn-primary text-white px-8 py-3 rounded-lg font-semibold shadow-lg hover:shadow-xl transition">
                 ✅ Créer le Membre

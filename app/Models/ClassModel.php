@@ -74,8 +74,11 @@ class ClassModel extends Model
 
     { 
 
-        return $this->belongsToMany(Member::class, 'enrollments') 
-
+        return $this->belongsToMany(
+            Member::class,
+            'enrollments',
+            'class_id',
+            'member_id')
             ->withPivot('enrollment_date') 
 
             ->withTimestamps(); 

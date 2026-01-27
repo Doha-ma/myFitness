@@ -42,6 +42,7 @@
                         <th class="text-left py-3 px-4">Méthode</th>
                         <th class="text-left py-3 px-4">Enregistré par</th>
                         <th class="text-left py-3 px-4">Notes</th>
+                        <th class="text-left py-3 px-4">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -58,7 +59,15 @@
                                 </span>
                             </td>
                             <td class="py-3 px-4">{{ $payment->receptionist->name ?? 'N/A' }}</td>
-                            <td class="py-3 px-4 text-sm text-gray-600">{{ Str::limit($payment->notes, 30) }}</td>
+                            <td class="py-3 px-4 text-sm text-gray-600">{{ Str::limit($payment->notes ?? '', 30) }}</td>
+                            <td class="py-3 px-4">
+                                <a href="{{ route('receptionist.payments.invoice', $payment) }}" 
+                                   class="btn-primary text-white px-4 py-2 rounded-lg text-sm font-semibold hover:shadow-lg transition inline-block"
+                                   target="_blank"
+                                   title="Télécharger la facture PDF">
+                                    📄 PDF
+                                </a>
+                            </td>
                         </tr>
                     @endforeach
                 </tbody>

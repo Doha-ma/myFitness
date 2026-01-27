@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Member;
 use App\Models\Payment;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class ReceptionistController extends Controller
 {
@@ -29,7 +30,9 @@ class ReceptionistController extends Controller
 
     public function membersCreate()
     {
-        return view('receptionist.members.create');
+        // Load available classes for course selection
+        $classes = \App\Models\ClassModel::with('coach')->get();
+        return view('receptionist.members.create', compact('classes'));
     }
 
     public function membersStore(Request $request)
@@ -42,9 +45,39 @@ class ReceptionistController extends Controller
             'address' => 'nullable|string',
             'join_date' => 'required|date',
             'status' => 'required|in:active,inactive',
+            // Course selection validation (optional)
+            'classes' => 'nullable|array',
+            'classes.*' => 'exists:classes,id',
         ]);
 
-        Member::create($validated);
+        // Create member (existing functionality preserved)
+        $member = Member::create($validated);
+
+        // Attach selected courses to member using existing enrollments pivot table
+        // Uses existing many-to-many relationship via Member->classes()
+        if ($request->has('classes') && is_array($request->classes) && count($request->classes) > 0) {
+            // Prepare enrollment data with enrollment_date
+            $enrollmentData = [];
+            foreach ($request->classes as $classId) {
+                // Check if enrollment already exists to prevent duplicates
+                $exists = \App\Models\Enrollment::where('member_id', $member->id)
+                    ->where('class_id', $classId)
+                    ->exists();
+                
+                if (!$exists) {
+                    $enrollmentData[$classId] = [
+                        'enrollment_date' => $validated['join_date'],
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ];
+                }
+            }
+            
+            // Attach courses using existing relationship
+            if (!empty($enrollmentData)) {
+                $member->classes()->attach($enrollmentData);
+            }
+        }
 
         return redirect()->route('receptionist.members.index')
             ->with('success', 'Membre ajouté avec succès!');
@@ -105,5 +138,24 @@ class ReceptionistController extends Controller
 
         return redirect()->route('receptionist.payments.index')
             ->with('success', 'Paiement enregistré avec succès!');
+    }
+
+    /**
+     * Generate PDF invoice for a payment
+     * Route: GET /receptionist/payments/{payment}/invoice
+     * Only accessible to receptionists (enforced by route middleware)
+     */
+    public function paymentsInvoice(Payment $payment)
+    {
+        // Load necessary relationships for PDF
+        $payment->load(['member', 'receptionist']);
+        
+        // Generate PDF using dedicated Blade view
+        $pdf = Pdf::loadView('pdf.payment-invoice', compact('payment'));
+        
+        // Generate filename with payment ID and date
+        $filename = 'facture-' . str_pad($payment->id, 6, '0', STR_PAD_LEFT) . '-' . now()->format('Y-m-d') . '.pdf';
+        
+        return $pdf->download($filename);
     }
 }

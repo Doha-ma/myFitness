@@ -78,8 +78,12 @@ class Member extends Model
 
     { 
 
-        return $this->belongsToMany(ClassModel::class, 'enrollments') 
-
+        return $this->belongsToMany(
+            ClassModel::class,
+            'enrollments',
+            'member_id',
+            'class_id' // 🔴 IMPORTANT
+        )
             ->withPivot('enrollment_date') 
 
             ->withTimestamps(); 
