@@ -103,6 +103,40 @@ class CoachController extends Controller
             ->with('success', 'Cours mis à jour avec succès!');
     }
 
+    /**
+     * Delete a class
+     * Only the coach who owns the class can delete it
+     * Detaches all enrolled members before deletion
+     */
+    public function classesDestroy(ClassModel $class)
+    {
+        // Verify ownership
+        if (auth()->id() !== $class->coach_id) {
+            abort(403, 'Unauthorized');
+        }
+
+        try {
+            // Detach all members from this class using existing many-to-many relationship
+            // This removes records from enrollments pivot table
+            $class->members()->detach();
+            
+            // Delete all schedules for this class
+            $class->schedules()->delete();
+            
+            // Delete the class
+            // Note: Enrollments are already detached, so no orphan records
+            $class->delete();
+            
+            return redirect()->route('coach.classes.index')
+                ->with('success', 'Cours supprimé avec succès!');
+        } catch (\Exception $e) {
+            // Log error and return with message
+            \Log::error('Error deleting class: ' . $e->getMessage());
+            return redirect()->route('coach.classes.index')
+                ->with('error', 'Erreur lors de la suppression. Veuillez réessayer.');
+        }
+    }
+
     public function schedulesStore(Request $request, ClassModel $class)
     {
         if (auth()->id() !== $class->coach_id) {

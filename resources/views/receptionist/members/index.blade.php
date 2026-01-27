@@ -28,6 +28,12 @@
     </div>
 @endif
 
+@if(session('error'))
+    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg mb-6">
+        {{ session('error') }}
+    </div>
+@endif
+
 <div class="card p-6">
     @if($members->isEmpty())
         <p class="text-gray-500 text-center py-8">Aucun membre enregistré</p>
@@ -57,7 +63,14 @@
                                 </span>
                             </td>
                             <td class="py-3 px-4">
-                                <a href="{{ route('receptionist.members.edit', $member) }}" class="text-blue-500 hover:text-blue-700">✏️ Modifier</a>
+                                <div class="flex gap-2">
+                                    <a href="{{ route('receptionist.members.edit', $member) }}" class="text-blue-500 hover:text-blue-700">✏️ Modifier</a>
+                                    <form method="POST" action="{{ route('receptionist.members.destroy', $member) }}" class="inline" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce membre ? Cette action est irréversible.')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="text-red-500 hover:text-red-700">🗑️ Supprimer</button>
+                                    </form>
+                                </div>
                             </td>
                         </tr>
                     @endforeach

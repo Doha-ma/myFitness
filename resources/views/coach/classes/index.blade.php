@@ -27,6 +27,12 @@
     </div>
 @endif
 
+@if(session('error'))
+    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg mb-6">
+        {{ session('error') }}
+    </div>
+@endif
+
 @if($classes->isEmpty())
     <div class="card p-8 text-center">
         <p class="text-gray-500 text-lg mb-4">Aucun cours créé pour le moment</p>
@@ -62,6 +68,11 @@
                                 <div class="flex gap-2">
                                     <a href="{{ route('coach.classes.show', $class) }}" class="text-blue-500 hover:text-blue-700">👁️ Voir</a>
                                     <a href="{{ route('coach.classes.edit', $class) }}" class="text-orange-500 hover:text-orange-700">✏️ Modifier</a>
+                                    <form method="POST" action="{{ route('coach.classes.destroy', $class) }}" class="inline" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce cours ? Tous les membres seront désinscrits. Cette action est irréversible.')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="text-red-500 hover:text-red-700">🗑️ Supprimer</button>
+                                    </form>
                                 </div>
                             </td>
                         </tr>

@@ -27,6 +27,12 @@
     </div>
 @endif
 
+@if(session('error'))
+    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg mb-6">
+        {{ session('error') }}
+    </div>
+@endif
+
 <!-- Réceptionnistes -->
 <div class="card p-6 mb-6">
     <h3 class="text-2xl font-bold mb-4">🏢 Réceptionnistes</h3>

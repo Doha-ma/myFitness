@@ -44,6 +44,7 @@ Route::middleware(['auth', 'role:receptionist'])->prefix('receptionist')->name('
     Route::post('/members', [ReceptionistController::class, 'membersStore'])->name('members.store');
     Route::get('/members/{member}/edit', [ReceptionistController::class, 'membersEdit'])->name('members.edit');
     Route::put('/members/{member}', [ReceptionistController::class, 'membersUpdate'])->name('members.update');
+    Route::delete('/members/{member}', [ReceptionistController::class, 'membersDestroy'])->name('members.destroy');
     
     Route::get('/payments', [ReceptionistController::class, 'paymentsIndex'])->name('payments.index');
     Route::get('/payments/create', [ReceptionistController::class, 'paymentsCreate'])->name('payments.create');
@@ -62,6 +63,7 @@ Route::middleware(['auth', 'role:coach'])->prefix('coach')->name('coach.')->grou
     Route::get('/classes/{class}', [CoachController::class, 'classesShow'])->name('classes.show');
     Route::get('/classes/{class}/edit', [CoachController::class, 'classesEdit'])->name('classes.edit');
     Route::put('/classes/{class}', [CoachController::class, 'classesUpdate'])->name('classes.update');
+    Route::delete('/classes/{class}', [CoachController::class, 'classesDestroy'])->name('classes.destroy');
     
     Route::post('/classes/{class}/schedules', [CoachController::class, 'schedulesStore'])->name('schedules.store');
     Route::delete('/classes/{class}/schedules/{schedule}', [CoachController::class, 'schedulesDestroy'])->name('schedules.destroy');

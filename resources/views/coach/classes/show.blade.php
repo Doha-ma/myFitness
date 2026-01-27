@@ -22,9 +22,18 @@
             <h2 class="text-3xl font-bold">{{ $class->name }}</h2>
             <p class="text-gray-600 mt-2">{{ $class->description }}</p>
         </div>
-        <a href="{{ route('coach.classes.edit', $class) }}" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">
-            ✏️ Modifier
-        </a>
+        <div class="flex gap-2">
+            <a href="{{ route('coach.classes.edit', $class) }}" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">
+                ✏️ Modifier
+            </a>
+            <form method="POST" action="{{ route('coach.classes.destroy', $class) }}" class="inline" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce cours ? Tous les membres seront désinscrits. Cette action est irréversible.')">
+                @csrf
+                @method('DELETE')
+                <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600">
+                    🗑️ Supprimer
+                </button>
+            </form>
+        </div>
     </div>
 
     <div class="grid grid-cols-3 gap-4">

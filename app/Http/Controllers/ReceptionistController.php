@@ -106,6 +106,38 @@ class ReceptionistController extends Controller
             ->with('success', 'Membre mis à jour avec succès!');
     }
 
+    /**
+     * Delete a member
+     * Detaches member from all classes before deletion
+     * Prevents deletion if member has payments (to preserve historical records)
+     */
+    public function membersDestroy(Member $member)
+    {
+        try {
+            // Check if member has payments - preserve historical payment records
+            $paymentsCount = $member->payments()->count();
+            if ($paymentsCount > 0) {
+                return redirect()->route('receptionist.members.index')
+                    ->with('error', 'Impossible de supprimer ce membre car il a ' . $paymentsCount . ' paiement(s) enregistré(s). Les paiements sont des enregistrements historiques et doivent être conservés.');
+            }
+            
+            // Detach member from all classes using existing many-to-many relationship
+            // This removes records from enrollments pivot table
+            $member->classes()->detach();
+            
+            // Delete member (no payments exist, so safe to delete)
+            $member->delete();
+            
+            return redirect()->route('receptionist.members.index')
+                ->with('success', 'Membre supprimé avec succès!');
+        } catch (\Exception $e) {
+            // Log error and return with message
+            \Log::error('Error deleting member: ' . $e->getMessage());
+            return redirect()->route('receptionist.members.index')
+                ->with('error', 'Erreur lors de la suppression. Veuillez réessayer.');
+        }
+    }
+
     public function paymentsIndex()
     {
         $payments = Payment::with(['member', 'receptionist'])
