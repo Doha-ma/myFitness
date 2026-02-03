@@ -3,12 +3,12 @@
 @section('title', 'Réceptionniste Dashboard')
 
 @section('sidebar')
-    <a href="{{ route('receptionist.dashboard') }}" class="block px-4 py-3 rounded hover:bg-white/10 transition bg-white/10">📊 Dashboard</a>
-    <a href="{{ route('receptionist.members.index') }}" class="block px-4 py-3 rounded hover:bg-white/10 transition">👥 Membres</a>
-    <a href="{{ route('receptionist.payments.index') }}" class="block px-4 py-3 rounded hover:bg-white/10 transition">💰 Paiements</a>
+    <a href="{{ route('receptionist.dashboard') }}" class="block px-4 py-3 rounded hover:bg-white/10 transition bg-white/10"> Dashboard</a>
+    <a href="{{ route('receptionist.members.index') }}" class="block px-4 py-3 rounded hover:bg-white/10 transition"> Membres</a>
+    <a href="{{ route('receptionist.payments.index') }}" class="block px-4 py-3 rounded hover:bg-white/10 transition"> Paiements</a>
     <form method="POST" action="{{ route('logout') }}">
         @csrf
-        <button type="submit" class="block w-full text-left px-4 py-3 rounded hover:bg-white/10 transition mt-4">🚪 Déconnexion</button>
+        <button type="submit" class="block w-full text-left px-4 py-3 rounded hover:bg-white/10 transition mt-4"> Déconnexion</button>
     </form>
 @endsection
 
@@ -26,7 +26,7 @@
                 <p class="text-4xl font-bold mt-3" style="color: var(--gym-primary);">{{ $totalMembers }}</p>
                 <p class="text-xs text-gray-500 mt-1">Membres enregistrés</p>
             </div>
-            <div class="text-6xl opacity-20">👥</div>
+            <div class="text-6xl opacity-20"></div>
         </div>
     </div>
 
@@ -37,7 +37,7 @@
                 <p class="text-4xl font-bold mt-3" style="color: var(--gym-success);">{{ number_format($totalPaymentsToday, 2) }} €</p>
                 <p class="text-xs text-gray-500 mt-1">Revenus du jour</p>
             </div>
-            <div class="text-6xl opacity-20">💰</div>
+            <div class="text-6xl opacity-20"></div>
         </div>
     </div>
 </div>
@@ -45,19 +45,19 @@
 <div class="card p-6">
     <div class="flex justify-between items-center mb-6">
         <h3 class="text-2xl font-bold flex items-center">
-            <span class="mr-2">👥</span> Membres Récents
+            <span class="mr-2"></span> Membres Récents
         </h3>
         <a href="{{ route('receptionist.members.create') }}" class="btn-primary text-white px-4 py-2 rounded-lg font-semibold text-sm">
-            ➕ Nouveau Membre
+             Nouveau Membre
         </a>
     </div>
     
     @if($recentMembers->isEmpty())
         <div class="text-center py-12">
-            <div class="text-6xl mb-4 opacity-50">👥</div>
+            <div class="text-6xl mb-4 opacity-50"></div>
             <p class="text-gray-500 text-lg">Aucun membre récent</p>
             <a href="{{ route('receptionist.members.create') }}" class="btn-primary inline-block text-white px-6 py-3 rounded-lg font-semibold mt-4">
-                ➕ Ajouter votre premier membre
+                 Ajouter votre premier membre
             </a>
         </div>
     @else

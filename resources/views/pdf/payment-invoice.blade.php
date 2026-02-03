@@ -165,7 +165,7 @@
 </head>
 <body>
     <div class="header">
-        <h1>💪 myFitness</h1>
+        <h1> myFitness</h1>
         <p>Centre de Fitness et Bien-être</p>
     </div>
     
@@ -206,11 +206,11 @@
             <div class="detail-label">Méthode de paiement:</div>
             <div class="detail-value">
                 @if($payment->method == 'cash')
-                    <span class="method-badge method-cash">💵 Espèces</span>
+                    <span class="method-badge method-cash"> Espèces</span>
                 @elseif($payment->method == 'card')
-                    <span class="method-badge method-card">💳 Carte</span>
+                    <span class="method-badge method-card"> Carte</span>
                 @else
-                    <span class="method-badge method-transfer">🏦 Virement</span>
+                    <span class="method-badge method-transfer"> Virement</span>
                 @endif
             </div>
         </div>

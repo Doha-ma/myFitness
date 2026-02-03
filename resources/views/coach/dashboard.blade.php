@@ -3,11 +3,11 @@
 @section('title', 'Coach Dashboard')
 
 @section('sidebar')
-    <a href="{{ route('coach.dashboard') }}" class="block px-4 py-3 rounded hover:bg-white/10 transition bg-white/10">📊 Dashboard</a>
-    <a href="{{ route('coach.classes.index') }}" class="block px-4 py-3 rounded hover:bg-white/10 transition">🏋️ Mes Cours</a>
+    <a href="{{ route('coach.dashboard') }}" class="block px-4 py-3 rounded hover:bg-white/10 transition bg-white/10"> Dashboard</a>
+    <a href="{{ route('coach.classes.index') }}" class="block px-4 py-3 rounded hover:bg-white/10 transition"> Mes Cours</a>
     <form method="POST" action="{{ route('logout') }}">
         @csrf
-        <button type="submit" class="block w-full text-left px-4 py-3 rounded hover:bg-white/10 transition mt-4">🚪 Déconnexion</button>
+        <button type="submit" class="block w-full text-left px-4 py-3 rounded hover:bg-white/10 transition mt-4"> Déconnexion</button>
     </form>
 @endsection
 
@@ -25,7 +25,7 @@
                 <p class="text-4xl font-bold mt-3" style="color: var(--gym-primary);">{{ $totalClasses }}</p>
                 <p class="text-xs text-gray-500 mt-1">Cours créés</p>
             </div>
-            <div class="text-6xl opacity-20">🏋️</div>
+            <div class="text-6xl opacity-20"></div>
         </div>
     </div>
 
@@ -44,19 +44,19 @@
 <div class="card p-6">
     <div class="flex justify-between items-center mb-6">
         <h3 class="text-2xl font-bold flex items-center">
-            <span class="mr-2">🏋️</span> Mes Cours
+            <span class="mr-2"></span> Mes Cours
         </h3>
         <a href="{{ route('coach.classes.create') }}" class="btn-primary text-white px-4 py-2 rounded-lg font-semibold">
-            ➕ Nouveau Cours
+             Nouveau Cours
         </a>
     </div>
 
     @if($classes->isEmpty())
         <div class="text-center py-12">
-            <div class="text-6xl mb-4 opacity-50">🏋️</div>
+            <div class="text-6xl mb-4 opacity-50"></div>
             <p class="text-gray-500 text-lg">Aucun cours créé pour le moment</p>
             <a href="{{ route('coach.classes.create') }}" class="btn-primary inline-block text-white px-6 py-3 rounded-lg font-semibold mt-4">
-                ➕ Créer votre premier cours
+                 Créer votre premier cours
             </a>
         </div>
     @else

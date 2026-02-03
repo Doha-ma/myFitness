@@ -66,13 +66,13 @@
     <div class="login-container w-full max-w-md">
         <div class="glass-effect p-8 rounded-2xl shadow-2xl">
             <div class="text-center mb-8">
-                <h1 class="text-4xl font-bold mb-2" style="color: var(--gym-primary);">💪 GYM MANAGER</h1>
+                <h1 class="text-4xl font-bold mb-2" style="color: var(--gym-primary);"> GYM MANAGER</h1>
                 <p class="text-gray-700 font-medium">Connectez-vous à votre compte</p>
             </div>
 
             @if($errors->any())
                 <div class="bg-red-50 border-2 border-red-300 text-red-700 px-4 py-3 rounded-lg mb-6">
-                    <strong>⚠️ Erreur :</strong> 
+                    <strong> Erreur :</strong> 
                     <ul class="list-disc list-inside mt-1">
                         @foreach($errors->all() as $error)
                             <li>{{ $error }}</li>
@@ -85,7 +85,7 @@
                 @csrf
 
                 <div class="mb-6">
-                    <label class="block text-gray-800 font-semibold mb-2">📧 Email</label>
+                    <label class="block text-gray-800 font-semibold mb-2"> Email</label>
                     <input type="email" name="email" value="{{ old('email') }}" 
                            class="w-full px-4 py-3 border-2 rounded-lg focus:outline-none transition @error('email') border-red-500 @else border-gray-300 @enderror" 
                            placeholder="votre@email.com"
@@ -96,7 +96,7 @@
                 </div>
 
                 <div class="mb-6">
-                    <label class="block text-gray-800 font-semibold mb-2">🔒 Mot de passe</label>
+                    <label class="block text-gray-800 font-semibold mb-2"> Mot de passe</label>
                     <input type="password" name="password" 
                            class="w-full px-4 py-3 border-2 rounded-lg focus:outline-none transition @error('password') border-red-500 @else border-gray-300 @enderror" 
                            placeholder="••••••••"
@@ -115,19 +115,11 @@
 
                 <button type="submit" 
                         class="btn-primary w-full text-white py-3 rounded-lg font-bold text-lg shadow-lg">
-                    🔐 Se connecter
+                     Se connecter
                 </button>
             </form>
 
-            <div class="mt-8 p-4 bg-gradient-to-r from-gray-50 to-orange-50 rounded-lg border border-orange-200">
-                <p class="text-center text-sm font-semibold text-gray-800 mb-2">🧪 Comptes de test</p>
-                <div class="text-xs text-gray-700 space-y-1">
-                    <p><strong>Admin:</strong> admin@gym.com / password</p>
-                    <p><strong>Réceptionniste:</strong> receptionist@gym.com / password</p>
-                    <p><strong>Coach:</strong> coach@gym.com / password</p>
-                    <p class="text-orange-600 mt-2 font-semibold"><strong>Note:</strong> Tous les comptes utilisent le mot de passe "password"</p>
-                </div>
-            </div>
+           
         </div>
     </div>
 </body>

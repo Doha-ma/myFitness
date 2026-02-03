@@ -3,12 +3,12 @@
 @section('title', 'Modifier Membre')
 
 @section('sidebar')
-    <a href="{{ route('receptionist.dashboard') }}" class="block px-4 py-3 rounded hover:bg-white/10 transition">📊 Dashboard</a>
-    <a href="{{ route('receptionist.members.index') }}" class="block px-4 py-3 rounded hover:bg-white/10 transition">👥 Membres</a>
-    <a href="{{ route('receptionist.payments.index') }}" class="block px-4 py-3 rounded hover:bg-white/10 transition">💰 Paiements</a>
+    <a href="{{ route('receptionist.dashboard') }}" class="block px-4 py-3 rounded hover:bg-white/10 transition"> Dashboard</a>
+    <a href="{{ route('receptionist.members.index') }}" class="block px-4 py-3 rounded hover:bg-white/10 transition"> Membres</a>
+    <a href="{{ route('receptionist.payments.index') }}" class="block px-4 py-3 rounded hover:bg-white/10 transition"> Paiements</a>
     <form method="POST" action="{{ route('logout') }}">
         @csrf
-        <button type="submit" class="block w-full text-left px-4 py-3 rounded hover:bg-white/10 transition">🚪 Déconnexion</button>
+        <button type="submit" class="block w-full text-left px-4 py-3 rounded hover:bg-white/10 transition"> Déconnexion</button>
     </form>
 @endsection
 
@@ -90,10 +90,10 @@
 
         <div class="flex gap-4">
             <button type="submit" class="btn-primary text-white px-6 py-3 rounded-lg font-semibold">
-                ✅ Mettre à jour
+                 Mettre à jour
             </button>
             <a href="{{ route('receptionist.members.index') }}" class="bg-gray-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-gray-600">
-                ❌ Annuler
+                 Annuler
             </a>
         </div>
     </form>

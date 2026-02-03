@@ -3,11 +3,11 @@
 @section('title', 'Mes Cours')
 
 @section('sidebar')
-    <a href="{{ route('coach.dashboard') }}" class="block px-4 py-3 rounded hover:bg-white/10 transition">📊 Dashboard</a>
-    <a href="{{ route('coach.classes.index') }}" class="block px-4 py-3 rounded hover:bg-white/10 transition bg-white/10">🏋️ Mes Cours</a>
+    <a href="{{ route('coach.dashboard') }}" class="block px-4 py-3 rounded hover:bg-white/10 transition"> Dashboard</a>
+    <a href="{{ route('coach.classes.index') }}" class="block px-4 py-3 rounded hover:bg-white/10 transition bg-white/10"> Mes Cours</a>
     <form method="POST" action="{{ route('logout') }}">
         @csrf
-        <button type="submit" class="block w-full text-left px-4 py-3 rounded hover:bg-white/10 transition">🚪 Déconnexion</button>
+        <button type="submit" class="block w-full text-left px-4 py-3 rounded hover:bg-white/10 transition"> Déconnexion</button>
     </form>
 @endsection
 
@@ -16,7 +16,7 @@
     <div class="flex justify-between items-center">
         <h2 class="text-4xl font-bold text-white">Mes Cours</h2>
         <a href="{{ route('coach.classes.create') }}" class="btn-primary text-white px-6 py-3 rounded-lg font-semibold">
-            ➕ Créer un Cours
+             Créer un Cours
         </a>
     </div>
 </div>
@@ -37,7 +37,7 @@
     <div class="card p-8 text-center">
         <p class="text-gray-500 text-lg mb-4">Aucun cours créé pour le moment</p>
         <a href="{{ route('coach.classes.create') }}" class="btn-primary inline-block text-white px-6 py-3 rounded-lg font-semibold">
-            ➕ Créer votre premier cours
+             Créer votre premier cours
         </a>
     </div>
 @else
@@ -66,12 +66,12 @@
                             </td>
                             <td class="py-3 px-4">
                                 <div class="flex gap-2">
-                                    <a href="{{ route('coach.classes.show', $class) }}" class="text-blue-500 hover:text-blue-700">👁️ Voir</a>
-                                    <a href="{{ route('coach.classes.edit', $class) }}" class="text-orange-500 hover:text-orange-700">✏️ Modifier</a>
+                                    <a href="{{ route('coach.classes.show', $class) }}" class="text-blue-500 hover:text-blue-700"> Voir</a>
+                                    <a href="{{ route('coach.classes.edit', $class) }}" class="text-orange-500 hover:text-orange-700"> Modifier</a>
                                     <form method="POST" action="{{ route('coach.classes.destroy', $class) }}" class="inline" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce cours ? Tous les membres seront désinscrits. Cette action est irréversible.')">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="text-red-500 hover:text-red-700">🗑️ Supprimer</button>
+                                        <button type="submit" class="text-red-500 hover:text-red-700"> Supprimer</button>
                                     </form>
                                 </div>
                             </td>

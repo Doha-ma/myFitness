@@ -150,18 +150,31 @@ class ReceptionistController extends Controller
     public function paymentsCreate()
     {
         $members = Member::where('status', 'active')->get();
-        return view('receptionist.payments.create', compact('members'));
+        $subscriptionTypes = \App\Models\SubscriptionType::where('is_active', true)->get();
+        return view('receptionist.payments.create', compact('members', 'subscriptionTypes'));
     }
 
     public function paymentsStore(Request $request)
     {
         $validated = $request->validate([
             'member_id' => 'required|exists:members,id',
-            'amount' => 'required|numeric|min:0',
+            'subscription_type_id' => 'nullable|exists:subscription_types,id',
+            'amount' => 'nullable|numeric|min:0', // Optional if subscription is selected
             'payment_date' => 'required|date',
             'method' => 'required|in:cash,card,transfer',
             'notes' => 'nullable|string',
         ]);
+
+        // If subscription type is selected, calculate amount automatically
+        if ($request->filled('subscription_type_id')) {
+            $subscriptionType = \App\Models\SubscriptionType::findOrFail($request->subscription_type_id);
+            $validated['amount'] = $subscriptionType->final_price;
+        } else {
+            // Fallback to manual amount if no subscription selected (backward compatibility)
+            $request->validate([
+                'amount' => 'required|numeric|min:0',
+            ]);
+        }
 
         Payment::create([
             ...$validated,

@@ -33,6 +33,9 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::get('/staff/{user}/edit', [AdminController::class, 'staffEdit'])->name('staff.edit');
     Route::put('/staff/{user}', [AdminController::class, 'staffUpdate'])->name('staff.update');
     Route::delete('/staff/{user}', [AdminController::class, 'staffDestroy'])->name('staff.destroy');
+    
+    // Subscription Types Management
+    Route::resource('subscription-types', \App\Http\Controllers\Admin\SubscriptionTypeController::class)->except(['show']);
 });
 
 // Receptionist Routes

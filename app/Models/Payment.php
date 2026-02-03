@@ -26,6 +26,8 @@ class Payment extends Model
 
         'receptionist_id', 
 
+        'subscription_type_id',
+
         'amount', 
 
         'payment_date', 
@@ -70,7 +72,12 @@ class Payment extends Model
 
         return $this->belongsTo(User::class, 'receptionist_id'); 
 
-    } 
+    }
+
+    public function subscriptionType()
+    {
+        return $this->belongsTo(SubscriptionType::class);
+    }
 
 } 
 

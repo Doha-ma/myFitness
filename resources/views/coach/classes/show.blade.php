@@ -3,11 +3,11 @@
 @section('title', 'Détails du Cours')
 
 @section('sidebar')
-    <a href="{{ route('coach.dashboard') }}" class="block px-4 py-3 rounded hover:bg-white/10 transition">📊 Dashboard</a>
-    <a href="{{ route('coach.classes.index') }}" class="block px-4 py-3 rounded hover:bg-white/10 transition">🏋️ Mes Cours</a>
+    <a href="{{ route('coach.dashboard') }}" class="block px-4 py-3 rounded hover:bg-white/10 transition"> Dashboard</a>
+    <a href="{{ route('coach.classes.index') }}" class="block px-4 py-3 rounded hover:bg-white/10 transition"> Mes Cours</a>
     <form method="POST" action="{{ route('logout') }}">
         @csrf
-        <button type="submit" class="block w-full text-left px-4 py-3 rounded hover:bg-white/10 transition">🚪 Déconnexion</button>
+        <button type="submit" class="block w-full text-left px-4 py-3 rounded hover:bg-white/10 transition"> Déconnexion</button>
     </form>
 @endsection
 
@@ -24,13 +24,13 @@
         </div>
         <div class="flex gap-2">
             <a href="{{ route('coach.classes.edit', $class) }}" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">
-                ✏️ Modifier
+                 Modifier
             </a>
             <form method="POST" action="{{ route('coach.classes.destroy', $class) }}" class="inline" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce cours ? Tous les membres seront désinscrits. Cette action est irréversible.')">
                 @csrf
                 @method('DELETE')
                 <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600">
-                    🗑️ Supprimer
+                     Supprimer
                 </button>
             </form>
         </div>
@@ -55,7 +55,7 @@
 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
     <!-- Schedules -->
     <div class="card p-6">
-        <h3 class="text-xl font-bold mb-4">📅 Horaires</h3>
+        <h3 class="text-xl font-bold mb-4"> Horaires</h3>
         
         @if($class->schedules->isEmpty())
             <p class="text-gray-500 mb-4">Aucun horaire défini</p>
@@ -72,7 +72,7 @@
                         <form method="POST" action="{{ route('coach.schedules.destroy', [$class, $schedule]) }}" class="inline">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="text-red-500 hover:text-red-700" onclick="return confirm('Supprimer cet horaire?')">🗑️</button>
+                            <button type="submit" class="text-red-500 hover:text-red-700" onclick="return confirm('Supprimer cet horaire?')"></button>
                         </form>
                     </div>
                 @endforeach
@@ -97,14 +97,14 @@
                 <input type="time" name="end_time" class="px-3 py-2 border rounded" required>
             </div>
             <button type="submit" class="btn-primary w-full text-white px-4 py-2 rounded">
-                ➕ Ajouter
+                 Ajouter
             </button>
         </form>
     </div>
 
     <!-- Members -->
     <div class="card p-6">
-        <h3 class="text-xl font-bold mb-4">👥 Membres Inscrits ({{ $class->enrollments->count() }})</h3>
+        <h3 class="text-xl font-bold mb-4"> Membres Inscrits ({{ $class->enrollments->count() }})</h3>
         
         @if($class->enrollments->isEmpty())
             <p class="text-gray-500">Aucun membre inscrit pour le moment</p>

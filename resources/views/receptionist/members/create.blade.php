@@ -3,12 +3,12 @@
 @section('title', 'Ajouter Membre')
 
 @section('sidebar')
-    <a href="{{ route('receptionist.dashboard') }}" class="block px-4 py-3 rounded hover:bg-white/10 transition">📊 Dashboard</a>
-    <a href="{{ route('receptionist.members.index') }}" class="block px-4 py-3 rounded hover:bg-white/10 transition bg-white/10">👥 Membres</a>
-    <a href="{{ route('receptionist.payments.index') }}" class="block px-4 py-3 rounded hover:bg-white/10 transition">💰 Paiements</a>
+    <a href="{{ route('receptionist.dashboard') }}" class="block px-4 py-3 rounded hover:bg-white/10 transition"> Dashboard</a>
+    <a href="{{ route('receptionist.members.index') }}" class="block px-4 py-3 rounded hover:bg-white/10 transition bg-white/10"> Membres</a>
+    <a href="{{ route('receptionist.payments.index') }}" class="block px-4 py-3 rounded hover:bg-white/10 transition"> Paiements</a>
     <form method="POST" action="{{ route('logout') }}">
         @csrf
-        <button type="submit" class="block w-full text-left px-4 py-3 rounded hover:bg-white/10 transition mt-4">🚪 Déconnexion</button>
+        <button type="submit" class="block w-full text-left px-4 py-3 rounded hover:bg-white/10 transition mt-4"> Déconnexion</button>
     </form>
 @endsection
 
@@ -21,7 +21,7 @@
 <div class="card p-8 max-w-3xl">
     @if($errors->any())
         <div class="bg-red-50 border-2 border-red-300 text-red-700 px-4 py-3 rounded-lg mb-6">
-            <strong>⚠️ Erreurs :</strong>
+            <strong> Erreurs :</strong>
             <ul class="list-disc list-inside mt-1">
                 @foreach($errors->all() as $error)
                     <li>{{ $error }}</li>
@@ -35,7 +35,7 @@
         
         <div class="grid grid-cols-2 gap-6 mb-6">
             <div>
-                <label class="block text-gray-800 font-semibold mb-2">👤 Prénom</label>
+                <label class="block text-gray-800 font-semibold mb-2"> Prénom</label>
                 <input type="text" name="first_name" value="{{ old('first_name') }}" 
                        class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none transition" 
                        placeholder="Ex: Jean"
@@ -45,7 +45,7 @@
                 @enderror
             </div>
             <div>
-                <label class="block text-gray-800 font-semibold mb-2">👤 Nom</label>
+                <label class="block text-gray-800 font-semibold mb-2"> Nom</label>
                 <input type="text" name="last_name" value="{{ old('last_name') }}" 
                        class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none transition" 
                        placeholder="Ex: Dupont"
@@ -58,7 +58,7 @@
 
         <div class="grid grid-cols-2 gap-6 mb-6">
             <div>
-                <label class="block text-gray-800 font-semibold mb-2">📧 Email</label>
+                <label class="block text-gray-800 font-semibold mb-2"> Email</label>
                 <input type="email" name="email" value="{{ old('email') }}" 
                        class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none transition" 
                        placeholder="exemple@email.com"
@@ -68,7 +68,7 @@
                 @enderror
             </div>
             <div>
-                <label class="block text-gray-800 font-semibold mb-2">📞 Téléphone</label>
+                <label class="block text-gray-800 font-semibold mb-2"> Téléphone</label>
                 <input type="text" name="phone" value="{{ old('phone') }}" 
                        class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none transition" 
                        placeholder="+33 6 12 34 56 78"
@@ -80,7 +80,7 @@
         </div>
 
         <div class="mb-6">
-            <label class="block text-gray-800 font-semibold mb-2">📍 Adresse</label>
+            <label class="block text-gray-800 font-semibold mb-2"> Adresse</label>
             <textarea name="address" rows="3" 
                       class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none transition"
                       placeholder="Adresse complète du membre">{{ old('address') }}</textarea>
@@ -91,7 +91,7 @@
 
         <div class="grid grid-cols-2 gap-6 mb-6">
             <div>
-                <label class="block text-gray-800 font-semibold mb-2">📅 Date d'inscription</label>
+                <label class="block text-gray-800 font-semibold mb-2"> Date d'inscription</label>
                 <input type="date" name="join_date" value="{{ old('join_date', date('Y-m-d')) }}" 
                        class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none transition" 
                        required>
@@ -100,7 +100,7 @@
                 @enderror
             </div>
             <div>
-                <label class="block text-gray-800 font-semibold mb-2">⚡ Statut</label>
+                <label class="block text-gray-800 font-semibold mb-2"> Statut</label>
                 <select name="status" class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none transition" required>
                     <option value="active" {{ old('status') == 'active' ? 'selected' : '' }}>✓ Actif</option>
                     <option value="inactive" {{ old('status') == 'inactive' ? 'selected' : '' }}>✗ Inactif</option>
@@ -113,11 +113,11 @@
 
         {{-- Course selection section - allows selecting multiple courses for enrollment --}}
         <div class="mb-6">
-            <label class="block text-gray-800 font-semibold mb-2">🏋️ Cours à s'abonner (optionnel)</label>
+            <label class="block text-gray-800 font-semibold mb-2"> Cours à s'abonner (optionnel)</label>
             <p class="text-sm text-gray-600 mb-3">Sélectionnez un ou plusieurs cours auxquels ce membre souhaite s'abonner</p>
             @if(isset($classes) && $classes->isEmpty())
                 <div class="bg-yellow-50 border-2 border-yellow-300 text-yellow-800 px-4 py-3 rounded-lg">
-                    <p class="text-sm">⚠️ Aucun cours disponible pour le moment. Les cours doivent être créés par les coachs.</p>
+                    <p class="text-sm"> Aucun cours disponible pour le moment. Les cours doivent être créés par les coachs.</p>
                 </div>
             @elseif(isset($classes))
                 <div class="border-2 border-gray-300 rounded-lg p-4 max-h-64 overflow-y-auto">
@@ -151,10 +151,10 @@
 
         <div class="flex gap-4 pt-4">
             <button type="submit" class="btn-primary text-white px-8 py-3 rounded-lg font-semibold shadow-lg hover:shadow-xl transition">
-                ✅ Créer le Membre
+                 Créer le Membre
             </button>
             <a href="{{ route('receptionist.members.index') }}" class="bg-gray-200 hover:bg-gray-300 text-gray-800 px-8 py-3 rounded-lg font-semibold transition">
-                ❌ Annuler
+                 Annuler
             </a>
         </div>
     </form>

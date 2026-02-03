@@ -174,7 +174,7 @@
                 <!-- Sidebar -->
                 <aside class="sidebar w-64 text-white min-h-screen p-4 fixed left-0 top-0 bottom-0">
                     <div class="mb-8">
-                        <h1 class="text-2xl font-bold" style="color: var(--gym-primary);">💪 GYM MANAGER</h1>
+                        <h1 class="text-2xl font-bold" style="color: var(--gym-primary);"> GYM MANAGER</h1>
                         <p class="text-sm text-gray-300 mt-1">Système de gestion</p>
                     </div>
                     <div class="space-y-2">
