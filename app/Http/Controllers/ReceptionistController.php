@@ -22,10 +22,33 @@ class ReceptionistController extends Controller
         ));
     }
 
-    public function membersIndex()
+    public function membersIndex(Request $request)
     {
-        $members = Member::latest()->paginate(15);
-        return view('receptionist.members.index', compact('members'));
+        $query = Member::with(['classes', 'payments.subscriptionType']);
+
+        // Filter by enrolled class
+        if ($request->filled('class_id')) {
+            $query->whereHas('classes', function ($q) use ($request) {
+                $q->where('classes.id', $request->class_id);
+            });
+        }
+
+        // Filter by subscription type
+        if ($request->filled('subscription_type_id')) {
+            $query->whereHas('payments', function ($q) use ($request) {
+                $q->where('subscription_type_id', $request->subscription_type_id)
+                  ->orderBy('payment_date', 'desc')
+                  ->limit(1);
+            });
+        }
+
+        $members = $query->latest()->paginate(15);
+        
+        // Get filter options
+        $classes = \App\Models\ClassModel::with('coach')->get();
+        $subscriptionTypes = \App\Models\SubscriptionType::where('is_active', true)->get();
+
+        return view('receptionist.members.index', compact('members', 'classes', 'subscriptionTypes'));
     }
 
     public function membersCreate()
@@ -140,7 +163,7 @@ class ReceptionistController extends Controller
 
     public function paymentsIndex()
     {
-        $payments = Payment::with(['member', 'receptionist'])
+        $payments = Payment::with(['member', 'receptionist', 'subscriptionType'])
             ->latest()
             ->paginate(15);
 

@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ReceptionistController;
 use App\Http\Controllers\CoachController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 // Page d'accueil
@@ -23,6 +24,25 @@ Route::get('/', function () {
 Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('login', [LoginController::class, 'login']);
 Route::post('logout', [LoginController::class, 'logout'])->name('logout');
+
+// Profile routes (shared across all roles)
+Route::middleware(['auth'])->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+});
+
+// Generic dashboard route
+Route::middleware(['auth'])->get('/dashboard', function () {
+    if (auth()->check()) {
+        return match(auth()->user()->role) {
+            'admin' => redirect()->route('admin.dashboard'),
+            'receptionist' => redirect()->route('receptionist.dashboard'),
+            'coach' => redirect()->route('coach.dashboard'),
+            default => redirect()->route('login'),
+        };
+    }
+    return redirect()->route('login');
+})->name('dashboard');
 
 // Admin Routes
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
@@ -63,11 +83,11 @@ Route::middleware(['auth', 'role:coach'])->prefix('coach')->name('coach.')->grou
     Route::get('/classes', [CoachController::class, 'classesIndex'])->name('classes.index');
     Route::get('/classes/create', [CoachController::class, 'classesCreate'])->name('classes.create');
     Route::post('/classes', [CoachController::class, 'classesStore'])->name('classes.store');
-    Route::get('/classes/{class}', [CoachController::class, 'classesShow'])->name('classes.show');
-    Route::get('/classes/{class}/edit', [CoachController::class, 'classesEdit'])->name('classes.edit');
-    Route::put('/classes/{class}', [CoachController::class, 'classesUpdate'])->name('classes.update');
-    Route::delete('/classes/{class}', [CoachController::class, 'classesDestroy'])->name('classes.destroy');
+    Route::get('/classes/{classModel}', [CoachController::class, 'classesShow'])->name('classes.show');
+    Route::get('/classes/{classModel}/edit', [CoachController::class, 'classesEdit'])->name('classes.edit');
+    Route::put('/classes/{classModel}', [CoachController::class, 'classesUpdate'])->name('classes.update');
+    Route::delete('/classes/{classModel}', [CoachController::class, 'classesDestroy'])->name('classes.destroy');
     
-    Route::post('/classes/{class}/schedules', [CoachController::class, 'schedulesStore'])->name('schedules.store');
-    Route::delete('/classes/{class}/schedules/{schedule}', [CoachController::class, 'schedulesDestroy'])->name('schedules.destroy');
+    Route::post('/classes/{classModel}/schedules', [CoachController::class, 'schedulesStore'])->name('schedules.store');
+    Route::delete('/classes/{classModel}/schedules/{schedule}', [CoachController::class, 'schedulesDestroy'])->name('schedules.destroy');
 });

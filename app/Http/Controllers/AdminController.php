@@ -7,6 +7,7 @@ use App\Models\Member;
 use App\Models\Schedule;
 use App\Models\Payment;
 use App\Models\ClassModel;
+use App\Models\SubscriptionType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 

@@ -19,14 +19,14 @@
 <div class="card p-8 mb-6">
     <div class="flex justify-between items-start mb-6">
         <div>
-            <h2 class="text-3xl font-bold">{{ $class->name }}</h2>
-            <p class="text-gray-600 mt-2">{{ $class->description }}</p>
+            <h2 class="text-3xl font-bold">{{ $classModel->name }}</h2>
+            <p class="text-gray-600 mt-2">{{ $classModel->description }}</p>
         </div>
         <div class="flex gap-2">
-            <a href="{{ route('coach.classes.edit', $class) }}" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">
+            <a href="{{ route('coach.classes.edit', $classModel) }}" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">
                  Modifier
             </a>
-            <form method="POST" action="{{ route('coach.classes.destroy', $class) }}" class="inline" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce cours ? Tous les membres seront désinscrits. Cette action est irréversible.')">
+            <form method="POST" action="{{ route('coach.classes.destroy', $classModel) }}" class="inline" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce cours ? Tous les membres seront désinscrits. Cette action est irréversible.')">
                 @csrf
                 @method('DELETE')
                 <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600">
@@ -39,15 +39,15 @@
     <div class="grid grid-cols-3 gap-4">
         <div class="bg-orange-50 p-4 rounded-lg">
             <p class="text-gray-600 text-sm">Capacité</p>
-            <p class="text-2xl font-bold text-orange-600">{{ $class->capacity }} personnes</p>
+            <p class="text-2xl font-bold text-orange-600">{{ $classModel->capacity }} personnes</p>
         </div>
         <div class="bg-blue-50 p-4 rounded-lg">
             <p class="text-gray-600 text-sm">Durée</p>
-            <p class="text-2xl font-bold text-blue-600">{{ $class->duration }} min</p>
+            <p class="text-2xl font-bold text-blue-600">{{ $classModel->duration }} min</p>
         </div>
         <div class="bg-green-50 p-4 rounded-lg">
             <p class="text-gray-600 text-sm">Inscrits</p>
-            <p class="text-2xl font-bold text-green-600">{{ $class->enrollments->count() }}</p>
+            <p class="text-2xl font-bold text-green-600">{{ $classModel->enrollments->count() }}</p>
         </div>
     </div>
 </div>
@@ -57,11 +57,11 @@
     <div class="card p-6">
         <h3 class="text-xl font-bold mb-4"> Horaires</h3>
         
-        @if($class->schedules->isEmpty())
+        @if($classModel->schedules->isEmpty())
             <p class="text-gray-500 mb-4">Aucun horaire défini</p>
         @else
             <div class="space-y-2 mb-4">
-                @foreach($class->schedules as $schedule)
+                @foreach($classModel->schedules as $schedule)
                     <div class="flex justify-between items-center bg-gray-50 p-3 rounded">
                         <div>
                             <span class="font-semibold">{{ $schedule->day_of_week }}</span>
@@ -69,7 +69,7 @@
                                 {{ $schedule->start_time->format('H:i') }} - {{ $schedule->end_time->format('H:i') }}
                             </span>
                         </div>
-                        <form method="POST" action="{{ route('coach.schedules.destroy', [$class, $schedule]) }}" class="inline">
+                        <form method="POST" action="{{ route('coach.schedules.destroy', [$classModel, $schedule]) }}" class="inline">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="text-red-500 hover:text-red-700" onclick="return confirm('Supprimer cet horaire?')"></button>
@@ -79,7 +79,7 @@
             </div>
         @endif
 
-        <form method="POST" action="{{ route('coach.schedules.store', $class) }}" class="border-t pt-4">
+        <form method="POST" action="{{ route('coach.schedules.store', $classModel) }}" class="border-t pt-4">
             @csrf
             <h4 class="font-semibold mb-3">Ajouter un horaire</h4>
             <select name="day_of_week" class="w-full px-3 py-2 border rounded mb-2" required>
@@ -104,13 +104,13 @@
 
     <!-- Members -->
     <div class="card p-6">
-        <h3 class="text-xl font-bold mb-4"> Membres Inscrits ({{ $class->enrollments->count() }})</h3>
+        <h3 class="text-xl font-bold mb-4"> Membres Inscrits ({{ $classModel->enrollments->count() }})</h3>
         
-        @if($class->enrollments->isEmpty())
+        @if($classModel->enrollments->isEmpty())
             <p class="text-gray-500">Aucun membre inscrit pour le moment</p>
         @else
             <div class="space-y-2">
-                @foreach($class->enrollments as $enrollment)
+                @foreach($classModel->enrollments as $enrollment)
                     <div class="flex justify-between items-center bg-gray-50 p-3 rounded">
                         <div>
                             <p class="font-semibold">{{ $enrollment->member->full_name }}</p>

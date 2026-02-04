@@ -48,13 +48,32 @@
             @enderror
         </div>
 
+        <div class="mb-6">
+            <label class="block text-gray-800 font-semibold mb-2"> Type d'abonnement</label>
+            <select name="subscription_type_id" id="subscription_type_id" class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none transition">
+                <option value="">Sélectionner un type d'abonnement</option>
+                @foreach($subscriptionTypes as $subscriptionType)
+                    <option value="{{ $subscriptionType->id }}" 
+                            data-price="{{ $subscriptionType->final_price }}"
+                            data-formatted-price="{{ $subscriptionType->formatted_price }}"
+                            {{ old('subscription_type_id') == $subscriptionType->id ? 'selected' : '' }}>
+                        {{ $subscriptionType->name }} - {{ $subscriptionType->formatted_price }} ({{ $subscriptionType->duration_days }} jours)
+                    </option>
+                @endforeach
+            </select>
+            @error('subscription_type_id')
+                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+            @enderror
+        </div>
+
         <div class="grid grid-cols-2 gap-6 mb-6">
             <div>
-                <label class="block text-gray-800 font-semibold mb-2"> Montant (€)</label>
-                <input type="number" step="0.01" name="amount" value="{{ old('amount') }}" 
+                <label class="block text-gray-800 font-semibold mb-2"> Montant (DH)</label>
+                <input type="number" step="0.01" name="amount" id="amount" value="{{ old('amount') }}" 
                        class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none transition" 
                        placeholder="0.00"
-                       required>
+                       readonly>
+                <small class="text-gray-600">Le montant sera calculé automatiquement selon le type d'abonnement sélectionné</small>
                 @error('amount')
                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                 @enderror
@@ -102,4 +121,26 @@
         </div>
     </form>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const subscriptionSelect = document.getElementById('subscription_type_id');
+    const amountInput = document.getElementById('amount');
+    
+    function updateAmount() {
+        const selectedOption = subscriptionSelect.options[subscriptionSelect.selectedIndex];
+        if (selectedOption && selectedOption.value) {
+            const price = selectedOption.getAttribute('data-price');
+            amountInput.value = price;
+        } else {
+            amountInput.value = '';
+        }
+    }
+    
+    subscriptionSelect.addEventListener('change', updateAmount);
+    
+    // Set initial amount if subscription is pre-selected
+    updateAmount();
+});
+</script>
 @endsection

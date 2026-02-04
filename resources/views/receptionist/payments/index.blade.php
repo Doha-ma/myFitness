@@ -37,6 +37,7 @@
                 <thead>
                     <tr class="border-b">
                         <th class="text-left py-3 px-4">Membre</th>
+                        <th class="text-left py-3 px-4">Type d'abonnement</th>
                         <th class="text-left py-3 px-4">Montant</th>
                         <th class="text-left py-3 px-4">Date</th>
                         <th class="text-left py-3 px-4">Méthode</th>
@@ -50,7 +51,16 @@
                         <tr class="border-b hover:bg-gray-50">
                             <td class="py-3 px-4 font-semibold">{{ $payment->member->full_name ?? 'N/A' }}</td>
                             <td class="py-3 px-4">
-                                <span class="font-bold text-green-600">{{ number_format($payment->amount, 2) }} €</span>
+                                @if($payment->subscriptionType)
+                                    <span class="px-2 py-1 rounded-full text-sm bg-purple-100 text-purple-800">
+                                        {{ $payment->subscriptionType->name }}
+                                    </span>
+                                @else
+                                    <span class="text-gray-500 text-sm">-</span>
+                                @endif
+                            </td>
+                            <td class="py-3 px-4">
+                                <span class="font-bold text-green-600">{{ number_format($payment->amount, 2) }} DH</span>
                             </td>
                             <td class="py-3 px-4">{{ $payment->payment_date->format('d/m/Y') }}</td>
                             <td class="py-3 px-4">

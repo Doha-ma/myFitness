@@ -34,7 +34,7 @@
         <div class="flex items-center justify-between">
             <div>
                 <p class="text-gray-600 text-sm font-medium uppercase tracking-wide">Paiements Aujourd'hui</p>
-                <p class="text-4xl font-bold mt-3" style="color: var(--gym-success);">{{ number_format($totalPaymentsToday, 2) }} €</p>
+                <p class="text-4xl font-bold mt-3" style="color: var(--gym-success);">{{ number_format($totalPaymentsToday, 2) }} DH</p>
                 <p class="text-xs text-gray-500 mt-1">Revenus du jour</p>
             </div>
             <div class="text-6xl opacity-20"></div>

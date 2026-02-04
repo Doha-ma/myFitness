@@ -73,7 +73,7 @@
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-gray-700 text-sm font-medium">Total Paiements</p>
-                    <p class="text-3xl font-bold text-green-700 mt-2">{{ number_format($totalPayments, 2) }} €</p>
+                    <p class="text-3xl font-bold text-green-700 mt-2">{{ number_format($totalPayments, 2) }} DH</p>
                 </div>
                 <div class="text-5xl"></div>
             </div>
@@ -83,7 +83,7 @@
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-gray-700 text-sm font-medium">Ce Mois</p>
-                    <p class="text-3xl font-bold text-blue-700 mt-2">{{ number_format($paymentsThisMonth, 2) }} €</p>
+                    <p class="text-3xl font-bold text-blue-700 mt-2">{{ number_format($paymentsThisMonth, 2) }} DH</p>
                 </div>
                 <div class="text-5xl"></div>
             </div>
@@ -93,7 +93,7 @@
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-gray-700 text-sm font-medium">Aujourd'hui</p>
-                    <p class="text-3xl font-bold text-orange-700 mt-2">{{ number_format($paymentsToday, 2) }} €</p>
+                    <p class="text-3xl font-bold text-orange-700 mt-2">{{ number_format($paymentsToday, 2) }} DH</p>
                 </div>
                 <div class="text-5xl"></div>
             </div>
@@ -143,7 +143,7 @@
                             <p class="text-xs text-gray-500 mt-1">Par: {{ $payment->receptionist->name ?? 'N/A' }}</p>
                         </div>
                         <div class="text-right">
-                            <p class="font-bold text-green-600 text-lg">{{ number_format($payment->amount, 2) }} €</p>
+                            <p class="font-bold text-green-600 text-lg">{{ number_format($payment->amount, 2) }} DH</p>
                             <span class="inline-block px-2 py-1 rounded-full text-xs font-semibold badge-primary mt-1">
                                 {{ ucfirst($payment->method) }}
                             </span>

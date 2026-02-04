@@ -6,29 +6,60 @@ use App\Models\ClassModel;
 use App\Models\Schedule;
 use Illuminate\Http\Request;
 
-
 class CoachController extends Controller
 {
-    public function dashboard()
+    public function dashboard(Request $request)
     {
         $coach = auth()->user();
-        $totalClasses = $coach->classesAsCoach()->count();
-        $totalEnrollments = $coach->classesAsCoach()
-            ->withCount('enrollments')
-            ->get()
-            ->sum('enrollments_count');
-
-        // Load classes with enrollment counts for dynamic display
-        // Enrollment counts update automatically via Eloquent relationships
-        $classes = $coach->classesAsCoach()
-            ->with('schedules')
+        
+        // Base query for coach's classes
+        $classesQuery = $coach->classesAsCoach();
+        
+        // Apply class filter if selected
+        $selectedClassId = $request->get('class_id');
+        if ($selectedClassId) {
+            $classesQuery->where('id', $selectedClassId);
+        }
+        
+        // Get all coach's classes for filter dropdown
+        $allClasses = $coach->classesAsCoach()->withCount('enrollments')->get();
+        
+        // Get filtered classes with statistics
+        $classes = $classesQuery->with(['schedules', 'enrollments.member'])
             ->withCount('enrollments')
             ->get();
+        
+        // Calculate statistics
+        $totalClasses = $allClasses->count();
+        $totalEnrollments = $allClasses->sum('enrollments_count');
+        
+        // Class-specific statistics if filter is applied
+        $classStats = null;
+        if ($selectedClassId) {
+            $selectedClass = $classes->first();
+            if ($selectedClass) {
+                $classStats = [
+                    'class' => $selectedClass,
+                    'enrollment_count' => $selectedClass->enrollments_count,
+                    'capacity_utilization' => $selectedClass->capacity > 0 
+                        ? round(($selectedClass->enrollments_count / $selectedClass->capacity) * 100, 1)
+                        : 0,
+                    'recent_enrollments' => $selectedClass->enrollments()
+                        ->with('member')
+                        ->latest('enrollment_date')
+                        ->take(5)
+                        ->get()
+                ];
+            }
+        }
 
         return view('coach.dashboard', compact(
             'totalClasses',
             'totalEnrollments',
-            'classes'
+            'classes',
+            'allClasses',
+            'selectedClassId',
+            'classStats'
         ));
     }
 
@@ -65,28 +96,28 @@ class CoachController extends Controller
             ->with('success', 'Cours créé avec succès!');
     }
 
-    public function classesShow(ClassModel $class)
+    public function classesShow(ClassModel $classModel)
     {
-        if(auth()->user()->id !== $class->coach_id){
+        if(auth()->user()->id !== $classModel->coach_id){
             abort(403, 'Unauthorized');
         }
         
-        $class->load(['schedules', 'enrollments.member']);
+        $classModel->load(['schedules', 'enrollments.member']);
 
-        return view('coach.classes.show', compact('class'));
+        return view('coach.classes.show', compact('classModel'));
     }
 
-    public function classesEdit(ClassModel $class)
+    public function classesEdit(ClassModel $classModel)
     {
-        if (auth()->id() !== $class->coach_id) {
+        if (auth()->id() !== $classModel->coach_id) {
             abort(403, 'Unauthorized');}
 
-        return view('coach.classes.edit', compact('class'));
+        return view('coach.classes.edit', compact('classModel'));
     }
 
-    public function classesUpdate(Request $request, ClassModel $class)
+    public function classesUpdate(Request $request, ClassModel $classModel)
     {
-        if (auth()->id() !== $class->coach_id) {
+        if (auth()->id() !== $classModel->coach_id) {
             abort(403, 'Unauthorized');}
 
 
@@ -97,9 +128,9 @@ class CoachController extends Controller
             'duration' => 'required|integer|min:15',
         ]);
 
-        $class->update($validated);
+        $classModel->update($validated);
 
-        return redirect()->route('coach.classes.show', $class)
+        return redirect()->route('coach.classes.show', $classModel)
             ->with('success', 'Cours mis à jour avec succès!');
     }
 
@@ -108,24 +139,24 @@ class CoachController extends Controller
      * Only the coach who owns the class can delete it
      * Detaches all enrolled members before deletion
      */
-    public function classesDestroy(ClassModel $class)
+    public function classesDestroy(ClassModel $classModel)
     {
         // Verify ownership
-        if (auth()->id() !== $class->coach_id) {
+        if (auth()->id() !== $classModel->coach_id) {
             abort(403, 'Unauthorized');
         }
 
         try {
             // Detach all members from this class using existing many-to-many relationship
             // This removes records from enrollments pivot table
-            $class->members()->detach();
+            $classModel->members()->detach();
             
             // Delete all schedules for this class
-            $class->schedules()->delete();
+            $classModel->schedules()->delete();
             
             // Delete the class
             // Note: Enrollments are already detached, so no orphan records
-            $class->delete();
+            $classModel->delete();
             
             return redirect()->route('coach.classes.index')
                 ->with('success', 'Cours supprimé avec succès!');
@@ -137,9 +168,9 @@ class CoachController extends Controller
         }
     }
 
-    public function schedulesStore(Request $request, ClassModel $class)
+    public function schedulesStore(Request $request, ClassModel $classModel)
     {
-        if (auth()->id() !== $class->coach_id) {
+        if (auth()->id() !== $classModel->coach_id) {
             abort(403, 'Unauthorized');}
 
         $validated = $request->validate([
@@ -148,24 +179,24 @@ class CoachController extends Controller
             'end_time' => 'required|date_format:H:i|after:start_time',
         ]);
 
-        $class->schedules()->create($validated);
+        $classModel->schedules()->create($validated);
 
-        return redirect()->route('coach.classes.show', $class)
+        return redirect()->route('coach.classes.show', $classModel)
             ->with('success', 'Horaire ajouté avec succès!');
     }
 
-    public function schedulesDestroy(ClassModel $class, Schedule $schedule)
+    public function schedulesDestroy(ClassModel $classModel, Schedule $schedule)
     {
-        if (auth()->id() !== $class->coach_id) {
+        if (auth()->id() !== $classModel->coach_id) {
             abort(403, 'Unauthorized');}
 
-        if ($schedule->class_id !== $class->id) {
+        if ($schedule->class_id !== $classModel->id) {
             abort(403);
         }
 
         $schedule->delete();
 
-        return redirect()->route('coach.classes.show', $class)
+        return redirect()->route('coach.classes.show', $classModel)
             ->with('success', 'Horaire supprimé avec succès!');
     }
 }

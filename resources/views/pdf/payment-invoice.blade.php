@@ -199,7 +199,7 @@
         
         <div class="detail-row">
             <div class="detail-label">Montant:</div>
-            <div class="detail-value">{{ number_format($payment->amount, 2, ',', ' ') }} €</div>
+            <div class="detail-value">{{ number_format($payment->amount, 2, ',', ' ') }} DH</div>
         </div>
         
         <div class="detail-row">
@@ -229,7 +229,7 @@
         
         <div class="amount-box">
             <div class="label">Montant Total</div>
-            <div class="value">{{ number_format($payment->amount, 2, ',', ' ') }} €</div>
+            <div class="value">{{ number_format($payment->amount, 2, ',', ' ') }} DH</div>
         </div>
     </div>
     

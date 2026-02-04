@@ -52,6 +52,6 @@ class SubscriptionType extends Model
      */
     public function getFormattedPriceAttribute(): string
     {
-        return number_format($this->final_price, 2, ',', ' ') . ' €';
+        return number_format($this->final_price, 2, ',', ' ') . ' DH';
     }
 }
