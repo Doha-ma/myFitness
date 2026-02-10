@@ -84,7 +84,7 @@
                 </div>
             @else
                 <!-- Navigation corrigée sans composants Blade -->
-                <nav x-data="{ open: false }" class="bg-white border-b border-gray-100">
+                <div x-data="{ open: false, notificationsOpen: false }" class="min-h-screen bg-gray-100">
                     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                         <div class="flex justify-between h-16">
                             <div class="flex">
@@ -99,6 +99,72 @@
                                     <a href="{{ route('dashboard') }}" class="{{ request()->routeIs('dashboard') ? 'text-orange-500' : 'text-gray-700' }} px-3 py-2 rounded-md text-sm font-medium hover:text-orange-600">Dashboard</a>
                                 </div>
                             </div>
+
+                            <!-- Notifications Dropdown (Admin only) -->
+                            @auth
+                                @if(Auth::user()->role === 'admin')
+                                    <div class="hidden sm:flex sm:items-center sm:ms-6">
+                                        <div class="relative">
+                                            <button @click="notificationsOpen = !notificationsOpen" class="relative inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
+                                                <i class="fas fa-bell"></i>
+                                                @if(Auth::user()->unreadNotifications->count() > 0)
+                                                    <span class="absolute -top-1 -right-1 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-red-600 rounded-full">
+                                                        {{ Auth::user()->unreadNotifications->count() }}
+                                                    </span>
+                                                @endif
+                                            </button>
+
+                                            <div x-show="notificationsOpen" @click.away="notificationsOpen = false" class="absolute right-0 mt-2 w-80 bg-white border rounded-md shadow-lg py-1 z-50 max-h-96 overflow-y-auto">
+                                                <div class="px-4 py-2 border-b border-gray-200">
+                                                    <h3 class="text-sm font-medium text-gray-900">Notifications</h3>
+                                                </div>
+                                                @if(Auth::user()->notifications->count() > 0)
+                                                    @foreach(Auth::user()->notifications()->latest()->take(10)->get() as $notification)
+                                                        <a href="#" class="block px-4 py-3 hover:bg-gray-50 border-b border-gray-100 {{ $notification->read_at ? 'bg-gray-50' : '' }}" onclick="markAsRead({{ $notification->id }})">
+                                                            <div class="flex items-start">
+                                                                <div class="flex-shrink-0">
+                                                                    @if($notification->data['action_type'] === 'new_member')
+                                                                        <i class="fas fa-user-plus text-blue-500 mt-1"></i>
+                                                                    @elseif($notification->data['action_type'] === 'payment')
+                                                                        <i class="fas fa-credit-card text-green-500 mt-1"></i>
+                                                                    @elseif($notification->data['action_type'] === 'new_course')
+                                                                        <i class="fas fa-dumbbell text-orange-500 mt-1"></i>
+                                                                    @else
+                                                                        <i class="fas fa-info-circle text-gray-500 mt-1"></i>
+                                                                    @endif
+                                                                </div>
+                                                                <div class="ml-3 flex-1">
+                                                                    <p class="text-sm text-gray-900 {{ $notification->read_at ? 'font-normal' : 'font-semibold' }}">
+                                                                        {{ $notification->data['title'] }}
+                                                                    </p>
+                                                                    <p class="text-xs text-gray-500 mt-1">
+                                                                        {{ $notification->data['message'] }}
+                                                                    </p>
+                                                                    <p class="text-xs text-gray-400 mt-1">
+                                                                        {{ \Carbon\Carbon::parse($notification->created_at)->diffForHumans() }}
+                                                                    </p>
+                                                                </div>
+                                                                @if(!$notification->read_at)
+                                                                    <div class="flex-shrink-0">
+                                                                        <span class="inline-block w-2 h-2 bg-blue-600 rounded-full"></span>
+                                                                    </div>
+                                                                @endif
+                                                            </div>
+                                                        </a>
+                                                    @endforeach
+                                                    <div class="px-4 py-2 border-t border-gray-200">
+                                                        <a href="{{ route('admin.notifications.index') }}" class="text-sm text-blue-600 hover:text-blue-800">Voir toutes les notifications</a>
+                                                    </div>
+                                                @else
+                                                    <div class="px-4 py-3 text-sm text-gray-500">
+                                                        Aucune notification
+                                                    </div>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endif
+                            @endauth
 
                             <!-- Settings Dropdown -->
                             <div class="hidden sm:flex sm:items-center sm:ms-6">
@@ -175,6 +241,41 @@
     
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Notifications JavaScript -->
+    <script>
+        function markAsRead(notificationId) {
+            fetch(`/admin/notifications/${notificationId}/read`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Remove the notification from the dropdown
+                    const notificationElement = document.querySelector(`[onclick="markAsRead(${notificationId})"]`);
+                    if (notificationElement) {
+                        notificationElement.remove();
+                    }
+                    
+                    // Update the unread count
+                    const countElement = document.querySelector('.bg-red-600');
+                    if (countElement) {
+                        const currentCount = parseInt(countElement.textContent);
+                        if (currentCount > 1) {
+                            countElement.textContent = currentCount - 1;
+                        } else {
+                            countElement.remove();
+                        }
+                    }
+                }
+            })
+            .catch(error => console.error('Error marking notification as read:', error));
+        }
+    </script>
     
     @stack('scripts')
 </html>

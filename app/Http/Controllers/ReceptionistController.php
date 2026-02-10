@@ -45,7 +45,7 @@ class ReceptionistController extends Controller
         $members = $query->latest()->paginate(15);
         
         // Get filter options
-        $classes = \App\Models\ClassModel::with('coach')->get();
+        $classes = \App\Models\ClassModel::with('coach')->where('status', 'approved')->get();
         $subscriptionTypes = \App\Models\SubscriptionType::where('is_active', true)->get();
 
         return view('receptionist.members.index', compact('members', 'classes', 'subscriptionTypes'));
@@ -54,7 +54,7 @@ class ReceptionistController extends Controller
     public function membersCreate()
     {
         // Load available classes for course selection
-        $classes = \App\Models\ClassModel::with('coach')->get();
+        $classes = \App\Models\ClassModel::with('coach')->where('status', 'approved')->get();
         return view('receptionist.members.create', compact('classes'));
     }
 
@@ -75,6 +75,12 @@ class ReceptionistController extends Controller
 
         // Create member (existing functionality preserved)
         $member = Member::create($validated);
+
+        // Send notification to admin
+        $admin = \App\Models\User::where('role', 'admin')->first();
+        if ($admin) {
+            $admin->notify(new \App\Notifications\NewMemberRegistered($member, auth()->user()));
+        }
 
         // Attach selected courses to member using existing enrollments pivot table
         // Uses existing many-to-many relationship via Member->classes()
@@ -199,10 +205,16 @@ class ReceptionistController extends Controller
             ]);
         }
 
-        Payment::create([
+        $payment = Payment::create([
             ...$validated,
             'receptionist_id' => auth()->id(),
         ]);
+
+        // Send notification to admin
+        $admin = \App\Models\User::where('role', 'admin')->first();
+        if ($admin) {
+            $admin->notify(new \App\Notifications\PaymentValidated($payment, auth()->user()));
+        }
 
         return redirect()->route('receptionist.payments.index')
             ->with('success', 'Paiement enregistré avec succès!');
