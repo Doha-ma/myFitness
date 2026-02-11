@@ -53,7 +53,7 @@ class SubscriptionReminderEmail extends Mailable implements ShouldQueue
                 'lastPayment' => $this->lastPayment,
                 'subscriptionType' => $this->subscriptionType,
                 'daysUntilExpiry' => $this->daysUntilExpiry,
-                'expiryDate' => $this->lastPayment->payment_date->addDays($this->subscriptionType->duration_days),
+                'expiryDate' => $this->lastPayment->payment_date->copy()->addDays($this->subscriptionType->duration_days),
                 'renewalPrice' => $this->subscriptionType->formatted_price,
             ]
         );

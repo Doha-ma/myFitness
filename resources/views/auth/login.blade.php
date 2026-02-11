@@ -113,6 +113,14 @@
                     </label>
                 </div>
 
+                @if (Route::has('password.request'))
+                    <div class="mb-6 text-right">
+                        <a href="{{ route('password.request') }}" class="text-sm font-semibold text-orange-600 hover:text-orange-500">
+                            Mot de passe oublie ?
+                        </a>
+                    </div>
+                @endif
+
                 <button type="submit" 
                         class="btn-primary w-full text-white py-3 rounded-lg font-bold text-lg shadow-lg">
                      Se connecter

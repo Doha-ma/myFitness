@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Password;
+use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
 class PasswordResetLinkController extends Controller
@@ -26,7 +27,13 @@ class PasswordResetLinkController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
-            'email' => ['required', 'email'],
+            'email' => [
+                'required',
+                'email',
+                Rule::exists('users', 'email')->where(fn ($query) => $query->whereIn('role', ['coach', 'receptionist'])),
+            ],
+        ], [
+            'email.exists' => 'Seuls les coachs et les receptionnistes peuvent demander une reinitialisation du mot de passe.',
         ]);
 
         // We will send the password reset link to this user. Once we have attempted

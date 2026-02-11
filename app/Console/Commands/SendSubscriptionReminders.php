@@ -3,9 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Mail\SubscriptionReminderEmail;
-use App\Models\Member;
 use App\Models\Payment;
-use App\Models\SubscriptionType;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
@@ -68,13 +66,14 @@ class SendSubscriptionReminders extends Command
             $expiryDate = $lastPayment->payment_date->copy()->addDays($subscriptionType->duration_days);
             $daysUntilExpiry = now()->diffInDays($expiryDate, false);
 
-            // Send reminder if subscription expires within the reminder period
-            $reminderDays = config('subscription.reminder_days_before', [7, 3, 1]);
+            // Send reminder if subscription expires within configured reminder periods
+            $reminderDaysBefore = config('subscription.reminder_days_before', [7, 3, 1]);
+            $reminderDaysAfter = config('subscription.reminder_days_after', [1, 3, 7]);
             
-            if ($daysUntilExpiry <= 0 && in_array(abs($daysUntilExpiry), [1, 3, 7])) {
+            if ($daysUntilExpiry <= 0 && in_array(abs($daysUntilExpiry), $reminderDaysAfter, true)) {
                 // Recently expired (1, 3, or 7 days ago)
                 $this->sendReminder($member, $lastPayment, $subscriptionType, $daysUntilExpiry, $remindersSent, $errors);
-            } elseif (in_array($daysUntilExpiry, $reminderDays)) {
+            } elseif (in_array($daysUntilExpiry, $reminderDaysBefore, true)) {
                 // About to expire (7, 3, or 1 days before)
                 $this->sendReminder($member, $lastPayment, $subscriptionType, $daysUntilExpiry, $remindersSent, $errors);
             }
@@ -94,9 +93,14 @@ class SendSubscriptionReminders extends Command
                 return;
             }
 
-            // Send the email
-            Mail::to($member->email)
-                ->send(new SubscriptionReminderEmail($member, $lastPayment, $subscriptionType, $daysUntilExpiry));
+            $mail = new SubscriptionReminderEmail($member, $lastPayment, $subscriptionType, $daysUntilExpiry);
+            $mailer = Mail::to($member->email);
+
+            if (config('subscription.queue_emails', true)) {
+                $mailer->queue($mail);
+            } else {
+                $mailer->send($mail);
+            }
 
             $remindersSent++;
             

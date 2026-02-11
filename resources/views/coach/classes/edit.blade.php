@@ -15,13 +15,13 @@
 <div class="card p-8 max-w-2xl">
     <h2 class="text-2xl font-bold mb-6">Modifier le cours</h2>
     
-    <form method="POST" action="{{ route('coach.classes.update', $class) }}">
+    <form method="POST" action="{{ route('coach.classes.update', $classModel) }}">
         @csrf
         @method('PUT')
         
         <div class="mb-4">
             <label class="block text-gray-700 font-semibold mb-2">Nom du cours</label>
-            <input type="text" name="name" value="{{ old('name', $class->name) }}" 
+            <input type="text" name="name" value="{{ old('name', $classModel->name) }}" 
                    placeholder="Ex: Yoga, CrossFit, Cardio..."
                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500" required>
         </div>
@@ -30,18 +30,18 @@
             <label class="block text-gray-700 font-semibold mb-2">Description</label>
             <textarea name="description" rows="4" 
                       placeholder="Décrivez le cours, niveau requis, objectifs..."
-                      class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500">{{ old('description', $class->description) }}</textarea>
+                      class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500">{{ old('description', $classModel->description) }}</textarea>
         </div>
 
         <div class="grid grid-cols-2 gap-4 mb-6">
             <div>
                 <label class="block text-gray-700 font-semibold mb-2">Capacité (personnes)</label>
-                <input type="number" name="capacity" value="{{ old('capacity', $class->capacity) }}" min="1"
+                <input type="number" name="capacity" value="{{ old('capacity', $classModel->capacity) }}" min="1"
                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500" required>
             </div>
             <div>
                 <label class="block text-gray-700 font-semibold mb-2">Durée (minutes)</label>
-                <input type="number" name="duration" value="{{ old('duration', $class->duration) }}" min="15"
+                <input type="number" name="duration" value="{{ old('duration', $classModel->duration) }}" min="15"
                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500" required>
             </div>
         </div>
@@ -50,7 +50,7 @@
             <button type="submit" class="btn-primary text-white px-6 py-3 rounded-lg font-semibold">
                  Enregistrer
             </button>
-            <a href="{{ route('coach.classes.show', $class) }}" class="bg-gray-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-gray-600">
+            <a href="{{ route('coach.classes.show', $classModel) }}" class="bg-gray-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-gray-600">
                  Annuler
             </a>
         </div>

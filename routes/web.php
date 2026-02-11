@@ -4,6 +4,8 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ReceptionistController;
 use App\Http\Controllers\CoachController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\NewPasswordController;
+use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -24,6 +26,14 @@ Route::get('/', function () {
 Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('login', [LoginController::class, 'login']);
 Route::post('logout', [LoginController::class, 'logout'])->name('logout');
+
+// Forgot/reset password routes for staff accounts
+Route::middleware('guest')->group(function () {
+    Route::get('forgot-password', [PasswordResetLinkController::class, 'create'])->name('password.request');
+    Route::post('forgot-password', [PasswordResetLinkController::class, 'store'])->name('password.email');
+    Route::get('reset-password/{token}', [NewPasswordController::class, 'create'])->name('password.reset');
+    Route::post('reset-password', [NewPasswordController::class, 'store'])->name('password.store');
+});
 
 // Profile routes (shared across all roles)
 Route::middleware(['auth'])->group(function () {
@@ -76,6 +86,10 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::put('/subscription-types/{subscriptionType}', [AdminController::class, 'subscriptionTypesUpdate'])->name('subscription-types.update');
     Route::delete('/subscription-types/{subscriptionType}', [AdminController::class, 'subscriptionTypesDestroy'])->name('subscription-types.destroy');
     
+    Route::get('/classes/pending', [AdminController::class, 'pendingClasses'])->name('classes.pending');
+    Route::post('/classes/{classModel}/approve', [AdminController::class, 'approveClass'])->name('classes.approve');
+    Route::post('/classes/{classModel}/reject', [AdminController::class, 'rejectClass'])->name('classes.reject');
+
     Route::get('/classes', [AdminController::class, 'classesIndex'])->name('classes.index');
     Route::get('/classes/create', [AdminController::class, 'classesCreate'])->name('classes.create');
     Route::post('/classes', [AdminController::class, 'classesStore'])->name('classes.store');
@@ -83,10 +97,6 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::get('/classes/{classModel}/edit', [AdminController::class, 'classesEdit'])->name('classes.edit');
     Route::put('/classes/{classModel}', [AdminController::class, 'classesUpdate'])->name('classes.update');
     Route::delete('/classes/{classModel}', [AdminController::class, 'classesDestroy'])->name('classes.destroy');
-    
-    Route::get('/classes/pending', [AdminController::class, 'pendingClasses'])->name('classes.pending');
-    Route::post('/classes/{classModel}/approve', [AdminController::class, 'approveClass'])->name('classes.approve');
-    Route::post('/classes/{classModel}/reject', [AdminController::class, 'rejectClass'])->name('classes.reject');
     
     // Payments (view only for admin)
     Route::get('/payments', [AdminController::class, 'paymentsIndex'])->name('payments.index');

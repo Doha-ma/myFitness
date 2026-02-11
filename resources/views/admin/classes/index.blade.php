@@ -5,7 +5,7 @@
 @section('content')
 <div class="mb-8">
     <h2 class="text-4xl font-bold text-white mb-2">Gestion de cours</h2>
-    <p class="text-gray-300">Gestion de tous les cours validés de la salle de sport</p>
+    <p class="text-gray-300">Gestion de tous les cours de la salle de sport (valides, en attente, rejetes)</p>
 </div>
 
 <div class="card p-6">
@@ -25,14 +25,22 @@
 
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h3 class="h5 mb-0">Liste des Cours</h3>
-        <span class="badge bg-info">{{ $classes->total() }} cours</span>
+        <div class="d-flex gap-2 align-items-center">
+            <span class="badge bg-info">{{ $classes->total() }} cours</span>
+            <a href="{{ route('admin.classes.pending') }}" class="btn btn-warning btn-sm">
+                <i class="fas fa-check-circle"></i> Validation
+                @if(($pendingClassesCount ?? 0) > 0)
+                    <span class="badge bg-danger">{{ $pendingClassesCount }}</span>
+                @endif
+            </a>
+        </div>
     </div>
 
     @if($classes->isEmpty())
         <div class="text-center py-12">
             <i class="fas fa-dumbbell text-6xl text-gray-300 mb-4"></i>
             <h3 class="text-xl font-semibold text-gray-600 mb-2">Aucun cours</h3>
-            <p class="text-gray-500">Aucun cours n'a encore été créé dans le système.</p>
+            <p class="text-gray-500">Aucun cours n'a encore Ã©tÃ© crÃ©Ã© dans le systÃ¨me.</p>
         </div>
     @else
         <div class="table-responsive">
@@ -41,9 +49,9 @@
                     <tr>
                         <th>Nom du cours</th>
                         <th>Coach</th>
-                        <th>Capacité</th>
+                        <th>CapacitÃ©</th>
                         <th>Inscrits</th>
-                        <th>Durée</th>
+                        <th>DurÃ©e</th>
                         <th>Statut</th>
                         <th>Actions</th>
                     </tr>
@@ -75,9 +83,9 @@
                                     {{ $class->status === 'approved' ? 'bg-success' : '' }}
                                     {{ $class->status === 'pending' ? 'bg-warning' : '' }}
                                     {{ $class->status === 'rejected' ? 'bg-danger' : '' }}">
-                                    {{ $class->status === 'approved' ? 'Approuvé' : '' }}
+                                    {{ $class->status === 'approved' ? 'ApprouvÃ©' : '' }}
                                     {{ $class->status === 'pending' ? 'En attente' : '' }}
-                                    {{ $class->status === 'rejected' ? 'Rejeté' : '' }}
+                                    {{ $class->status === 'rejected' ? 'RejetÃ©' : '' }}
                                 </span>
                             </td>
                             <td>
@@ -112,3 +120,4 @@
     @endif
 </div>
 @endsection
+

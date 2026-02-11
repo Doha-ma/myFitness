@@ -525,7 +525,9 @@ class AdminController extends Controller
             ->latest()
             ->paginate(20);
 
-        return view('admin.classes.index', compact('classes'));
+        $pendingClassesCount = ClassModel::where('status', 'pending')->count();
+
+        return view('admin.classes.index', compact('classes', 'pendingClassesCount'));
     }
 
     /**

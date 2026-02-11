@@ -70,4 +70,32 @@ class PasswordResetTest extends TestCase
             return true;
         });
     }
+
+    public function test_receptionist_can_request_reset_password_link(): void
+    {
+        Notification::fake();
+
+        $user = User::factory()->create([
+            'role' => 'receptionist',
+        ]);
+
+        $response = $this->post('/forgot-password', ['email' => $user->email]);
+
+        $response->assertSessionHasNoErrors();
+        Notification::assertSentTo($user, ResetPassword::class);
+    }
+
+    public function test_admin_cannot_request_reset_password_link(): void
+    {
+        Notification::fake();
+
+        $user = User::factory()->create([
+            'role' => 'admin',
+        ]);
+
+        $response = $this->post('/forgot-password', ['email' => $user->email]);
+
+        $response->assertSessionHasErrors('email');
+        Notification::assertNotSentTo($user, ResetPassword::class);
+    }
 }
