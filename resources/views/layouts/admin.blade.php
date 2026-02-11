@@ -28,11 +28,11 @@
     
     <style>
         :root {
-            --gym-bg-primary: #1E3A8A;
-            --gym-bg-secondary: #2C5282;
-            --gym-primary: #FACC15;
+            --gym-bg-primary: #1A1A2E;
+            --gym-bg-secondary: #004E89;
+            --gym-primary: #FF6B35;
             --gym-text: #FFFFFF;
-            --gym-secondary-bg: #E5E7EB;
+            --gym-secondary-bg: #F3F4F6;
             --gym-success: #10B981;
             --gym-warning: #F59E0B;
             --gym-danger: #EF4444;
@@ -96,13 +96,13 @@
         
         .btn-primary { 
             background: var(--gym-primary); 
-            color: var(--gym-bg-primary);
+            color: #FFFFFF;
         }
         
         .btn-primary:hover { 
-            background: #E5A610; 
+            background: #ff8555; 
             transform: translateY(-2px); 
-            box-shadow: 0 10px 25px rgba(250, 204, 21, 0.4); 
+            box-shadow: 0 10px 25px rgba(255, 107, 53, 0.4); 
         }
         
         .btn-success { 
@@ -173,7 +173,7 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(250, 204, 21, 0.1), transparent);
+            background: linear-gradient(90deg, transparent, rgba(255, 107, 53, 0.1), transparent);
             transition: left 0.5s;
         }
         
@@ -182,14 +182,14 @@
         }
         
         .sidebar a:hover { 
-            background: rgba(250, 204, 21, 0.15); 
+            background: rgba(255, 107, 53, 0.15); 
             transform: translateX(8px);
-            box-shadow: 0 4px 12px rgba(250, 204, 21, 0.2);
+            box-shadow: 0 4px 12px rgba(255, 107, 53, 0.2);
         }
         
         .sidebar a.active {
-            background: rgba(250, 204, 21, 0.2);
-            box-shadow: 0 4px 12px rgba(250, 204, 21, 0.3);
+            background: rgba(255, 107, 53, 0.2);
+            box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
         }
         
         .sidebar button { 
@@ -209,9 +209,9 @@
         }
         
         .sidebar button:hover { 
-            background: rgba(250, 204, 21, 0.15); 
+            background: rgba(255, 107, 53, 0.15); 
             transform: translateX(8px);
-            box-shadow: 0 4px 12px rgba(250, 204, 21, 0.2);
+            box-shadow: 0 4px 12px rgba(255, 107, 53, 0.2);
         }
         
         /* Alerts */
@@ -282,9 +282,9 @@
         }
         
         .badge-primary { 
-            background: rgba(250, 204, 21, 0.1); 
+            background: rgba(255, 107, 53, 0.1); 
             color: var(--gym-primary);
-            border: 1px solid rgba(250, 204, 21, 0.2);
+            border: 1px solid rgba(255, 107, 53, 0.2);
         }
         
         .badge-info { 
@@ -325,7 +325,7 @@
         }
         
         .table tbody tr:hover { 
-            background: linear-gradient(90deg, rgba(250, 204, 21, 0.05) 0%, rgba(250, 204, 21, 0.02) 100%);
+            background: linear-gradient(90deg, rgba(255, 107, 53, 0.05) 0%, rgba(255, 107, 53, 0.02) 100%);
             transform: scale(1.01);
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
@@ -335,7 +335,7 @@
         }
         
         .table tbody tr:nth-child(even):hover {
-            background: linear-gradient(90deg, rgba(250, 204, 21, 0.08) 0%, rgba(250, 204, 21, 0.04) 100%);
+            background: linear-gradient(90deg, rgba(255, 107, 53, 0.08) 0%, rgba(255, 107, 53, 0.04) 100%);
         }
         
         /* Forms */
@@ -349,7 +349,7 @@
         
         .form-control:focus, .form-select:focus { 
             border-color: var(--gym-primary) !important; 
-            box-shadow: 0 0 0 3px rgba(250, 204, 21, 0.1) !important; 
+            box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1) !important; 
             outline: none;
         }
         
@@ -373,9 +373,9 @@
         
         .pagination a:hover {
             background: var(--gym-primary);
-            color: var(--gym-bg-primary);
+            color: #FFFFFF;
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(250, 204, 21, 0.3);
+            box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
         }
         
         /* Responsive */
@@ -569,3 +569,4 @@
     </script>
 </body>
 </html>
+

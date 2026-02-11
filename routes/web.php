@@ -19,7 +19,7 @@ Route::get('/', function () {
             default => redirect()->route('login'),
         };
     }
-    return redirect()->route('login');
+    return view('welcome');
 })->name('home');
 
 // Routes d'authentification

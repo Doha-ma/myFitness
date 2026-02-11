@@ -3,11 +3,11 @@
 @section('title', 'Mes Cours')
 
 @section('sidebar')
-    <a href="{{ route('coach.dashboard') }}" class="block px-4 py-3 rounded hover:bg-white/10 transition"> Dashboard</a>
-    <a href="{{ route('coach.classes.index') }}" class="block px-4 py-3 rounded hover:bg-white/10 transition bg-white/10"> Mes Cours</a>
+    <a href="{{ route('coach.dashboard') }}" class="block px-4 py-3 rounded hover:bg-white/10 transition"><i class="fas fa-tachometer-alt me-3"></i><span>Dashboard</span></a>
+    <a href="{{ route('coach.classes.index') }}" class="block px-4 py-3 rounded hover:bg-white/10 transition bg-white/10"><i class="fas fa-dumbbell me-3"></i><span>Mes Cours</span></a>
     <form method="POST" action="{{ route('logout') }}">
         @csrf
-        <button type="submit" class="block w-full text-left px-4 py-3 rounded hover:bg-white/10 transition"> DÃ©connexion</button>
+        <button type="submit" class="block w-full text-left px-4 py-3 rounded hover:bg-white/10 transition"><i class="fas fa-sign-out-alt me-3"></i><span>Déconnexion</span></button>
     </form>
 @endsection
 
@@ -87,3 +87,4 @@
     </div>
 @endif
 @endsection
+

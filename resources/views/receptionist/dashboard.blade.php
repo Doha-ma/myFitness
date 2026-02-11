@@ -3,12 +3,12 @@
 @section('title', 'Réceptionniste Dashboard')
 
 @section('sidebar')
-    <a href="{{ route('receptionist.dashboard') }}" class="block px-4 py-3 rounded hover:bg-white/10 transition bg-white/10"> Dashboard</a>
-    <a href="{{ route('receptionist.members.index') }}" class="block px-4 py-3 rounded hover:bg-white/10 transition"> Membres</a>
-    <a href="{{ route('receptionist.payments.index') }}" class="block px-4 py-3 rounded hover:bg-white/10 transition"> Paiements</a>
+    <a href="{{ route('receptionist.dashboard') }}" class="block px-4 py-3 rounded hover:bg-white/10 transition bg-white/10"><i class="fas fa-tachometer-alt me-3"></i><span>Dashboard</span></a>
+    <a href="{{ route('receptionist.members.index') }}" class="block px-4 py-3 rounded hover:bg-white/10 transition"><i class="fas fa-users me-3"></i><span>Membres</span></a>
+    <a href="{{ route('receptionist.payments.index') }}" class="block px-4 py-3 rounded hover:bg-white/10 transition"><i class="fas fa-money-bill-wave me-3"></i><span>Paiements</span></a>
     <form method="POST" action="{{ route('logout') }}">
         @csrf
-        <button type="submit" class="block w-full text-left px-4 py-3 rounded hover:bg-white/10 transition mt-4"> Déconnexion</button>
+        <button type="submit" class="block w-full text-left px-4 py-3 rounded hover:bg-white/10 transition mt-4"><i class="fas fa-sign-out-alt me-3"></i><span>D�connexion</span></button>
     </form>
 @endsection
 
@@ -86,3 +86,4 @@
     @endif
 </div>
 @endsection
+
