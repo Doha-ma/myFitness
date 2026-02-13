@@ -121,6 +121,10 @@
             .pagination a:hover { background: var(--gym-primary); color: white; }
 
             .pagination span { background: var(--gym-primary); color: white; border: 2px solid var(--gym-primary); }
+            .receptionist-content { max-width: calc(100vw - 16rem); overflow-x: hidden; }
+            .receptionist-content .card { width: 100%; }
+            .receptionist-content .overflow-x-auto { overflow-x: auto; }
+            .receptionist-content table { min-width: 980px; }
 
         </style>
 
@@ -158,7 +162,7 @@
 
                     <!-- Main Content -->
 
-                    <main class="flex-1 p-8 ml-64">
+                    <main class="flex-1 p-8 ml-64 {{ request()->routeIs('receptionist.members.*') || request()->routeIs('receptionist.payments.*') ? 'receptionist-content' : '' }}">
 
                         @yield('content')
 

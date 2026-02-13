@@ -220,6 +220,64 @@ class AdminController extends Controller
     }
 
     /**
+     * Show form for creating a member (admin space)
+     */
+    public function membersCreate()
+    {
+        return view('admin.members.create');
+    }
+
+    /**
+     * Store a newly created member (admin space)
+     */
+    public function membersStore(Request $request)
+    {
+        $validated = $request->validate([
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'email' => 'required|email|unique:members,email',
+            'phone' => 'required|string|max:20',
+            'address' => 'nullable|string',
+            'join_date' => 'required|date',
+            'status' => 'required|in:active,inactive',
+        ]);
+
+        Member::create($validated);
+
+        return redirect()->route('admin.members.index')
+            ->with('success', 'Membre ajoute avec succes!');
+    }
+
+    /**
+     * Show form for editing a member (admin space)
+     */
+    public function membersEdit(Member $member)
+    {
+        return view('admin.members.edit', compact('member'));
+    }
+
+    /**
+     * Update member data (admin space)
+     */
+    public function membersUpdate(Request $request, Member $member)
+    {
+        $validated = $request->validate([
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'email' => 'required|email|unique:members,email,' . $member->id,
+            'phone' => 'required|string|max:20',
+            'address' => 'nullable|string',
+            'join_date' => 'required|date',
+            'status' => 'required|in:active,inactive',
+        ]);
+
+        $member->update($validated);
+
+        return redirect()->route('admin.members.index')
+            ->with('success', 'Membre mis a jour avec succes!');
+    }
+
+    /**
      * Remove the specified member
      */
     public function membersDestroy(Member $member)

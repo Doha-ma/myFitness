@@ -51,7 +51,7 @@
                     @foreach($members as $member)
                         <tr>
                             <td>
-                                <strong>{{ $member->name }}</strong>
+                                <strong>{{ $member->full_name }}</strong>
                                 @if($member->email)
                                     <br><small class="text-muted">{{ $member->email }}</small>
                                 @endif

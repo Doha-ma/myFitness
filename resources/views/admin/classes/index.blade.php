@@ -5,7 +5,7 @@
 @section('content')
 <div class="mb-8">
     <h2 class="text-4xl font-bold text-white mb-2">Gestion de cours</h2>
-    <p class="text-gray-300">Gestion de tous les cours de la salle de sport (valides, en attente, rejetes)</p>
+    <p class="text-gray-300">Gestion de tous les cours de la salle de sport (valides, en attente, rejetés)</p>
 </div>
 
 <div class="card p-6">
@@ -40,7 +40,7 @@
         <div class="text-center py-12">
             <i class="fas fa-dumbbell text-6xl text-gray-300 mb-4"></i>
             <h3 class="text-xl font-semibold text-gray-600 mb-2">Aucun cours</h3>
-            <p class="text-gray-500">Aucun cours n'a encore Ã©tÃ© crÃ©Ã© dans le systÃ¨me.</p>
+            <p class="text-gray-500">Aucun cours n'a encore été créé dans le système.</p>
         </div>
     @else
         <div class="table-responsive">
@@ -49,9 +49,9 @@
                     <tr>
                         <th>Nom du cours</th>
                         <th>Coach</th>
-                        <th>CapacitÃ©</th>
+                        <th>Capacité</th>
                         <th>Inscrits</th>
-                        <th>DurÃ©e</th>
+                        <th>Durée</th>
                         <th>Statut</th>
                         <th>Actions</th>
                     </tr>
@@ -83,9 +83,9 @@
                                     {{ $class->status === 'approved' ? 'bg-success' : '' }}
                                     {{ $class->status === 'pending' ? 'bg-warning' : '' }}
                                     {{ $class->status === 'rejected' ? 'bg-danger' : '' }}">
-                                    {{ $class->status === 'approved' ? 'ApprouvÃ©' : '' }}
+                                    {{ $class->status === 'approved' ? 'Approuvé' : '' }}
                                     {{ $class->status === 'pending' ? 'En attente' : '' }}
-                                    {{ $class->status === 'rejected' ? 'RejetÃ©' : '' }}
+                                    {{ $class->status === 'rejected' ? 'Rejeté' : '' }}
                                 </span>
                             </td>
                             <td>
