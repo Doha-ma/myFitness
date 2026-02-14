@@ -8,7 +8,7 @@
     <a href="{{ route('receptionist.payments.index') }}" class="block px-4 py-3 rounded hover:bg-white/10 transition bg-white/10"><i class="fas fa-money-bill-wave me-3"></i><span>Paiements</span></a>
     <form method="POST" action="{{ route('logout') }}">
         @csrf
-        <button type="submit" class="block w-full text-left px-4 py-3 rounded hover:bg-white/10 transition"><i class="fas fa-sign-out-alt me-3"></i><span>D�connexion</span></button>
+        <button type="submit" class="block w-full text-left px-4 py-3 rounded hover:bg-white/10 transition"><i class="fas fa-sign-out-alt me-3"></i><span>Deconnexion</span></button>
     </form>
 @endsection
 
@@ -30,7 +30,7 @@
 
 <div class="card p-6">
     @if($payments->isEmpty())
-        <p class="text-gray-500 text-center py-8">Aucun paiement enregistré</p>
+        <p class="text-gray-500 text-center py-8">Aucun paiement enregistre</p>
     @else
         <div class="overflow-x-auto">
             <table class="w-full">
@@ -40,8 +40,8 @@
                         <th class="text-left py-3 px-4">Type d'abonnement</th>
                         <th class="text-left py-3 px-4">Montant</th>
                         <th class="text-left py-3 px-4">Date</th>
-                        <th class="text-left py-3 px-4">Méthode</th>
-                        <th class="text-left py-3 px-4">Enregistré par</th>
+                        <th class="text-left py-3 px-4">Methode</th>
+                        <th class="text-left py-3 px-4">Enregistre par</th>
                         <th class="text-left py-3 px-4">Notes</th>
                         <th class="text-left py-3 px-4">Actions</th>
                     </tr>
@@ -74,7 +74,7 @@
                                 <a href="{{ route('receptionist.payments.invoice', $payment) }}" 
                                    class="btn-primary text-white px-4 py-2 rounded-lg text-sm font-semibold hover:shadow-lg transition inline-block"
                                    target="_blank"
-                                   title="Télécharger la facture PDF">
+                                   title="Telecharger la facture PDF">
                                      PDF
                                 </a>
                             </td>
@@ -90,4 +90,5 @@
     @endif
 </div>
 @endsection
+
 

@@ -7,7 +7,7 @@
                 <div class="shrink-0 flex items-center">
                     <a href="{{ route('dashboard') }}">
                         <span class="text-xl font-bold text-orange-500">
-                            GYM MANAGER
+                            MyFitness
                         </span>
                     </a>
                 </div>
@@ -16,7 +16,7 @@
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <a href="{{ route('dashboard') }}" 
                        class="{{ request()->routeIs('dashboard') ? 'text-orange-500' : 'text-gray-700' }} px-3 py-2 rounded-md text-sm font-medium hover:text-orange-600">
-                        Dashboard
+                        Tableau de bord
                     </a>
                 </div>
             </div>
@@ -37,12 +37,12 @@
                     <!-- Dropdown menu -->
                     <div x-show="open" @click.away="open = false" 
                          class="absolute right-0 mt-2 w-48 bg-white border rounded-md shadow-lg py-1 z-50">
-                        <a href="{{ route('profile.edit') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profile</a>
+                        <a href="{{ route('profile.edit') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profil</a>
 
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
                             <button type="submit" class="w-full text-left block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                                Log Out
+                                Deconnexion
                             </button>
                         </form>
                     </div>
@@ -64,7 +64,7 @@
     <!-- Responsive Navigation Menu -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
-            <a href="{{ route('dashboard') }}" class="{{ request()->routeIs('dashboard') ? 'text-orange-500' : 'text-gray-700' }} block px-3 py-2 rounded-md text-base font-medium hover:text-orange-600">Dashboard</a>
+            <a href="{{ route('dashboard') }}" class="{{ request()->routeIs('dashboard') ? 'text-orange-500' : 'text-gray-700' }} block px-3 py-2 rounded-md text-base font-medium hover:text-orange-600">Tableau de bord</a>
         </div>
 
         <!-- Responsive Settings Options -->
@@ -75,13 +75,14 @@
             </div>
 
             <div class="mt-3 space-y-1">
-                <a href="{{ route('profile.edit') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-100">Profile</a>
+                <a href="{{ route('profile.edit') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-100">Profil</a>
 
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
-                    <button type="submit" class="w-full text-left block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-100">Log Out</button>
+                    <button type="submit" class="w-full text-left block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-100">Deconnexion</button>
                 </form>
             </div>
         </div>
     </div>
 </nav>
+

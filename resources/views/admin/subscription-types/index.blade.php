@@ -32,9 +32,9 @@
                                 <tr>
                                     <th>Nom</th>
                                     <th>Prix de base</th>
-                                    <th>Réduction</th>
+                                    <th>Reduction</th>
                                     <th>Prix final</th>
-                                    <th>Durée</th>
+                                    <th>Duree</th>
                                     <th>Statut</th>
                                     <th>Actions</th>
                                 </tr>
@@ -79,7 +79,7 @@
                                                 </a>
                                                 <form action="{{ route('admin.subscription-types.destroy', $subscriptionType) }}" 
                                                       method="POST" 
-                                                      onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce type d\'abonnement ?');">
+                                                      onsubmit="return confirm('Êtes-vous sur de vouloir supprimer ce type d\'abonnement ?');">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="btn btn-sm btn-outline-danger">
@@ -91,7 +91,7 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="7" class="text-center">Aucun type d'abonnement trouvé</td>
+                                        <td colspan="7" class="text-center">Aucun type d'abonnement trouve</td>
                                     </tr>
                                 @endforelse
                             </tbody>
@@ -121,3 +121,4 @@
     });
 </script>
 @endpush
+

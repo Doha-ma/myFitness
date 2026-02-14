@@ -1,17 +1,17 @@
 @extends('layouts.admin')
 
-@section('title', 'Réceptionnistes')
+@section('title', 'Receptionnistes')
 
 @section('content')
 <div class="mb-8">
     <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
-            <h2 class="text-4xl font-bold text-white mb-2">Réceptionnistes</h2>
-            <p class="text-gray-300">Gestion de tous les réceptionnistes de la salle de sport</p>
+            <h2 class="text-4xl font-bold text-white mb-2">Receptionnistes</h2>
+            <p class="text-gray-300">Gestion de tous les receptionnistes de la salle de sport</p>
         </div>
         <div class="flex flex-wrap gap-2">
             <a href="{{ route('admin.receptionists.create') }}" class="btn btn-primary">
-                <i class="fas fa-plus"></i> Ajouter un Réceptionniste
+                <i class="fas fa-plus"></i> Ajouter un Receptionniste
             </a>
         </div>
     </div>
@@ -33,18 +33,18 @@
     @endif
 
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h3 class="h5 mb-0">Liste des Réceptionnistes</h3>
-        <span class="badge bg-info">{{ $receptionists->total() }} réceptionnistes</span>
+        <h3 class="h5 mb-0">Liste des Receptionnistes</h3>
+        <span class="badge bg-info">{{ $receptionists->total() }} receptionnistes</span>
     </div>
 
     @if($receptionists->isEmpty())
         <div class="text-center py-12">
             <i class="fas fa-clipboard text-6xl text-gray-300 mb-4"></i>
-            <h3 class="text-xl font-semibold text-gray-600 mb-2">Aucun réceptionniste</h3>
-            <p class="text-gray-500">Aucun réceptionniste n'a encore été ajouté au système.</p>
+            <h3 class="text-xl font-semibold text-gray-600 mb-2">Aucun receptionniste</h3>
+            <p class="text-gray-500">Aucun receptionniste n'a encore ete ajoute au systeme.</p>
             <div class="mt-4">
                 <a href="{{ route('admin.receptionists.create') }}" class="btn btn-primary">
-                    <i class="fas fa-plus"></i> Ajouter le premier réceptionniste
+                    <i class="fas fa-plus"></i> Ajouter le premier receptionniste
                 </a>
             </div>
         </div>
@@ -55,9 +55,9 @@
                     <tr>
                         <th>Nom</th>
                         <th>Email</th>
-                        <th>Téléphone</th>
-                        <th>Paiements traités</th>
-                        <th>Date de création</th>
+                        <th>Telephone</th>
+                        <th>Paiements traites</th>
+                        <th>Date de creation</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -75,10 +75,10 @@
                                     <span class="badge bg-info">{{ $receptionist->email }}</span>
                                     <br><small class="text-muted">{{ $receptionist->email }}</small>
                                 @else
-                                    <span class="badge bg-secondary">Non renseigné</span>
+                                    <span class="badge bg-secondary">Non renseigne</span>
                                 @endif
                             </td>
-                            <td>{{ $receptionist->phone ?? 'Non renseigné' }}</td>
+                            <td>{{ $receptionist->phone ?? 'Non renseigne' }}</td>
                             <td>{{ $receptionist->paymentsAsReceptionist->count() }}</td>
                             <td>{{ $receptionist->created_at->format('d/m/Y') }}</td>
                             <td>
@@ -110,3 +110,4 @@
     @endif
 </div>
 @endsection
+

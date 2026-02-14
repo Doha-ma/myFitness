@@ -7,7 +7,7 @@
     <a href="{{ route('coach.classes.index') }}" class="block px-4 py-3 rounded hover:bg-white/10 transition"><i class="fas fa-dumbbell me-3"></i><span>Mes Cours</span></a>
     <form method="POST" action="{{ route('logout') }}">
         @csrf
-        <button type="submit" class="block w-full text-left px-4 py-3 rounded hover:bg-white/10 transition mt-4"><i class="fas fa-sign-out-alt me-3"></i><span>D�connexion</span></button>
+        <button type="submit" class="block w-full text-left px-4 py-3 rounded hover:bg-white/10 transition mt-4"><i class="fas fa-sign-out-alt me-3"></i><span>Deconnexion</span></button>
     </form>
 @endsection
 
@@ -23,7 +23,7 @@
             <div>
                 <p class="text-gray-600 text-sm font-medium uppercase tracking-wide">Mes Cours</p>
                 <p class="text-4xl font-bold mt-3" style="color: var(--gym-primary);">{{ $totalClasses }}</p>
-                <p class="text-xs text-gray-500 mt-1">Cours créés</p>
+                <p class="text-xs text-gray-500 mt-1">Cours crees</p>
             </div>
             <div class="text-6xl opacity-20"></div>
         </div>
@@ -89,13 +89,13 @@
                 </div>
                 <div class="text-center">
                     <p class="text-3xl font-bold text-purple-600">{{ $classStats['class']->capacity }}</p>
-                    <p class="text-sm text-gray-600">Capacité totale</p>
+                    <p class="text-sm text-gray-600">Capacite totale</p>
                 </div>
             </div>
             
             @if($classStats['recent_enrollments']->isNotEmpty())
                 <div class="mt-4">
-                    <h5 class="font-semibold text-sm text-gray-700 mb-2">Inscriptions récentes:</h5>
+                    <h5 class="font-semibold text-sm text-gray-700 mb-2">Inscriptions recentes:</h5>
                     <div class="space-y-1">
                         @foreach($classStats['recent_enrollments'] as $enrollment)
                             <div class="text-xs text-gray-600">
@@ -111,9 +111,9 @@
     @if($classes->isEmpty())
         <div class="text-center py-12">
             <div class="text-6xl mb-4 opacity-50"></div>
-            <p class="text-gray-500 text-lg">Aucun cours trouvé</p>
+            <p class="text-gray-500 text-lg">Aucun cours trouve</p>
             <a href="{{ route('coach.classes.create') }}" class="btn-primary inline-block text-white px-6 py-3 rounded-lg font-semibold mt-4">
-                 Créer votre premier cours
+                 Creer votre premier cours
             </a>
         </div>
     @else
@@ -122,9 +122,18 @@
                 <div class="bg-gradient-to-br from-gray-50 to-blue-50 p-5 rounded-lg border border-blue-100 hover:shadow-xl transition transform hover:-translate-y-1">
                     <div class="flex justify-between items-start mb-3">
                         <h4 class="font-bold text-lg text-gray-800">{{ $class->name }}</h4>
-                        <span class="badge-primary px-2 py-1 rounded-full text-xs font-semibold">
-                            {{ $class->enrollments_count ?? $class->enrollments->count() }} membres
-                        </span>
+                        <div class="flex flex-col items-end gap-2">
+                            @if($class->status === 'approved')
+                                <span class="px-2 py-1 rounded-full text-xs bg-green-100 text-green-800 font-semibold">Valide</span>
+                            @elseif($class->status === 'pending')
+                                <span class="px-2 py-1 rounded-full text-xs bg-yellow-100 text-yellow-800 font-semibold">En attente</span>
+                            @else
+                                <span class="px-2 py-1 rounded-full text-xs bg-red-100 text-red-800 font-semibold">Rejete</span>
+                            @endif
+                            <span class="badge-primary px-2 py-1 rounded-full text-xs font-semibold">
+                                {{ $class->enrollments_count ?? $class->enrollments->count() }} membres
+                            </span>
+                        </div>
                     </div>
                     <p class="text-sm text-gray-600 mb-4 line-clamp-2">{{ Str::limit($class->description ?? 'Aucune description', 80) }}</p>
                     
@@ -141,10 +150,10 @@
                     
                     <div class="flex justify-between items-center pt-3 border-t border-gray-200">
                         <div class="text-xs text-gray-500">
-                            <span class="font-semibold">Capacité:</span> {{ $class->capacity }} personnes
+                            <span class="font-semibold">Capacite:</span> {{ $class->capacity }} personnes
                         </div>
                         <a href="{{ route('coach.classes.show', $class) }}" class="text-sm font-semibold" style="color: var(--gym-primary);">
-                            Voir détails →
+                            Voir details →
                         </a>
                     </div>
                 </div>

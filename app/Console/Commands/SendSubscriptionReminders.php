@@ -3,7 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Mail\SubscriptionReminderEmail;
-use App\Models\Payment;
+use App\Models\Member;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
@@ -22,74 +22,62 @@ class SendSubscriptionReminders extends Command
      *
      * @var string
      */
-    protected $description = 'Send subscription expiration reminder emails to members';
+    protected $description = 'Envoie les emails de rappel pour les abonnements expires';
 
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): int
     {
-        // Check if email reminders are enabled
         if (!config('subscription.email_reminders_enabled', true)) {
-            $this->info('Email reminders are disabled. Skipping...');
-            return 0;
+            $this->info('Les rappels emails sont desactives.');
+
+            return self::SUCCESS;
         }
 
-        $this->info('Sending subscription reminder emails...');
+        $this->info('Envoi des rappels d abonnement expire...');
 
         $remindersSent = 0;
         $errors = 0;
+        $reminderDaysAfter = config('subscription.reminder_days_after', [1, 3, 7]);
 
-        // Get members with active subscriptions
-        $membersWithSubscriptions = Payment::with(['member', 'subscriptionType'])
-            ->whereHas('member', function ($query) {
-                $query->where('status', 'active');
-            })
-            ->whereHas('subscriptionType', function ($query) {
-                $query->where('is_active', true);
-            })
-            ->whereNotNull('subscription_type_id')
-            ->orderBy('payment_date', 'desc')
-            ->get()
-            ->groupBy('member_id');
+        $members = Member::with('latestSubscriptionPayment.subscriptionType')
+            ->whereNotNull('email')
+            ->whereNotNull('subscription_end_date')
+            ->get();
 
-        foreach ($membersWithSubscriptions as $memberId => $payments) {
-            $member = $payments->first()->member;
-            $lastPayment = $payments->first();
-            $subscriptionType = $lastPayment->subscriptionType;
+        foreach ($members as $member) {
+            $payment = $member->latestSubscriptionPayment;
+            $subscriptionType = $payment?->subscriptionType;
 
-            if (!$member || !$subscriptionType) {
+            if (!$payment || !$subscriptionType) {
                 continue;
             }
 
-            // Calculate expiry date
-            $expiryDate = $lastPayment->payment_date->copy()->addDays($subscriptionType->duration_days);
-            $daysUntilExpiry = now()->diffInDays($expiryDate, false);
+            $expiryDate = $member->subscription_end_date->copy()->startOfDay();
+            $daysUntilExpiry = now()->startOfDay()->diffInDays($expiryDate, false);
 
-            // Send reminder if subscription expires within configured reminder periods
-            $reminderDaysBefore = config('subscription.reminder_days_before', [7, 3, 1]);
-            $reminderDaysAfter = config('subscription.reminder_days_after', [1, 3, 7]);
-            
-            if ($daysUntilExpiry <= 0 && in_array(abs($daysUntilExpiry), $reminderDaysAfter, true)) {
-                // Recently expired (1, 3, or 7 days ago)
-                $this->sendReminder($member, $lastPayment, $subscriptionType, $daysUntilExpiry, $remindersSent, $errors);
-            } elseif (in_array($daysUntilExpiry, $reminderDaysBefore, true)) {
-                // About to expire (7, 3, or 1 days before)
-                $this->sendReminder($member, $lastPayment, $subscriptionType, $daysUntilExpiry, $remindersSent, $errors);
+            if ($daysUntilExpiry > 0) {
+                continue;
             }
+
+            $daysAfterExpiry = abs($daysUntilExpiry);
+            if (!in_array($daysAfterExpiry, $reminderDaysAfter, true)) {
+                continue;
+            }
+
+            $this->sendReminder($member, $payment, $subscriptionType, $daysUntilExpiry, $remindersSent, $errors);
         }
 
-        $this->info("Process completed. Reminders sent: {$remindersSent}, Errors: {$errors}");
-        
-        return $errors === 0 ? 0 : 1;
+        $this->info("Termine. Emails envoyes : {$remindersSent}. Erreurs : {$errors}.");
+
+        return $errors === 0 ? self::SUCCESS : self::FAILURE;
     }
 
-    private function sendReminder($member, $lastPayment, $subscriptionType, $daysUntilExpiry, &$remindersSent, &$errors)
+    private function sendReminder($member, $lastPayment, $subscriptionType, int $daysUntilExpiry, int &$remindersSent, int &$errors): void
     {
         try {
-            // Check if member has a valid email
             if (empty($member->email)) {
-                $this->warn("Member {$member->full_name} has no email address");
                 return;
             }
 
@@ -103,17 +91,16 @@ class SendSubscriptionReminders extends Command
             }
 
             $remindersSent++;
-            
-            $status = $daysUntilExpiry <= 0 ? "expired" : "expires in {$daysUntilExpiry} days";
-            $this->line("✓ Reminder sent to {$member->full_name} ({$member->email}) - Subscription {$status}");
-
+            $this->line("Rappel envoye a {$member->full_name} ({$member->email})");
         } catch (\Exception $e) {
             $errors++;
-            $this->error("✗ Failed to send reminder to {$member->full_name}: {$e->getMessage()}");
-            Log::error("Subscription reminder failed", [
+
+            $this->error("Echec d envoi pour {$member->full_name}: {$e->getMessage()}");
+            Log::error('Subscription reminder failed', [
                 'member_id' => $member->id,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ]);
         }
     }
 }
+

@@ -28,7 +28,7 @@ class LoginController extends Controller
 
         $request->session()->regenerate();
 
-        // Redirection selon le rôle
+        // Redirection selon le role
         $user = Auth::user();
         return match($user->role) {
             'admin' => redirect()->route('admin.dashboard'),

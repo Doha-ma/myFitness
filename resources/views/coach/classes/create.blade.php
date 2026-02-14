@@ -1,20 +1,20 @@
 @extends('layouts.app')
 
-@section('title', 'Créer Cours')
+@section('title', 'Creer Cours')
 
 @section('sidebar')
     <a href="{{ route('coach.dashboard') }}" class="block px-4 py-3 rounded hover:bg-white/10 transition"><i class="fas fa-tachometer-alt me-3"></i><span>Dashboard</span></a>
     <a href="{{ route('coach.classes.index') }}" class="block px-4 py-3 rounded hover:bg-white/10 transition bg-white/10"><i class="fas fa-dumbbell me-3"></i><span>Mes Cours</span></a>
     <form method="POST" action="{{ route('logout') }}">
         @csrf
-        <button type="submit" class="block w-full text-left px-4 py-3 rounded hover:bg-white/10 transition mt-4"><i class="fas fa-sign-out-alt me-3"></i><span>D�connexion</span></button>
+        <button type="submit" class="block w-full text-left px-4 py-3 rounded hover:bg-white/10 transition mt-4"><i class="fas fa-sign-out-alt me-3"></i><span>Deconnexion</span></button>
     </form>
 @endsection
 
 @section('content')
 <div class="mb-6">
-    <h2 class="text-3xl font-bold text-white mb-2">Créer un nouveau cours</h2>
-    <p class="text-gray-300">Ajoutez un nouveau cours à votre programme</p>
+    <h2 class="text-3xl font-bold text-white mb-2">Creer un nouveau cours</h2>
+    <p class="text-gray-300">Ajoutez un nouveau cours a votre programme</p>
 </div>
 
 <div class="card p-8 max-w-2xl">
@@ -46,7 +46,7 @@
         <div class="mb-6">
             <label class="block text-gray-800 font-semibold mb-2"> Description</label>
             <textarea name="description" rows="4" 
-                      placeholder="Décrivez le cours, niveau requis, objectifs, équipements nécessaires..."
+                      placeholder="Decrivez le cours, niveau requis, objectifs, equipements necessaires..."
                       class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none transition">{{ old('description') }}</textarea>
             @error('description')
                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
@@ -55,7 +55,7 @@
 
         <div class="grid grid-cols-2 gap-6 mb-6">
             <div>
-                <label class="block text-gray-800 font-semibold mb-2"> Capacité (personnes)</label>
+                <label class="block text-gray-800 font-semibold mb-2"> Capacite (personnes)</label>
                 <input type="number" name="capacity" value="{{ old('capacity', 20) }}" min="1"
                        class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none transition" 
                        required>
@@ -65,11 +65,11 @@
                 @enderror
             </div>
             <div>
-                <label class="block text-gray-800 font-semibold mb-2"> Durée (minutes)</label>
+                <label class="block text-gray-800 font-semibold mb-2"> Duree (minutes)</label>
                 <input type="number" name="duration" value="{{ old('duration', 60) }}" min="15"
                        class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none transition" 
                        required>
-                <p class="mt-1 text-xs text-gray-500">Durée d'une session</p>
+                <p class="mt-1 text-xs text-gray-500">Duree d'une session</p>
                 @error('duration')
                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                 @enderror
@@ -78,7 +78,7 @@
 
         <div class="flex gap-4 pt-4">
             <button type="submit" class="btn-primary text-white px-8 py-3 rounded-lg font-semibold shadow-lg hover:shadow-xl transition">
-                 Créer le Cours
+                 Creer le Cours
             </button>
             <a href="{{ route('coach.classes.index') }}" class="bg-gray-200 hover:bg-gray-300 text-gray-800 px-8 py-3 rounded-lg font-semibold transition">
                  Annuler
@@ -87,4 +87,5 @@
     </form>
 </div>
 @endsection
+
 

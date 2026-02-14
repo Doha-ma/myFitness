@@ -12,6 +12,12 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
+        $schedule->command('subscriptions:check-expiry')
+            ->dailyAt('08:00')
+            ->withoutOverlapping()
+            ->runInBackground()
+            ->appendOutputTo(storage_path('logs/subscription-expiry.log'));
+
         // Send subscription reminders daily at 9:00 AM
         $schedule->command('subscription:send-reminders')
             ->dailyAt('09:00')

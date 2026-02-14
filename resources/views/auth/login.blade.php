@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Connexion - Gym Management</title>
+    <title>Connexion - MyFitness</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         :root {
@@ -66,8 +66,8 @@
     <div class="login-container w-full max-w-md">
         <div class="glass-effect p-8 rounded-2xl shadow-2xl">
             <div class="text-center mb-8">
-                <h1 class="text-4xl font-bold mb-2" style="color: var(--gym-primary);"> GYM MANAGER</h1>
-                <p class="text-gray-700 font-medium">Connectez-vous à votre compte</p>
+                <h1 class="text-4xl font-bold mb-2" style="color: var(--gym-primary);"> MyFitness</h1>
+                <p class="text-gray-700 font-medium">Connectez-vous a votre compte</p>
             </div>
 
             @if($errors->any())
@@ -132,3 +132,5 @@
     </div>
 </body>
 </html>
+
+

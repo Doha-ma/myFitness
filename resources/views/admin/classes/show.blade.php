@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Détails du Cours')
+@section('title', 'Details du Cours')
 
 @section('content')
 <div class="mb-6">
@@ -17,7 +17,7 @@
             <a href="{{ route('admin.classes.edit', $class) }}" class="btn-primary text-white px-4 py-2 rounded-lg hover:shadow-lg transition">
                  Modifier
             </a>
-            <form method="POST" action="{{ route('admin.classes.destroy', $class) }}" class="inline" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce cours ? Tous les membres seront désinscrits. Cette action est irréversible.')">
+            <form method="POST" action="{{ route('admin.classes.destroy', $class) }}" class="inline" onsubmit="return confirm('Êtes-vous sur de vouloir supprimer ce cours ? Tous les membres seront desinscrits. Cette action est irreversible.')">
                 @csrf
                 <button type="submit" class="btn btn-danger text-white px-4 py-2 rounded-lg hover:shadow-lg transition">
                     Supprimer
@@ -33,12 +33,12 @@
             <p class="text-sm text-gray-500">{{ $class->coach->email }}</p>
         </div>
         <div class="bg-gray-50 p-4 rounded-lg">
-            <p class="text-sm text-gray-600 mb-1">Capacité</p>
+            <p class="text-sm text-gray-600 mb-1">Capacite</p>
             <p class="font-semibold">{{ $class->capacity }} personnes</p>
             <p class="text-sm text-gray-500">{{ $class->enrollments_count }} inscrits</p>
         </div>
         <div class="bg-gray-50 p-4 rounded-lg">
-            <p class="text-sm text-gray-600 mb-1">Durée</p>
+            <p class="text-sm text-gray-600 mb-1">Duree</p>
             <p class="font-semibold">{{ $class->duration }} minutes</p>
             <p class="text-sm text-gray-500">Par session</p>
         </div>
@@ -48,9 +48,9 @@
                 {{ $class->status === 'approved' ? 'bg-success' : '' }}
                 {{ $class->status === 'pending' ? 'bg-warning' : '' }}
                 {{ $class->status === 'rejected' ? 'bg-danger' : '' }}">
-                {{ $class->status === 'approved' ? 'Approuvé' : '' }}
+                {{ $class->status === 'approved' ? 'Approuve' : '' }}
                 {{ $class->status === 'pending' ? 'En attente' : '' }}
-                {{ $class->status === 'rejected' ? 'Rejeté' : '' }}
+                {{ $class->status === 'rejected' ? 'Rejete' : '' }}
             </span>
             @if($class->rejection_reason)
                 <p class="text-sm text-gray-500 mt-1">{{ $class->rejection_reason }}</p>
@@ -63,7 +63,7 @@
         <h3 class="text-xl font-semibold text-white mb-4">Horaires</h3>
         @if($class->schedules->isEmpty())
             <div class="bg-gray-50 p-4 rounded-lg text-center">
-                <p class="text-gray-600">Aucun horaire défini pour ce cours.</p>
+                <p class="text-gray-600">Aucun horaire defini pour ce cours.</p>
                 <a href="{{ route('admin.classes.edit', $class) }}" class="text-blue-600 hover:underline mt-2 inline-block">
                     Ajouter des horaires
                 </a>
@@ -85,7 +85,7 @@
         <h3 class="text-xl font-semibold text-white mb-4">Membres inscrits ({{ $class->enrollments_count }})</h3>
         @if($class->enrollments->isEmpty())
             <div class="bg-gray-50 p-4 rounded-lg text-center">
-                <p class="text-gray-600">Aucun membre n'est encore inscrit à ce cours.</p>
+                <p class="text-gray-600">Aucun membre n'est encore inscrit a ce cours.</p>
             </div>
         @else
             <div class="table-responsive">
@@ -150,12 +150,12 @@
                 <form method="POST" action="{{ route('admin.classes.reject', $class) }}">
                     @csrf
                     <div class="modal-body">
-                        <p>Êtes-vous sûr de vouloir rejeter le cours <strong>{{ $class->name }}</strong> ?</p>
+                        <p>Êtes-vous sur de vouloir rejeter le cours <strong>{{ $class->name }}</strong> ?</p>
                         
                         <div class="mb-3">
                             <label for="rejection_reason" class="form-label">Raison du rejet (optionnel)</label>
                             <textarea class="form-control" id="rejection_reason" name="rejection_reason" rows="3" 
-                                      placeholder="Expliquez pourquoi ce cours est rejeté..."></textarea>
+                                      placeholder="Expliquez pourquoi ce cours est rejete..."></textarea>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -170,3 +170,4 @@
     </div>
 @endif
 @endsection
+

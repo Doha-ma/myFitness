@@ -7,7 +7,7 @@
     <a href="{{ route('coach.classes.index') }}" class="block px-4 py-3 rounded hover:bg-white/10 transition bg-white/10"><i class="fas fa-dumbbell me-3"></i><span>Mes Cours</span></a>
     <form method="POST" action="{{ route('logout') }}">
         @csrf
-        <button type="submit" class="block w-full text-left px-4 py-3 rounded hover:bg-white/10 transition"><i class="fas fa-sign-out-alt me-3"></i><span>D�connexion</span></button>
+        <button type="submit" class="block w-full text-left px-4 py-3 rounded hover:bg-white/10 transition"><i class="fas fa-sign-out-alt me-3"></i><span>Deconnexion</span></button>
     </form>
 @endsection
 
@@ -16,7 +16,7 @@
     <div class="flex justify-between items-center">
         <h2 class="text-4xl font-bold text-white">Mes Cours</h2>
         <a href="{{ route('coach.classes.create') }}" class="btn-primary text-white px-6 py-3 rounded-lg font-semibold">
-             Créer un Cours
+             Creer un Cours
         </a>
     </div>
 </div>
@@ -35,9 +35,9 @@
 
 @if($classes->isEmpty())
     <div class="card p-8 text-center">
-        <p class="text-gray-500 text-lg mb-4">Aucun cours créé pour le moment</p>
+        <p class="text-gray-500 text-lg mb-4">Aucun cours cree pour le moment</p>
         <a href="{{ route('coach.classes.create') }}" class="btn-primary inline-block text-white px-6 py-3 rounded-lg font-semibold">
-             Créer votre premier cours
+             Creer votre premier cours
         </a>
     </div>
 @else
@@ -48,7 +48,8 @@
                     <tr class="border-b">
                         <th class="text-left py-3 px-4">Nom du Cours</th>
                         <th class="text-left py-3 px-4">Description</th>
-                        <th class="text-left py-3 px-4">Capacité</th>
+                        <th class="text-left py-3 px-4">Statut</th>
+                        <th class="text-left py-3 px-4">Capacite</th>
                         <th class="text-left py-3 px-4">Membres Inscrits</th>
                         <th class="text-left py-3 px-4">Actions</th>
                     </tr>
@@ -58,6 +59,15 @@
                         <tr class="border-b hover:bg-gray-50">
                             <td class="py-3 px-4 font-semibold">{{ $class->name }}</td>
                             <td class="py-3 px-4">{{ Str::limit($class->description, 50) }}</td>
+                            <td class="py-3 px-4">
+                                @if($class->status === 'approved')
+                                    <span class="px-3 py-1 rounded-full text-xs bg-green-100 text-green-800 font-semibold">Valide</span>
+                                @elseif($class->status === 'pending')
+                                    <span class="px-3 py-1 rounded-full text-xs bg-yellow-100 text-yellow-800 font-semibold">En attente</span>
+                                @else
+                                    <span class="px-3 py-1 rounded-full text-xs bg-red-100 text-red-800 font-semibold">Rejete</span>
+                                @endif
+                            </td>
                             <td class="py-3 px-4">{{ $class->capacity }} personnes</td>
                             <td class="py-3 px-4">
                                 <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-semibold">
@@ -68,7 +78,7 @@
                                 <div class="flex gap-2">
                                     <a href="{{ route('coach.classes.show', $class) }}" class="text-blue-500 hover:text-blue-700"> Voir</a>
                                     <a href="{{ route('coach.classes.edit', $class) }}" class="text-orange-500 hover:text-orange-700"> Modifier</a>
-                                    <form method="POST" action="{{ route('coach.classes.destroy', $class) }}" class="inline" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce cours ? Tous les membres seront désinscrits. Cette action est irréversible.')">
+                                    <form method="POST" action="{{ route('coach.classes.destroy', $class) }}" class="inline" onsubmit="return confirm('Êtes-vous sur de vouloir supprimer ce cours ? Tous les membres seront desinscrits. Cette action est irreversible.')">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="text-red-500 hover:text-red-700"> Supprimer</button>

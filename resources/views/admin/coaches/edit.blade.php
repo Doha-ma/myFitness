@@ -31,7 +31,7 @@
             <div class="d-flex align-items-center">
                 <i class="fas fa-check-circle me-3"></i>
                 <div>
-                    <strong>Succès!</strong> {{ session('success') }}
+                    <strong>Succes!</strong> {{ session('success') }}
                 </div>
             </div>
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
@@ -102,7 +102,7 @@
         <div class="row">
             <div class="col-md-6">
                 <div class="mb-3">
-                    <label for="phone" class="form-label">Téléphone</label>
+                    <label for="phone" class="form-label">Telephone</label>
                     <input type="tel" class="form-control @error('phone') is-invalid @enderror" 
                            id="phone" name="phone" value="{{ old('phone', $coach->phone) }}">
                     @error('phone')
@@ -132,18 +132,18 @@
                         <p class="mb-1"><strong>Email actuel:</strong> {{ $coach->email }}</p>
                     </div>
                     <div class="col-md-4">
-                        <p class="mb-1"><strong>Rôle:</strong> <span class="badge bg-primary">{{ $coach->role }}</span></p>
+                        <p class="mb-1"><strong>Role:</strong> <span class="badge bg-primary">{{ $coach->role }}</span></p>
                     </div>
                     <div class="col-md-4">
-                        <p class="mb-1"><strong>Cours assignés:</strong> {{ $coach->classesAsCoach->count() }}</p>
+                        <p class="mb-1"><strong>Cours assignes:</strong> {{ $coach->classesAsCoach->count() }}</p>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-6">
-                        <p class="mb-1"><strong>Date de création:</strong> {{ $coach->created_at->format('d/m/Y H:i') }}</p>
+                        <p class="mb-1"><strong>Date de creation:</strong> {{ $coach->created_at->format('d/m/Y H:i') }}</p>
                     </div>
                     <div class="col-md-6">
-                        <p class="mb-1"><strong>Dernière mise à jour:</strong> {{ $coach->updated_at->format('d/m/Y H:i') }}</p>
+                        <p class="mb-1"><strong>Derniere mise a jour:</strong> {{ $coach->updated_at->format('d/m/Y H:i') }}</p>
                     </div>
                 </div>
             </div>
@@ -151,17 +151,18 @@
 
         <div class="d-flex justify-content-between align-items-center mt-4">
             <div class="text-muted">
-                <small><i class="fas fa-info-circle"></i> Les champs marqués d'un astérisque (*) sont obligatoires</small>
+                <small><i class="fas fa-info-circle"></i> Les champs marques d'un asterisque (*) sont obligatoires</small>
             </div>
             <div class="btn-group">
                 <a href="{{ route('admin.coaches.index') }}" class="btn btn-secondary">
                     <i class="fas fa-times"></i> Annuler
                 </a>
                 <button type="submit" class="btn btn-primary">
-                    <i class="fas fa-save"></i> Mettre à jour
+                    <i class="fas fa-save"></i> Mettre a jour
                 </button>
             </div>
         </div>
     </form>
 </div>
 @endsection
+

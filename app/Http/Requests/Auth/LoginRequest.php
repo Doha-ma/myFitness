@@ -68,7 +68,7 @@ class LoginRequest extends FormRequest
         $seconds = RateLimiter::availableIn($this->throttleKey());
 
         throw ValidationException::withMessages([
-            'email' => 'Trop de tentatives de connexion. Veuillez réessayer dans ' . ceil($seconds / 60) . ' minute(s).',
+            'email' => 'Trop de tentatives de connexion. Veuillez reessayer dans ' . ceil($seconds / 60) . ' minute(s).',
         ]);
     }
 
@@ -80,3 +80,4 @@ class LoginRequest extends FormRequest
         return Str::transliterate(Str::lower($this->string('email')).'|'.$this->ip());
     }
 }
+

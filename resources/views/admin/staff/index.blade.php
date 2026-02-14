@@ -8,7 +8,7 @@
     <a href="{{ route('admin.subscription-types.index') }}" class="block px-4 py-3 rounded hover:bg-white/10 transition"> Types d'Abonnement</a>
     <form method="POST" action="{{ route('logout') }}">
         @csrf
-        <button type="submit" class="block w-full text-left px-4 py-3 rounded hover:bg-white/10 transition mt-4"> Déconnexion</button>
+        <button type="submit" class="block w-full text-left px-4 py-3 rounded hover:bg-white/10 transition mt-4"> Deconnexion</button>
     </form>
 @endsection
 
@@ -34,11 +34,11 @@
     </div>
 @endif
 
-<!-- Réceptionnistes -->
+<!-- Receptionnistes -->
 <div class="card p-6 mb-6">
-    <h3 class="text-2xl font-bold mb-4"> Réceptionnistes</h3>
+    <h3 class="text-2xl font-bold mb-4"> Receptionnistes</h3>
     @if($receptionists->isEmpty())
-        <p class="text-gray-500">Aucun réceptionniste pour le moment</p>
+        <p class="text-gray-500">Aucun receptionniste pour le moment</p>
     @else
         <div class="overflow-x-auto">
             <table class="w-full">
@@ -110,3 +110,4 @@
     @endif
 </div>
 @endsection
+

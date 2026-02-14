@@ -24,9 +24,9 @@
     <a href="{{ route('admin.classes.index') }}" class="card stat-card p-6 block hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
         <div class="flex items-center justify-between">
             <div>
-                <p class="text-gray-600 text-sm font-medium uppercase tracking-wide">Cours Créés</p>
+                <p class="text-gray-600 text-sm font-medium uppercase tracking-wide">Cours Crees</p>
                 <p class="text-4xl font-bold mt-3" style="color: var(--gym-secondary);">{{ $totalClasses }}</p>
-                <p class="text-xs text-gray-500 mt-1">En activité</p>
+                <p class="text-xs text-gray-500 mt-1">En activite</p>
             </div>
             <div class="text-6xl opacity-20">💪</div>
         </div>
@@ -35,7 +35,7 @@
     <a href="{{ route('admin.receptionists.index') }}" class="card stat-card p-6 block hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
         <div class="flex items-center justify-between">
             <div>
-                <p class="text-gray-600 text-sm font-medium uppercase tracking-wide">Réceptionnistes</p>
+                <p class="text-gray-600 text-sm font-medium uppercase tracking-wide">Receptionnistes</p>
                 <p class="text-4xl font-bold mt-3" style="color: var(--gym-accent);">{{ $totalReceptionists }}</p>
                 <p class="text-xs text-gray-500 mt-1">En service</p>
             </div>
@@ -116,12 +116,12 @@
 
     <div class="card p-6">
         <h3 class="text-xl font-bold mb-4 flex items-center">
-            <span class="mr-2"></span> Paiements Récents
+            <span class="mr-2"></span> Paiements Recents
         </h3>
         @if($recentPayments->isEmpty())
             <div class="text-center py-8">
-                <p class="text-gray-500 text-lg">Aucun paiement récent</p>
-                <p class="text-gray-400 text-sm mt-2">Les paiements apparaîtront ici</p>
+                <p class="text-gray-500 text-lg">Aucun paiement recent</p>
+                <p class="text-gray-400 text-sm mt-2">Les paiements apparaitront ici</p>
             </div>
         @else
             <div class="space-y-3 max-h-96 overflow-y-auto">
@@ -129,7 +129,7 @@
                     <div class="flex justify-between items-center bg-gradient-to-r from-gray-50 to-orange-50 p-4 rounded-lg border border-orange-100 hover:shadow-md transition">
                         <div>
                             <p class="font-semibold text-gray-800">{{ $payment->member->full_name ?? 'N/A' }}</p>
-                            <p class="text-sm text-gray-600 mt-1">{{ $payment->payment_date->format('d/m/Y à H:i') }}</p>
+                            <p class="text-sm text-gray-600 mt-1">{{ $payment->payment_date->format('d/m/Y a H:i') }}</p>
                             <p class="text-xs text-gray-500 mt-1">Par: {{ $payment->receptionist->name ?? 'N/A' }}</p>
                         </div>
                         <div class="text-right">
@@ -145,3 +145,4 @@
     </div>
 </div>
 @endsection
+

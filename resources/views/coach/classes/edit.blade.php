@@ -7,7 +7,7 @@
     <a href="{{ route('coach.classes.index') }}" class="block px-4 py-3 rounded hover:bg-white/10 transition"><i class="fas fa-dumbbell me-3"></i><span>Mes Cours</span></a>
     <form method="POST" action="{{ route('logout') }}">
         @csrf
-        <button type="submit" class="block w-full text-left px-4 py-3 rounded hover:bg-white/10 transition"><i class="fas fa-sign-out-alt me-3"></i><span>D�connexion</span></button>
+        <button type="submit" class="block w-full text-left px-4 py-3 rounded hover:bg-white/10 transition"><i class="fas fa-sign-out-alt me-3"></i><span>Deconnexion</span></button>
     </form>
 @endsection
 
@@ -29,18 +29,18 @@
         <div class="mb-4">
             <label class="block text-gray-700 font-semibold mb-2">Description</label>
             <textarea name="description" rows="4" 
-                      placeholder="Décrivez le cours, niveau requis, objectifs..."
+                      placeholder="Decrivez le cours, niveau requis, objectifs..."
                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500">{{ old('description', $classModel->description) }}</textarea>
         </div>
 
         <div class="grid grid-cols-2 gap-4 mb-6">
             <div>
-                <label class="block text-gray-700 font-semibold mb-2">Capacité (personnes)</label>
+                <label class="block text-gray-700 font-semibold mb-2">Capacite (personnes)</label>
                 <input type="number" name="capacity" value="{{ old('capacity', $classModel->capacity) }}" min="1"
                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500" required>
             </div>
             <div>
-                <label class="block text-gray-700 font-semibold mb-2">Durée (minutes)</label>
+                <label class="block text-gray-700 font-semibold mb-2">Duree (minutes)</label>
                 <input type="number" name="duration" value="{{ old('duration', $classModel->duration) }}" min="15"
                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500" required>
             </div>
@@ -57,4 +57,5 @@
     </form>
 </div>
 @endsection
+
 

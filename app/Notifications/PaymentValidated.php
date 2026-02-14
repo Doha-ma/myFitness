@@ -43,8 +43,8 @@ class PaymentValidated extends Notification
     public function toArray(object $notifiable): array
     {
         return [
-            'title' => 'Nouveau paiement validé',
-            'message' => "{$this->receptionist->name} a validé un paiement de {$this->payment->amount} DH pour {$this->payment->member->full_name}",
+            'title' => 'Nouveau paiement valide',
+            'message' => "{$this->receptionist->name} a valide un paiement de {$this->payment->amount} DH pour {$this->payment->member->full_name}",
             'action_type' => 'payment',
             'performed_by' => $this->receptionist->name,
             'payment_id' => $this->payment->id,
@@ -56,3 +56,4 @@ class PaymentValidated extends Notification
         ];
     }
 }
+

@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Ajouter un Réceptionniste')
+@section('title', 'Ajouter un Receptionniste')
 
 @section('content')
 <div class="mb-8">
@@ -8,9 +8,9 @@
         <div>
             <h2 class="text-4xl font-bold text-white mb-2 flex items-center gap-3">
                 <i class="fas fa-user-plus text-yellow-400"></i>
-                Ajouter un Réceptionniste
+                Ajouter un Receptionniste
             </h2>
-            <p class="text-gray-300 text-sm">Créez un nouveau compte réceptionniste pour la salle de sport</p>
+            <p class="text-gray-300 text-sm">Creez un nouveau compte receptionniste pour la salle de sport</p>
         </div>
         <div class="flex flex-wrap gap-2">
             <a href="{{ route('admin.dashboard') }}" class="btn btn-secondary">
@@ -19,7 +19,7 @@
             </a>
             <a href="{{ route('admin.receptionists.index') }}" class="btn btn-info">
                 <i class="fas fa-list"></i>
-                Liste des réceptionnistes
+                Liste des receptionnistes
             </a>
         </div>
     </div>
@@ -31,7 +31,7 @@
             <div class="d-flex align-items-center">
                 <i class="fas fa-check-circle me-3"></i>
                 <div>
-                    <strong>Succès!</strong> {{ session('success') }}
+                    <strong>Succes!</strong> {{ session('success') }}
                 </div>
             </div>
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
@@ -135,7 +135,7 @@
                 <div class="mb-4">
                     <label for="phone" class="form-label">
                         <i class="fas fa-phone mr-2"></i>
-                        Téléphone
+                        Telephone
                     </label>
                     <input type="tel" 
                            id="phone" 
@@ -163,7 +163,7 @@
                            name="address" 
                            class="form-control" 
                            value="{{ old('address') }}"
-                           placeholder="Entrez l'adresse complète">
+                           placeholder="Entrez l'adresse complete">
                     @error('address')
                         <div class="text-red-500 text-sm mt-1">
                             <i class="fas fa-exclamation-circle mr-1"></i>
@@ -177,9 +177,10 @@
         <div class="flex items-center justify-end mt-6">
             <button type="submit" class="btn btn-primary">
                 <i class="fas fa-user-plus mr-2"></i>
-                Créer le réceptionniste
+                Creer le receptionniste
             </button>
         </div>
     </form>
 </div>
 @endsection
+

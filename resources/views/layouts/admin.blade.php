@@ -433,7 +433,7 @@
                     </a>
                     <a href="{{ route('admin.receptionists.index') }}" class="{{ request()->routeIs('admin.receptionists.*') ? 'active' : '' }}">
                         <i class="fas fa-clipboard me-3"></i> 
-                        <span>Réceptionnistes</span>
+                        <span>Receptionnistes</span>
                     </a>
                     <a href="{{ route('admin.subscription-types.index') }}" class="{{ request()->routeIs('admin.subscription-types.*') ? 'active' : '' }}">
                         <i class="fas fa-credit-card me-3"></i> 
@@ -454,9 +454,16 @@
                     <a href="{{ route('admin.notifications.index') }}" class="{{ request()->routeIs('admin.notifications.*') ? 'active' : '' }}">
                         <i class="fas fa-bell me-3"></i> 
                         <span>Notifications</span>
-                        @if(auth()->user()->unreadNotifications->count() > 0)
+                        @php
+                            $unreadNotifications = auth()->user()->unreadNotifications;
+                            $expiredMembersBadgeCount = $unreadNotifications
+                                ->filter(fn ($notification) => ($notification->data['action_type'] ?? null) === 'expired_subscriptions')
+                                ->sum(fn ($notification) => (int) ($notification->data['expired_count'] ?? 0));
+                            $badgeCount = $expiredMembersBadgeCount > 0 ? $expiredMembersBadgeCount : $unreadNotifications->count();
+                        @endphp
+                        @if($badgeCount > 0)
                             <span class="badge badge-danger ml-auto">
-                                {{ auth()->user()->unreadNotifications->count() }}
+                                {{ $badgeCount }}
                             </span>
                         @endif
                     </a>
@@ -464,7 +471,7 @@
                         @csrf
                         <button type="submit" class="text-red-300 hover:text-red-200">
                             <i class="fas fa-sign-out-alt me-3"></i> 
-                            <span>Déconnexion</span>
+                            <span>Deconnexion</span>
                         </button>
                     </form>
                 @show
@@ -552,13 +559,13 @@
                 jQuery('.datatable').DataTable({
                     language: {
                         search: "Rechercher:",
-                        lengthMenu: "Afficher _MENU_ entrées",
-                        info: "Affichage de _START_ à _END_ sur _TOTAL_ entrées",
+                        lengthMenu: "Afficher _MENU_ entrees",
+                        info: "Affichage de _START_ a _END_ sur _TOTAL_ entrees",
                         paginate: {
                             first: "Premier",
                             last: "Dernier",
                             next: "Suivant",
-                            previous: "Précédent"
+                            previous: "Precedent"
                         }
                     },
                     pageLength: 10,
@@ -569,4 +576,5 @@
     </script>
 </body>
 </html>
+
 

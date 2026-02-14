@@ -8,14 +8,21 @@ use App\Models\Schedule;
 use App\Models\Payment;
 use App\Models\ClassModel;
 use App\Models\SubscriptionType;
+use App\Notifications\ExpiredSubscriptionsNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class AdminController extends Controller
 {
     public function dashboard()
     {
+        $this->syncExpiredSubscriptionsNotification();
+
         $totalMembers = Member::count();
+        $expiredMembersCount = Member::whereNotNull('subscription_end_date')
+            ->whereDate('subscription_end_date', '<', today())
+            ->count();
         $totalClasses = ClassModel::count();
         $totalReceptionists = User::where('role', 'receptionist')->count();
         $totalCoaches = User::where('role', 'coach')->count();
@@ -36,6 +43,7 @@ class AdminController extends Controller
 
         return view('admin.dashboard', compact(
             'totalMembers',
+            'expiredMembersCount',
             'totalClasses',
             'totalReceptionists',
             'totalCoaches',
@@ -77,7 +85,7 @@ class AdminController extends Controller
         ]);
 
         return redirect()->route('admin.staff.index')
-            ->with('success', ucfirst($validated['role']) . ' ajouté avec succès!');
+            ->with('success', ucfirst($validated['role']) . ' ajoute avec succes!');
     }
 
     public function staffEdit(User $user)
@@ -111,7 +119,7 @@ class AdminController extends Controller
         }
 
         return redirect()->route('admin.staff.index')
-            ->with('success', 'Staff mis à jour avec succès!');
+            ->with('success', 'Staff mis a jour avec succes!');
     }
 
     /**
@@ -147,12 +155,12 @@ class AdminController extends Controller
             'phone' => 'nullable|string|max:20',
             'address' => 'nullable|string|max:255',
         ], [
-            'name.required' => 'Le nom du réceptionniste est obligatoire',
+            'name.required' => 'Le nom du receptionniste est obligatoire',
             'email.required' => 'L\'email est obligatoire',
-            'email.email' => 'L\'email doit être valide',
-            'email.unique' => 'Cet email est déjà utilisé',
+            'email.email' => 'L\'email doit etre valide',
+            'email.unique' => 'Cet email est deja utilise',
             'password.required' => 'Le mot de passe est obligatoire',
-            'password.min' => 'Le mot de passe doit contenir au moins 8 caractères',
+            'password.min' => 'Le mot de passe doit contenir au moins 8 caracteres',
             'password.confirmed' => 'La confirmation du mot de passe ne correspond pas',
         ]);
 
@@ -166,7 +174,7 @@ class AdminController extends Controller
         ]);
 
         return redirect()->route('admin.receptionists.index')
-            ->with('success', 'Réceptionniste créé avec succès!');
+            ->with('success', 'Receptionniste cree avec succes!');
     }
 
     /**
@@ -198,7 +206,7 @@ class AdminController extends Controller
         }
 
         return redirect()->route('admin.receptionists.index')
-            ->with('success', 'Réceptionniste mis à jour avec succès!');
+            ->with('success', 'Receptionniste mis a jour avec succes!');
     }
 
     /**
@@ -210,13 +218,13 @@ class AdminController extends Controller
         $paymentsCount = $receptionist->paymentsAsReceptionist()->count();
         if ($paymentsCount > 0) {
             return redirect()->route('admin.receptionists.index')
-                ->with('error', 'Impossible de supprimer ce réceptionniste car il a des paiements enregistrés.');
+                ->with('error', 'Impossible de supprimer ce receptionniste car il a des paiements enregistres.');
         }
 
         $receptionist->delete();
 
         return redirect()->route('admin.receptionists.index')
-            ->with('success', 'Réceptionniste supprimé avec succès!');
+            ->with('success', 'Receptionniste supprime avec succes!');
     }
 
     /**
@@ -286,7 +294,7 @@ class AdminController extends Controller
         $paymentsCount = $member->payments()->count();
         if ($paymentsCount > 0) {
             return redirect()->route('admin.members.index')
-                ->with('error', 'Impossible de supprimer ce membre car il a des paiements enregistrés.');
+                ->with('error', 'Impossible de supprimer ce membre car il a des paiements enregistres.');
         }
 
         // Detach member from all classes
@@ -295,7 +303,7 @@ class AdminController extends Controller
         $member->delete();
 
         return redirect()->route('admin.members.index')
-            ->with('success', 'Membre supprimé avec succès!');
+            ->with('success', 'Membre supprime avec succes!');
     }
 
     /**
@@ -307,13 +315,13 @@ class AdminController extends Controller
         $classesCount = $coach->classesAsCoach()->count();
         if ($classesCount > 0) {
             return redirect()->route('admin.coaches.index')
-                ->with('error', 'Impossible de supprimer ce coach car il a des cours associés.');
+                ->with('error', 'Impossible de supprimer ce coach car il a des cours associes.');
         }
 
         $coach->delete();
 
         return redirect()->route('admin.coaches.index')
-            ->with('success', 'Coach supprimé avec succès!');
+            ->with('success', 'Coach supprime avec succes!');
     }
 
     /**
@@ -338,10 +346,10 @@ class AdminController extends Controller
         ], [
             'name.required' => 'Le nom du coach est obligatoire',
             'email.required' => 'L\'email est obligatoire',
-            'email.email' => 'L\'email doit être valide',
-            'email.unique' => 'Cet email est déjà utilisé',
+            'email.email' => 'L\'email doit etre valide',
+            'email.unique' => 'Cet email est deja utilise',
             'password.required' => 'Le mot de passe est obligatoire',
-            'password.min' => 'Le mot de passe doit contenir au moins 8 caractères',
+            'password.min' => 'Le mot de passe doit contenir au moins 8 caracteres',
             'password.confirmed' => 'La confirmation du mot de passe ne correspond pas',
         ]);
 
@@ -356,7 +364,7 @@ class AdminController extends Controller
         ]);
 
         return redirect()->route('admin.coaches.index')
-            ->with('success', 'Coach créé avec succès!');
+            ->with('success', 'Coach cree avec succes!');
     }
 
     /**
@@ -381,9 +389,9 @@ class AdminController extends Controller
         ], [
             'name.required' => 'Le nom du coach est obligatoire',
             'email.required' => 'L\'email est obligatoire',
-            'email.email' => 'L\'email doit être valide',
-            'email.unique' => 'Cet email est déjà utilisé',
-            'password.min' => 'Le mot de passe doit contenir au moins 8 caractères',
+            'email.email' => 'L\'email doit etre valide',
+            'email.unique' => 'Cet email est deja utilise',
+            'password.min' => 'Le mot de passe doit contenir au moins 8 caracteres',
             'password.confirmed' => 'La confirmation du mot de passe ne correspond pas',
         ]);
 
@@ -401,7 +409,7 @@ class AdminController extends Controller
         }
 
         return redirect()->route('admin.coaches.index')
-            ->with('success', 'Coach mis à jour avec succès!');
+            ->with('success', 'Coach mis a jour avec succes!');
     }
 
     /**
@@ -439,23 +447,37 @@ class AdminController extends Controller
         try {
             $user->delete();
             return redirect()->route('admin.staff.index')
-                ->with('success', 'Staff supprimé avec succès!');
+                ->with('success', 'Staff supprime avec succes!');
         } catch (\Exception $e) {
             // Log error and return with message
             \Log::error('Error deleting staff: ' . $e->getMessage());
             return redirect()->route('admin.staff.index')
-                ->with('error', 'Erreur lors de la suppression. Veuillez réessayer.');
+                ->with('error', 'Erreur lors de la suppression. Veuillez reessayer.');
         }
     }
 
     /**
      * Display all members for admin
      */
-    public function membersIndex()
+    public function membersIndex(Request $request)
     {
-        $members = Member::withCount('enrollments')
+        $membersQuery = Member::withCount('enrollments')
+            ->with('latestSubscriptionPayment.subscriptionType');
+
+        if ($request->filled('subscription_status')) {
+            if ($request->subscription_status === 'expired') {
+                $membersQuery->whereDate('subscription_end_date', '<', today());
+            }
+
+            if ($request->subscription_status === 'active') {
+                $membersQuery->whereDate('subscription_end_date', '>=', today());
+            }
+        }
+
+        $members = $membersQuery
             ->latest()
-            ->paginate(20);
+            ->paginate(20)
+            ->withQueryString();
 
         return view('admin.members.index', compact('members'));
     }
@@ -507,16 +529,18 @@ class AdminController extends Controller
         ], [
             'name.required' => 'Le nom du type d\'abonnement est obligatoire',
             'base_price.required' => 'Le prix de base est obligatoire',
-            'base_price.numeric' => 'Le prix de base doit être un nombre',
-            'discount_type.required' => 'Le type de réduction est obligatoire',
-            'duration_days.required' => 'La durée est obligatoire',
-            'duration_days.integer' => 'La durée doit être un nombre entier',
+            'base_price.numeric' => 'Le prix de base doit etre un nombre',
+            'discount_type.required' => 'Le type de reduction est obligatoire',
+            'duration_days.required' => 'La duree est obligatoire',
+            'duration_days.integer' => 'La duree doit etre un nombre entier',
         ]);
+
+        $validated['slug'] = $this->generateUniqueSubscriptionSlug($validated['name']);
 
         SubscriptionType::create($validated);
 
         return redirect()->route('admin.subscription-types.index')
-            ->with('success', 'Type d\'abonnement créé avec succès!');
+            ->with('success', 'Type d\'abonnement cree avec succes!');
     }
 
     /**
@@ -543,16 +567,18 @@ class AdminController extends Controller
         ], [
             'name.required' => 'Le nom du type d\'abonnement est obligatoire',
             'base_price.required' => 'Le prix de base est obligatoire',
-            'base_price.numeric' => 'Le prix de base doit être un nombre',
-            'discount_type.required' => 'Le type de réduction est obligatoire',
-            'duration_days.required' => 'La durée est obligatoire',
-            'duration_days.integer' => 'La durée doit être un nombre entier',
+            'base_price.numeric' => 'Le prix de base doit etre un nombre',
+            'discount_type.required' => 'Le type de reduction est obligatoire',
+            'duration_days.required' => 'La duree est obligatoire',
+            'duration_days.integer' => 'La duree doit etre un nombre entier',
         ]);
+
+        $validated['slug'] = $this->generateUniqueSubscriptionSlug($validated['name'], $subscriptionType->id);
 
         $subscriptionType->update($validated);
 
         return redirect()->route('admin.subscription-types.index')
-            ->with('success', 'Type d\'abonnement mis à jour avec succès!');
+            ->with('success', 'Type d\'abonnement mis a jour avec succes!');
     }
 
     /**
@@ -564,13 +590,13 @@ class AdminController extends Controller
         $paymentsCount = $subscriptionType->payments()->count();
         if ($paymentsCount > 0) {
             return redirect()->route('admin.subscription-types.index')
-                ->with('error', 'Impossible de supprimer ce type d\'abonnement car il a des paiements associés.');
+                ->with('error', 'Impossible de supprimer ce type d\'abonnement car il a des paiements associes.');
         }
 
         $subscriptionType->delete();
 
         return redirect()->route('admin.subscription-types.index')
-            ->with('success', 'Type d\'abonnement supprimé avec succès!');
+            ->with('success', 'Type d\'abonnement supprime avec succes!');
     }
 
     /**
@@ -624,15 +650,15 @@ class AdminController extends Controller
             'status' => 'nullable|in:pending,approved,rejected'
         ], [
             'name.required' => 'Le nom du cours est obligatoire',
-            'name.max' => 'Le nom ne peut pas dépasser 255 caractères',
+            'name.max' => 'Le nom ne peut pas depasser 255 caracteres',
             'coach_id.required' => 'Le coach est obligatoire',
-            'coach_id.exists' => 'Le coach sélectionné n\'existe pas',
-            'capacity.required' => 'La capacité est obligatoire',
-            'capacity.min' => 'La capacité doit être d\'au moins 1 personne',
-            'capacity.max' => 'La capacité ne peut pas dépasser 100 personnes',
-            'duration.required' => 'La durée est obligatoire',
-            'duration.min' => 'La durée doit être d\'au moins 15 minutes',
-            'duration.max' => 'La durée ne peut pas dépasser 8 heures (480 minutes)',
+            'coach_id.exists' => 'Le coach selectionne n\'existe pas',
+            'capacity.required' => 'La capacite est obligatoire',
+            'capacity.min' => 'La capacite doit etre d\'au moins 1 personne',
+            'capacity.max' => 'La capacite ne peut pas depasser 100 personnes',
+            'duration.required' => 'La duree est obligatoire',
+            'duration.min' => 'La duree doit etre d\'au moins 15 minutes',
+            'duration.max' => 'La duree ne peut pas depasser 8 heures (480 minutes)',
         ]);
 
         // Create class with validated data
@@ -645,7 +671,7 @@ class AdminController extends Controller
         // For admin-created classes, no notification needed as admin is the creator
 
         return redirect()->route('admin.classes.show', $class)
-            ->with('success', 'Cours créé avec succès!');
+            ->with('success', 'Cours cree avec succes!');
     }
 
     /**
@@ -672,24 +698,24 @@ class AdminController extends Controller
             'status' => 'required|in:pending,approved,rejected'
         ], [
             'name.required' => 'Le nom du cours est obligatoire',
-            'name.max' => 'Le nom ne peut pas dépasser 255 caractères',
+            'name.max' => 'Le nom ne peut pas depasser 255 caracteres',
             'coach_id.required' => 'Le coach est obligatoire',
-            'coach_id.exists' => 'Le coach sélectionné n\'existe pas',
-            'capacity.required' => 'La capacité est obligatoire',
-            'capacity.min' => 'La capacité doit être d\'au moins 1 personne',
-            'capacity.max' => 'La capacité ne peut pas dépasser 100 personnes',
-            'duration.required' => 'La durée est obligatoire',
-            'duration.min' => 'La durée doit être d\'au moins 15 minutes',
-            'duration.max' => 'La durée ne peut pas dépasser 8 heures (480 minutes)',
+            'coach_id.exists' => 'Le coach selectionne n\'existe pas',
+            'capacity.required' => 'La capacite est obligatoire',
+            'capacity.min' => 'La capacite doit etre d\'au moins 1 personne',
+            'capacity.max' => 'La capacite ne peut pas depasser 100 personnes',
+            'duration.required' => 'La duree est obligatoire',
+            'duration.min' => 'La duree doit etre d\'au moins 15 minutes',
+            'duration.max' => 'La duree ne peut pas depasser 8 heures (480 minutes)',
             'status.required' => 'Le statut est obligatoire',
-            'status.in' => 'Le statut doit être valide (pending, approved, rejected)',
+            'status.in' => 'Le statut doit etre valide (pending, approved, rejected)',
         ]);
 
         // Update class with validated data
         $classModel->update($validated);
 
         return redirect()->route('admin.classes.show', $classModel)
-            ->with('success', 'Cours mis à jour avec succès!');
+            ->with('success', 'Cours mis a jour avec succes!');
     }
 
     /**
@@ -714,12 +740,12 @@ class AdminController extends Controller
             $classModel->delete();
             
             return redirect()->route('admin.classes.index')
-                ->with('success', 'Cours supprimé avec succès!');
+                ->with('success', 'Cours supprime avec succes!');
                 
         } catch (\Exception $e) {
             \Log::error('Error deleting class: ' . $e->getMessage());
             return redirect()->route('admin.classes.index')
-                ->with('error', 'Erreur lors de la suppression. Veuillez réessayer.');
+                ->with('error', 'Erreur lors de la suppression. Veuillez reessayer.');
         }
     }
 
@@ -728,6 +754,8 @@ class AdminController extends Controller
      */
     public function notificationsIndex()
     {
+        $this->syncExpiredSubscriptionsNotification();
+
         $notifications = auth()->user()->notifications()->latest()->paginate(20);
         
         return view('admin.notifications.index', compact('notifications'));
@@ -740,8 +768,8 @@ class AdminController extends Controller
     {
         $notification = auth()->user()->notifications()->findOrFail($notificationId);
         $notification->markAsRead();
-        
-        return response()->json(['success' => true]);
+
+        return back()->with('success', 'Notification marquee comme lue.');
     }
 
     /**
@@ -752,7 +780,7 @@ class AdminController extends Controller
         auth()->user()->unreadNotifications->markAsRead();
         
         return redirect()->route('admin.notifications.index')
-            ->with('success', 'Toutes les notifications ont été marquées comme lues.');
+            ->with('success', 'Toutes les notifications ont ete marquees comme lues.');
     }
 
     /**
@@ -782,25 +810,25 @@ class AdminController extends Controller
     public function approveClass(ClassModel $classModel)
     {
         try {
-            // Vérifier que le cours est bien en attente
+            // Verifier que le cours est bien en attente
             if ($classModel->status !== 'pending') {
                 return redirect()->route('admin.classes.pending')
-                    ->with('error', 'Ce cours ne peut pas être approuvé car il n\'est pas en attente.');
+                    ->with('error', 'Ce cours ne peut pas etre approuve car il n\'est pas en attente.');
             }
 
             // Approuver le cours
             $classModel->update(['status' => 'approved']);
 
-            // TODO: Envoyer notification au coach (désactivé pour éviter les erreurs)
+            // TODO: Envoyer notification au coach (desactive pour eviter les erreurs)
             // $classModel->coach->notify(new \App\Notifications\CourseApproved($classModel));
 
             return redirect()->route('admin.classes.pending')
-                ->with('success', 'Le cours "' . $classModel->name . '" a été approuvé avec succès!');
+                ->with('success', 'Le cours "' . $classModel->name . '" a ete approuve avec succes!');
                 
         } catch (\Exception $e) {
             \Log::error('Error approving class: ' . $e->getMessage());
             return redirect()->route('admin.classes.pending')
-                ->with('error', 'Erreur lors de l\'approbation. Veuillez réessayer.');
+                ->with('error', 'Erreur lors de l\'approbation. Veuillez reessayer.');
         }
     }
 
@@ -810,17 +838,17 @@ class AdminController extends Controller
     public function rejectClass(ClassModel $classModel, Request $request)
     {
         try {
-            // Vérifier que le cours est bien en attente
+            // Verifier que le cours est bien en attente
             if ($classModel->status !== 'pending') {
                 return redirect()->route('admin.classes.pending')
-                    ->with('error', 'Ce cours ne peut pas être rejeté car il n\'est pas en attente.');
+                    ->with('error', 'Ce cours ne peut pas etre rejete car il n\'est pas en attente.');
             }
 
             // Validation de la raison de rejet
             $validated = $request->validate([
                 'rejection_reason' => 'nullable|string|max:500'
             ], [
-                'rejection_reason.max' => 'La raison du rejet ne peut pas dépasser 500 caractères.'
+                'rejection_reason.max' => 'La raison du rejet ne peut pas depasser 500 caracteres.'
             ]);
 
             // Rejeter le cours avec la raison
@@ -829,16 +857,16 @@ class AdminController extends Controller
                 'rejection_reason' => $validated['rejection_reason'] ?? null
             ]);
 
-            // TODO: Envoyer notification au coach (désactivé pour éviter les erreurs)
+            // TODO: Envoyer notification au coach (desactive pour eviter les erreurs)
             // $classModel->coach->notify(new \App\Notifications\CourseRejected($classModel, $validated['rejection_reason'] ?? null));
 
             return redirect()->route('admin.classes.pending')
-                ->with('success', 'Le cours "' . $classModel->name . '" a été rejeté avec succès!');
+                ->with('success', 'Le cours "' . $classModel->name . '" a ete rejete avec succes!');
                 
         } catch (\Exception $e) {
             \Log::error('Error rejecting class: ' . $e->getMessage());
             return redirect()->route('admin.classes.pending')
-                ->with('error', 'Erreur lors du rejet. Veuillez réessayer.');
+                ->with('error', 'Erreur lors du rejet. Veuillez reessayer.');
         }
     }
 
@@ -853,4 +881,51 @@ class AdminController extends Controller
 
         return view('admin.payments.index', compact('payments'));
     }
+
+    private function syncExpiredSubscriptionsNotification(): void
+    {
+        $expiredCount = Member::whereNotNull('subscription_end_date')
+            ->whereDate('subscription_end_date', '<', today())
+            ->count();
+
+        if ($expiredCount <= 0) {
+            return;
+        }
+
+        $today = now()->toDateString();
+        $admins = User::where('role', 'admin')->get();
+
+        foreach ($admins as $admin) {
+            $alreadyNotified = $admin->unreadNotifications->contains(function ($notification) use ($today, $expiredCount) {
+                return ($notification->data['action_type'] ?? null) === 'expired_subscriptions'
+                    && ($notification->data['date'] ?? null) === $today
+                    && (int) ($notification->data['expired_count'] ?? 0) === $expiredCount;
+            });
+
+            if (!$alreadyNotified) {
+                $admin->notify(new ExpiredSubscriptionsNotification($expiredCount));
+            }
+        }
+    }
+
+    private function generateUniqueSubscriptionSlug(string $name, ?int $ignoreId = null): string
+    {
+        $baseSlug = Str::slug($name);
+        $baseSlug = $baseSlug !== '' ? $baseSlug : 'abonnement';
+        $slug = $baseSlug;
+        $counter = 1;
+
+        while (
+            SubscriptionType::where('slug', $slug)
+                ->when($ignoreId, fn ($query) => $query->where('id', '!=', $ignoreId))
+                ->exists()
+        ) {
+            $slug = "{$baseSlug}-{$counter}";
+            $counter++;
+        }
+
+        return $slug;
+    }
 }
+
+

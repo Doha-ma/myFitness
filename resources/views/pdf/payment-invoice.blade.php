@@ -166,7 +166,7 @@
 <body>
     <div class="header">
         <h1> myFitness</h1>
-        <p>Centre de Fitness et Bien-être</p>
+        <p>Centre de Fitness et Bien-etre</p>
     </div>
     
     <div class="info-section">
@@ -175,7 +175,7 @@
                 <h3>Informations du Membre</h3>
                 <p><strong>Nom:</strong> {{ $payment->member->first_name }} {{ $payment->member->last_name }}</p>
                 <p><strong>Email:</strong> {{ $payment->member->email }}</p>
-                <p><strong>Téléphone:</strong> {{ $payment->member->phone }}</p>
+                <p><strong>Telephone:</strong> {{ $payment->member->phone }}</p>
                 @if($payment->member->address)
                     <p><strong>Adresse:</strong> {{ $payment->member->address }}</p>
                 @endif
@@ -186,16 +186,16 @@
             <div class="info-box">
                 <h3>Informations de la Facture</h3>
                 <p><strong>N° Facture:</strong> #{{ str_pad($payment->id, 6, '0', STR_PAD_LEFT) }}</p>
-                <p><strong>Référence:</strong> PAY-{{ str_pad($payment->id, 6, '0', STR_PAD_LEFT) }}</p>
+                <p><strong>Reference:</strong> PAY-{{ str_pad($payment->id, 6, '0', STR_PAD_LEFT) }}</p>
                 <p><strong>Date:</strong> {{ $payment->payment_date->format('d/m/Y') }}</p>
                 <p><strong>Heure:</strong> {{ $payment->created_at->format('H:i') }}</p>
-                <p><strong>Enregistré par:</strong> {{ $payment->receptionist->name }}</p>
+                <p><strong>Enregistre par:</strong> {{ $payment->receptionist->name }}</p>
             </div>
         </div>
     </div>
     
     <div class="payment-details">
-        <h2>Détails du Paiement</h2>
+        <h2>Details du Paiement</h2>
         
         <div class="detail-row">
             <div class="detail-label">Montant:</div>
@@ -203,10 +203,10 @@
         </div>
         
         <div class="detail-row">
-            <div class="detail-label">Méthode de paiement:</div>
+            <div class="detail-label">Methode de paiement:</div>
             <div class="detail-value">
                 @if($payment->method == 'cash')
-                    <span class="method-badge method-cash"> Espèces</span>
+                    <span class="method-badge method-cash"> Especes</span>
                 @elseif($payment->method == 'card')
                     <span class="method-badge method-card"> Carte</span>
                 @else
@@ -234,9 +234,10 @@
     </div>
     
     <div class="footer">
-        <p><strong>myFitness</strong> - Centre de Fitness et Bien-être</p>
+        <p><strong>myFitness</strong> - Centre de Fitness et Bien-etre</p>
         <p>Merci pour votre confiance !</p>
-        <p>Cette facture a été générée automatiquement le {{ now()->format('d/m/Y à H:i') }}</p>
+        <p>Cette facture a ete generee automatiquement le {{ now()->format('d/m/Y a H:i') }}</p>
     </div>
 </body>
 </html>
+

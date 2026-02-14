@@ -27,17 +27,17 @@ class CourseRejected extends Notification implements ShouldQueue
     public function toMail($notifiable)
     {
         $message = (new MailMessage)
-            ->subject('Votre cours a été rejeté')
+            ->subject('Votre cours a ete rejete')
             ->greeting('Bonjour ' . $notifiable->name . ',')
-            ->line('Votre cours "' . $this->course->name . '" a été rejeté.');
+            ->line('Votre cours "' . $this->course->name . '" a ete rejete.');
 
         if ($this->rejectionReason) {
             $message->line('Raison du rejet: ' . $this->rejectionReason);
         }
 
-        $message->line('Vous pouvez modifier ce cours et le soumettre à nouveau pour validation.')
+        $message->line('Vous pouvez modifier ce cours et le soumettre a nouveau pour validation.')
             ->action('Modifier le cours', url('/coach/classes/' . $this->course->id . '/edit'))
-            ->line('Merci de contribuer à notre salle de sport!');
+            ->line('Merci de contribuer a notre salle de sport!');
 
         return $message;
     }
@@ -48,8 +48,9 @@ class CourseRejected extends Notification implements ShouldQueue
             'course_id' => $this->course->id,
             'course_name' => $this->course->name,
             'rejection_reason' => $this->rejectionReason,
-            'message' => 'Votre cours "' . $this->course->name . '" a été rejeté.',
+            'message' => 'Votre cours "' . $this->course->name . '" a ete rejete.',
             'type' => 'course_rejected'
         ];
     }
 }
+

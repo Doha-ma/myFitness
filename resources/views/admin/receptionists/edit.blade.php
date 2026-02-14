@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Modifier un Réceptionniste')
+@section('title', 'Modifier un Receptionniste')
 
 @section('content')
 <div class="mb-8">
@@ -8,9 +8,9 @@
         <div>
             <h2 class="text-4xl font-bold text-white mb-2 flex items-center gap-3">
                 <i class="fas fa-user-edit text-yellow-400"></i>
-                Modifier un Réceptionniste
+                Modifier un Receptionniste
             </h2>
-            <p class="text-gray-300 text-sm">Modifiez les informations du compte réceptionniste</p>
+            <p class="text-gray-300 text-sm">Modifiez les informations du compte receptionniste</p>
         </div>
         <div class="flex flex-wrap gap-2">
             <a href="{{ route('admin.dashboard') }}" class="btn btn-secondary">
@@ -19,7 +19,7 @@
             </a>
             <a href="{{ route('admin.receptionists.index') }}" class="btn btn-info">
                 <i class="fas fa-list"></i>
-                Liste des réceptionnistes
+                Liste des receptionnistes
             </a>
         </div>
     </div>
@@ -31,7 +31,7 @@
             <div class="d-flex align-items-center">
                 <i class="fas fa-check-circle me-3"></i>
                 <div>
-                    <strong>Succès!</strong> {{ session('success') }}
+                    <strong>Succes!</strong> {{ session('success') }}
                 </div>
             </div>
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
@@ -132,7 +132,7 @@
         <div class="flex items-center justify-between mt-6">
             <button type="submit" class="btn btn-primary">
                 <i class="fas fa-save mr-2"></i>
-                Mettre à jour
+                Mettre a jour
             </button>
             
             <a href="{{ route('admin.receptionists.index') }}" class="btn btn-secondary">
@@ -143,3 +143,4 @@
     </form>
 </div>
 @endsection
+

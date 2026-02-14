@@ -10,7 +10,7 @@
                 <i class="fas fa-check-circle text-yellow-400"></i>
                 Validation des Cours
             </h2>
-            <p class="text-gray-300 text-sm">Approuvez ou rejetez les cours créés par les coachs</p>
+            <p class="text-gray-300 text-sm">Approuvez ou rejetez les cours crees par les coachs</p>
         </div>
         <div class="flex flex-wrap gap-2">
             <a href="{{ route('admin.dashboard') }}" class="btn btn-secondary">
@@ -31,7 +31,7 @@
             <div class="d-flex align-items-center">
                 <i class="fas fa-check-circle me-3"></i>
                 <div>
-                    <strong>Succès!</strong> {{ session('success') }}
+                    <strong>Succes!</strong> {{ session('success') }}
                 </div>
             </div>
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
@@ -58,7 +58,7 @@
                 </div>
                 <h3 class="text-2xl font-semibold text-gray-700 mb-3">Aucun cours en attente</h3>
                 <p class="text-gray-500 max-w-md mx-auto">
-                    Tous les cours ont été validés. Il n'y a aucun cours en attente de validation pour le moment.
+                    Tous les cours ont ete valides. Il n'y a aucun cours en attente de validation pour le moment.
                 </p>
                 <div class="mt-6">
                     <a href="{{ route('admin.classes.index') }}" class="btn btn-primary">
@@ -88,7 +88,7 @@
                         <i class="fas fa-user-tie text-white"></i>
                     </div>
                     <div>
-                        <p class="text-sm text-green-600 font-medium">Coachs concernés</p>
+                        <p class="text-sm text-green-600 font-medium">Coachs concernes</p>
                         <p class="text-2xl font-bold text-green-900">{{ $pendingClasses->pluck('coach_id')->unique()->count() }}</p>
                     </div>
                 </div>
@@ -99,7 +99,7 @@
                         <i class="fas fa-calendar text-white"></i>
                     </div>
                     <div>
-                        <p class="text-sm text-yellow-600 font-medium">Créés aujourd'hui</p>
+                        <p class="text-sm text-yellow-600 font-medium">Crees aujourd'hui</p>
                         <p class="text-2xl font-bold text-yellow-900">{{ $pendingClasses->where('created_at', '>=', now()->startOfDay())->count() }}</p>
                     </div>
                 </div>
@@ -132,13 +132,13 @@
                                 <i class="fas fa-user-tie mr-2"></i>Coach
                             </th>
                             <th class="text-center">
-                                <i class="fas fa-users mr-2"></i>Capacité
+                                <i class="fas fa-users mr-2"></i>Capacite
                             </th>
                             <th class="text-center">
-                                <i class="fas fa-clock mr-2"></i>Durée
+                                <i class="fas fa-clock mr-2"></i>Duree
                             </th>
                             <th class="text-left">
-                                <i class="fas fa-calendar-plus mr-2"></i>Créé le
+                                <i class="fas fa-calendar-plus mr-2"></i>Cree le
                             </th>
                             <th class="text-center">
                                 <i class="fas fa-cogs mr-2"></i>Actions
@@ -161,7 +161,7 @@
                                                 @if(isset($class->schedules) && $class->schedules->count() > 0)
                                                     <span class="badge badge-info">
                                                         <i class="fas fa-calendar-alt mr-1"></i>
-                                                        {{ $class->schedules->count() }} séances
+                                                        {{ $class->schedules->count() }} seances
                                                     </span>
                                                 @endif
                                                 @if(isset($class->enrollments) && $class->enrollments->count() > 0)
@@ -256,21 +256,21 @@
                     <div class="modal-body">
                         <div class="alert alert-info">
                             <i class="fas fa-info-circle mr-2"></i>
-                            Vous êtes sur le point d'approuver le cours <strong>{{ $class->name }}</strong>.
+                            Vous etes sur le point d'approuver le cours <strong>{{ $class->name }}</strong>.
                         </div>
                         <div class="mb-3">
-                            <p class="font-semibold mb-2">Détails du cours:</p>
+                            <p class="font-semibold mb-2">Details du cours:</p>
                             <ul class="list-unstyled">
                                 <li><strong>Nom:</strong> {{ $class->name }}</li>
                                 <li><strong>Coach:</strong> {{ $class->coach->name }}</li>
-                                <li><strong>Capacité:</strong> {{ $class->capacity }} personnes</li>
-                                <li><strong>Durée:</strong> {{ $class->duration }} minutes</li>
+                                <li><strong>Capacite:</strong> {{ $class->capacity }} personnes</li>
+                                <li><strong>Duree:</strong> {{ $class->duration }} minutes</li>
                                 @if($class->description)
                                     <li><strong>Description:</strong> {{ $class->description }}</li>
                                 @endif
                             </ul>
                         </div>
-                        <p class="text-muted">Une fois approuvé, ce cours sera visible pour tous les membres et les inscriptions pourront être effectuées.</p>
+                        <p class="text-muted">Une fois approuve, ce cours sera visible pour tous les membres et les inscriptions pourront etre effectuees.</p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
@@ -305,15 +305,15 @@
                         <div class="modal-body">
                             <div class="alert alert-warning">
                                 <i class="fas fa-exclamation-triangle mr-2"></i>
-                                Vous êtes sur le point de rejeter le cours <strong>{{ $class->name }}</strong>.
+                                Vous etes sur le point de rejeter le cours <strong>{{ $class->name }}</strong>.
                             </div>
                             <div class="mb-3">
-                                <p class="font-semibold mb-2">Détails du cours:</p>
+                                <p class="font-semibold mb-2">Details du cours:</p>
                                 <ul class="list-unstyled">
                                     <li><strong>Nom:</strong> {{ $class->name }}</li>
                                     <li><strong>Coach:</strong> {{ $class->coach->name }}</li>
-                                    <li><strong>Capacité:</strong> {{ $class->capacity }} personnes</li>
-                                    <li><strong>Durée:</strong> {{ $class->duration }} minutes</li>
+                                    <li><strong>Capacite:</strong> {{ $class->capacity }} personnes</li>
+                                    <li><strong>Duree:</strong> {{ $class->duration }} minutes</li>
                                     @if($class->description)
                                         <li><strong>Description:</strong> {{ $class->description }}</li>
                                     @endif
@@ -328,9 +328,9 @@
                                           id="rejection_reason_{{ $class->id }}" 
                                           class="form-control" 
                                           rows="3" 
-                                          placeholder="Expliquez pourquoi ce cours est rejeté..."
+                                          placeholder="Expliquez pourquoi ce cours est rejete..."
                                           maxlength="500">{{ old('rejection_reason') }}</textarea>
-                                <small class="form-text text-muted">Maximum 500 caractères</small>
+                                <small class="form-text text-muted">Maximum 500 caracteres</small>
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -350,3 +350,4 @@
     @endforeach
 @endif
 @endsection
+

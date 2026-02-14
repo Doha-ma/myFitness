@@ -10,7 +10,7 @@
                 <i class="fas fa-user-tie text-blue-400"></i>
                 Ajouter un Coach
             </h2>
-            <p class="text-gray-300 text-sm">Créez un nouveau compte coach pour la salle de sport</p>
+            <p class="text-gray-300 text-sm">Creez un nouveau compte coach pour la salle de sport</p>
         </div>
         <div class="flex flex-wrap gap-2">
             <a href="{{ route('admin.dashboard') }}" class="btn btn-secondary">
@@ -31,7 +31,7 @@
             <div class="d-flex align-items-center">
                 <i class="fas fa-check-circle me-3"></i>
                 <div>
-                    <strong>Succès!</strong> {{ session('success') }}
+                    <strong>Succes!</strong> {{ session('success') }}
                 </div>
             </div>
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
@@ -92,7 +92,7 @@
                     </label>
                     <input type="password" class="form-control @error('password') is-invalid @enderror" 
                            id="password" name="password" 
-                           placeholder="Entrez un mot de passe sécurisé" required>
+                           placeholder="Entrez un mot de passe securise" required>
                     @error('password')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
@@ -119,7 +119,7 @@
                 <div class="mb-3">
                     <label for="phone" class="form-label">
                         <i class="fas fa-phone me-2"></i>
-                        Téléphone
+                        Telephone
                     </label>
                     <input type="tel" class="form-control @error('phone') is-invalid @enderror" 
                            id="phone" name="phone" value="{{ old('phone') }}" 
@@ -137,7 +137,7 @@
                     </label>
                     <input type="text" class="form-control @error('address') is-invalid @enderror" 
                            id="address" name="address" value="{{ old('address') }}" 
-                           placeholder="Entrez l'adresse complète">
+                           placeholder="Entrez l'adresse complete">
                     @error('address')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
@@ -147,17 +147,18 @@
 
         <div class="d-flex justify-content-between align-items-center mt-4">
             <div class="text-muted">
-                <small><i class="fas fa-info-circle"></i> Les champs marqués d'un astérisque (*) sont obligatoires</small>
+                <small><i class="fas fa-info-circle"></i> Les champs marques d'un asterisque (*) sont obligatoires</small>
             </div>
             <div class="btn-group">
                 <a href="{{ route('admin.coaches.index') }}" class="btn btn-secondary">
                     <i class="fas fa-times"></i> Annuler
                 </a>
                 <button type="submit" class="btn btn-primary">
-                    <i class="fas fa-save"></i> Créer le Coach
+                    <i class="fas fa-save"></i> Creer le Coach
                 </button>
             </div>
         </div>
     </form>
 </div>
 @endsection
+

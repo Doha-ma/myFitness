@@ -8,7 +8,7 @@
     <a href="{{ route('admin.subscription-types.index') }}" class="block px-4 py-3 rounded hover:bg-white/10 transition"> Types d'Abonnement</a>
     <form method="POST" action="{{ route('logout') }}">
         @csrf
-        <button type="submit" class="block w-full text-left px-4 py-3 rounded hover:bg-white/10 transition mt-4"> Déconnexion</button>
+        <button type="submit" class="block w-full text-left px-4 py-3 rounded hover:bg-white/10 transition mt-4"> Deconnexion</button>
     </form>
 @endsection
 
@@ -39,10 +39,10 @@
         </div>
 
         <div class="mb-4">
-            <label class="block text-gray-700 font-semibold mb-2">Rôle</label>
+            <label class="block text-gray-700 font-semibold mb-2">Role</label>
             <select name="role" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500" required>
-                <option value="">Sélectionner un rôle</option>
-                <option value="receptionist" {{ old('role', $user->role) == 'receptionist' ? 'selected' : '' }}>Réceptionniste</option>
+                <option value="">Selectionner un role</option>
+                <option value="receptionist" {{ old('role', $user->role) == 'receptionist' ? 'selected' : '' }}>Receptionniste</option>
                 <option value="coach" {{ old('role', $user->role) == 'coach' ? 'selected' : '' }}>Coach</option>
             </select>
             @error('role')
@@ -67,7 +67,7 @@
 
         <div class="flex gap-4">
             <button type="submit" class="btn-primary text-white px-6 py-3 rounded-lg font-semibold">
-                 Mettre à jour
+                 Mettre a jour
             </button>
             <a href="{{ route('admin.staff.index') }}" class="bg-gray-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-gray-600">
                  Annuler
@@ -76,3 +76,4 @@
     </form>
 </div>
 @endsection
+

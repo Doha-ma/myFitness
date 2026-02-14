@@ -48,7 +48,7 @@ class SubscriptionTypeController extends Controller
         SubscriptionType::create($validated);
 
         return redirect()->route('admin.subscription-types.index')
-            ->with('success', 'Type d\'abonnement créé avec succès!');
+            ->with('success', 'Type d\'abonnement cree avec succes!');
     }
 
     public function edit(SubscriptionType $subscriptionType)
@@ -86,7 +86,7 @@ class SubscriptionTypeController extends Controller
         $subscriptionType->update($validated);
 
         return redirect()->route('admin.subscription-types.index')
-            ->with('success', 'Type d\'abonnement mis à jour avec succès!');
+            ->with('success', 'Type d\'abonnement mis a jour avec succes!');
     }
 
     public function destroy(SubscriptionType $subscriptionType)
@@ -95,12 +95,13 @@ class SubscriptionTypeController extends Controller
         $paymentsCount = $subscriptionType->payments()->count();
         if ($paymentsCount > 0) {
             return redirect()->route('admin.subscription-types.index')
-                ->with('error', 'Impossible de supprimer ce type d\'abonnement car il est utilisé dans ' . $paymentsCount . ' paiement(s).');
+                ->with('error', 'Impossible de supprimer ce type d\'abonnement car il est utilise dans ' . $paymentsCount . ' paiement(s).');
         }
 
         $subscriptionType->delete();
 
         return redirect()->route('admin.subscription-types.index')
-            ->with('success', 'Type d\'abonnement supprimé avec succès!');
+            ->with('success', 'Type d\'abonnement supprime avec succes!');
     }
 }
+

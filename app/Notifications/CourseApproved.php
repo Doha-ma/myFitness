@@ -25,12 +25,12 @@ class CourseApproved extends Notification implements ShouldQueue
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->subject('Votre cours a été approuvé')
+            ->subject('Votre cours a ete approuve')
             ->greeting('Bonjour ' . $notifiable->name . ',')
-            ->line('Votre cours "' . $this->course->name . '" a été approuvé et est maintenant visible pour les membres.')
-            ->line('Les membres peuvent maintenant s\'inscrire à ce cours.')
+            ->line('Votre cours "' . $this->course->name . '" a ete approuve et est maintenant visible pour les membres.')
+            ->line('Les membres peuvent maintenant s\'inscrire a ce cours.')
             ->action('Voir le cours', url('/coach/classes/' . $this->course->id))
-            ->line('Merci de contribuer à notre salle de sport!');
+            ->line('Merci de contribuer a notre salle de sport!');
     }
 
     public function toArray($notifiable)
@@ -38,8 +38,9 @@ class CourseApproved extends Notification implements ShouldQueue
         return [
             'course_id' => $this->course->id,
             'course_name' => $this->course->name,
-            'message' => 'Votre cours "' . $this->course->name . '" a été approuvé.',
+            'message' => 'Votre cours "' . $this->course->name . '" a ete approuve.',
             'type' => 'course_approved'
         ];
     }
 }
+

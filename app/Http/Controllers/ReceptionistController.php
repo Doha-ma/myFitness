@@ -2,11 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ClassModel;
+use App\Models\Enrollment;
 use App\Models\Member;
 use App\Models\Payment;
+use App\Models\SubscriptionType;
+use App\Models\User;
+use App\Notifications\NewMemberRegistered;
+use App\Notifications\PaymentValidated;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
-use Barryvdh\DomPDF\Facade\Pdf;
 
 class ReceptionistController extends Controller
 {
@@ -14,7 +20,7 @@ class ReceptionistController extends Controller
     {
         $totalMembers = Member::count();
         $totalPaymentsToday = Payment::whereDate('payment_date', today())->sum('amount');
-        $recentMembers = Member::latest()->take(5)->get();
+        $recentMembers = Member::with('latestSubscriptionPayment.subscriptionType')->latest()->take(5)->get();
 
         return view('receptionist.dashboard', compact(
             'totalMembers',
@@ -25,41 +31,50 @@ class ReceptionistController extends Controller
 
     public function membersIndex(Request $request)
     {
-        $query = Member::with(['classes', 'payments.subscriptionType']);
+        $query = Member::with([
+            'classes',
+            'latestSubscriptionPayment.subscriptionType',
+        ]);
 
-        // Filter by enrolled class
         if ($request->filled('class_id')) {
             $query->whereHas('classes', function ($q) use ($request) {
-                $q->where('classes.id', $request->class_id);
+                $q->where('classes.id', $request->integer('class_id'));
             });
         }
 
-        // Filter by subscription type
         if ($request->filled('subscription_type_id')) {
-            $query->whereHas('payments', function ($q) use ($request) {
-                $q->where('subscription_type_id', $request->subscription_type_id)
-                  ->orderBy('payment_date', 'desc')
-                  ->limit(1);
+            $query->whereHas('latestSubscriptionPayment', function ($q) use ($request) {
+                $q->where('subscription_type_id', $request->integer('subscription_type_id'));
             });
         }
 
-        $members = $query->latest()->paginate(15);
-        
-        // Get filter options
-        $classes = \App\Models\ClassModel::with('coach')
+        if ($request->filled('subscription_status')) {
+            if ($request->subscription_status === 'expired') {
+                $query->whereDate('subscription_end_date', '<', today());
+            }
+
+            if ($request->subscription_status === 'active') {
+                $query->whereDate('subscription_end_date', '>=', today());
+            }
+        }
+
+        $members = $query->latest()->paginate(15)->withQueryString();
+
+        $classes = ClassModel::with('coach')
             ->where('status', 'approved')
             ->get();
-        $subscriptionTypes = \App\Models\SubscriptionType::where('is_active', true)->get();
+
+        $subscriptionTypes = SubscriptionType::where('is_active', true)->get();
 
         return view('receptionist.members.index', compact('members', 'classes', 'subscriptionTypes'));
     }
 
     public function membersCreate()
     {
-        // Load available classes for course selection
-        $classes = \App\Models\ClassModel::with('coach')
+        $classes = ClassModel::with('coach')
             ->where('status', 'approved')
             ->get();
+
         return view('receptionist.members.create', compact('classes'));
     }
 
@@ -73,7 +88,6 @@ class ReceptionistController extends Controller
             'address' => 'nullable|string',
             'join_date' => 'required|date',
             'status' => 'required|in:active,inactive',
-            // Course selection validation (optional)
             'classes' => 'nullable|array',
             'classes.*' => [
                 Rule::exists('classes', 'id')->where(function ($query) {
@@ -82,20 +96,16 @@ class ReceptionistController extends Controller
             ],
         ]);
 
-        // Create member (existing functionality preserved)
         $member = Member::create($validated);
 
-        // Attach selected courses to member using existing enrollments pivot table
-        // Uses existing many-to-many relationship via Member->classes()
         if ($request->has('classes') && is_array($request->classes) && count($request->classes) > 0) {
-            // Prepare enrollment data with enrollment_date
             $enrollmentData = [];
+
             foreach ($request->classes as $classId) {
-                // Check if enrollment already exists to prevent duplicates
-                $exists = \App\Models\Enrollment::where('member_id', $member->id)
+                $exists = Enrollment::where('member_id', $member->id)
                     ->where('class_id', $classId)
                     ->exists();
-                
+
                 if (!$exists) {
                     $enrollmentData[$classId] = [
                         'enrollment_date' => $validated['join_date'],
@@ -104,19 +114,24 @@ class ReceptionistController extends Controller
                     ];
                 }
             }
-            
-            // Attach courses using existing relationship
+
             if (!empty($enrollmentData)) {
                 $member->classes()->attach($enrollmentData);
             }
         }
 
+        User::where('role', 'admin')->get()->each(function (User $admin) use ($member) {
+            $admin->notify(new NewMemberRegistered($member, auth()->user()));
+        });
+
         return redirect()->route('receptionist.members.index')
-            ->with('success', 'Membre ajouté avec succès!');
+            ->with('success', 'Le membre a ete ajoute avec succes.');
     }
 
     public function membersEdit(Member $member)
     {
+        $member->load('latestSubscriptionPayment.subscriptionType');
+
         return view('receptionist.members.edit', compact('member'));
     }
 
@@ -130,43 +145,87 @@ class ReceptionistController extends Controller
             'address' => 'nullable|string',
             'join_date' => 'required|date',
             'status' => 'required|in:active,inactive',
+            'subscription_end_date' => 'nullable|date',
         ]);
 
         $member->update($validated);
+        $member->syncMembershipStatusFromSubscription();
+        $member->save();
 
         return redirect()->route('receptionist.members.index')
-            ->with('success', 'Membre mis à jour avec succès!');
+            ->with('success', 'Le membre a ete mis a jour avec succes.');
+    }
+
+    public function renewSubscription(Request $request, Member $member)
+    {
+        $request->validate([
+            'duration_days' => 'nullable|integer|min:1|max:365',
+        ]);
+
+        $latestSubscriptionPayment = $member->latestSubscriptionPayment()->with('subscriptionType')->first();
+        $durationDays = (int) ($request->input('duration_days')
+            ?? optional($latestSubscriptionPayment?->subscriptionType)->duration_days
+            ?? 30);
+
+        $baseDate = $member->subscription_end_date && $member->subscription_end_date->isFuture()
+            ? $member->subscription_end_date->copy()
+            : today();
+
+        $member->subscription_end_date = $baseDate->addDays($durationDays);
+        $member->status = 'active';
+        $member->save();
+
+        return back()->with('success', "Abonnement renouvele pour {$durationDays} jours.");
+    }
+
+    public function updateSubscriptionEndDate(Request $request, Member $member)
+    {
+        $validated = $request->validate([
+            'subscription_end_date' => 'required|date',
+        ]);
+
+        $member->subscription_end_date = $validated['subscription_end_date'];
+        $member->syncMembershipStatusFromSubscription();
+        $member->save();
+
+        return back()->with('success', 'La date de fin de l abonnement a ete mise a jour.');
+    }
+
+    public function markAsPaid(Member $member)
+    {
+        if (!$member->subscription_end_date || $member->subscription_end_date->lt(today())) {
+            $member->subscription_end_date = today()->addDays(30);
+        }
+
+        $member->status = 'active';
+        $member->save();
+
+        return back()->with('success', 'Le membre est marque comme paye.');
     }
 
     /**
-     * Delete a member
-     * Detaches member from all classes before deletion
-     * Prevents deletion if member has payments (to preserve historical records)
+     * Delete a member.
      */
     public function membersDestroy(Member $member)
     {
         try {
-            // Check if member has payments - preserve historical payment records
             $paymentsCount = $member->payments()->count();
+
             if ($paymentsCount > 0) {
                 return redirect()->route('receptionist.members.index')
-                    ->with('error', 'Impossible de supprimer ce membre car il a ' . $paymentsCount . ' paiement(s) enregistré(s). Les paiements sont des enregistrements historiques et doivent être conservés.');
+                    ->with('error', "Suppression impossible : ce membre possede {$paymentsCount} paiement(s).");
             }
-            
-            // Detach member from all classes using existing many-to-many relationship
-            // This removes records from enrollments pivot table
+
             $member->classes()->detach();
-            
-            // Delete member (no payments exist, so safe to delete)
             $member->delete();
-            
+
             return redirect()->route('receptionist.members.index')
-                ->with('success', 'Membre supprimé avec succès!');
+                ->with('success', 'Le membre a ete supprime avec succes.');
         } catch (\Exception $e) {
-            // Log error and return with message
             \Log::error('Error deleting member: ' . $e->getMessage());
+
             return redirect()->route('receptionist.members.index')
-                ->with('error', 'Erreur lors de la suppression. Veuillez réessayer.');
+                ->with('error', 'Une erreur est survenue pendant la suppression.');
         }
     }
 
@@ -179,11 +238,13 @@ class ReceptionistController extends Controller
         return view('receptionist.payments.index', compact('payments'));
     }
 
-    public function paymentsCreate()
+    public function paymentsCreate(Request $request)
     {
         $members = Member::where('status', 'active')->get();
-        $subscriptionTypes = \App\Models\SubscriptionType::where('is_active', true)->get();
-        return view('receptionist.payments.create', compact('members', 'subscriptionTypes'));
+        $subscriptionTypes = SubscriptionType::where('is_active', true)->get();
+        $selectedMemberId = $request->integer('member_id');
+
+        return view('receptionist.payments.create', compact('members', 'subscriptionTypes', 'selectedMemberId'));
     }
 
     public function paymentsStore(Request $request)
@@ -191,48 +252,55 @@ class ReceptionistController extends Controller
         $validated = $request->validate([
             'member_id' => 'required|exists:members,id',
             'subscription_type_id' => 'nullable|exists:subscription_types,id',
-            'amount' => 'nullable|numeric|min:0', // Optional if subscription is selected
+            'amount' => 'nullable|numeric|min:0',
             'payment_date' => 'required|date',
             'method' => 'required|in:cash,card,transfer',
             'notes' => 'nullable|string',
         ]);
 
-        // If subscription type is selected, calculate amount automatically
         if ($request->filled('subscription_type_id')) {
-            $subscriptionType = \App\Models\SubscriptionType::findOrFail($request->subscription_type_id);
+            $subscriptionType = SubscriptionType::findOrFail($request->subscription_type_id);
             $validated['amount'] = $subscriptionType->final_price;
         } else {
-            // Fallback to manual amount if no subscription selected (backward compatibility)
             $request->validate([
                 'amount' => 'required|numeric|min:0',
             ]);
         }
 
-        Payment::create([
+        $payment = Payment::create([
             ...$validated,
             'receptionist_id' => auth()->id(),
         ]);
 
+        if (!empty($payment->subscription_type_id) && $payment->subscriptionType) {
+            $member = $payment->member;
+            $member->subscription_end_date = $payment->payment_date
+                ->copy()
+                ->addDays((int) $payment->subscriptionType->duration_days);
+            $member->status = 'active';
+            $member->save();
+        }
+
+        User::where('role', 'admin')->get()->each(function (User $admin) use ($payment) {
+            $admin->notify(new PaymentValidated($payment, auth()->user()));
+        });
+
         return redirect()->route('receptionist.payments.index')
-            ->with('success', 'Paiement enregistré avec succès!');
+            ->with('success', 'Le paiement a ete enregistre avec succes.');
     }
 
     /**
-     * Generate PDF invoice for a payment
-     * Route: GET /receptionist/payments/{payment}/invoice
-     * Only accessible to receptionists (enforced by route middleware)
+     * Generate PDF invoice for a payment.
      */
     public function paymentsInvoice(Payment $payment)
     {
-        // Load necessary relationships for PDF
         $payment->load(['member', 'receptionist']);
-        
-        // Generate PDF using dedicated Blade view
+
         $pdf = Pdf::loadView('pdf.payment-invoice', compact('payment'));
-        
-        // Generate filename with payment ID and date
-        $filename = 'facture-' . str_pad($payment->id, 6, '0', STR_PAD_LEFT) . '-' . now()->format('Y-m-d') . '.pdf';
-        
+
+        $filename = 'facture-' . str_pad((string) $payment->id, 6, '0', STR_PAD_LEFT) . '-' . now()->format('Y-m-d') . '.pdf';
+
         return $pdf->download($filename);
     }
 }
+

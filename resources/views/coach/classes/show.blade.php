@@ -1,13 +1,13 @@
 @extends('layouts.app')
 
-@section('title', 'Détails du Cours')
+@section('title', 'Details du Cours')
 
 @section('sidebar')
     <a href="{{ route('coach.dashboard') }}" class="block px-4 py-3 rounded hover:bg-white/10 transition"><i class="fas fa-tachometer-alt me-3"></i><span>Dashboard</span></a>
     <a href="{{ route('coach.classes.index') }}" class="block px-4 py-3 rounded hover:bg-white/10 transition"><i class="fas fa-dumbbell me-3"></i><span>Mes Cours</span></a>
     <form method="POST" action="{{ route('logout') }}">
         @csrf
-        <button type="submit" class="block w-full text-left px-4 py-3 rounded hover:bg-white/10 transition"><i class="fas fa-sign-out-alt me-3"></i><span>D�connexion</span></button>
+        <button type="submit" class="block w-full text-left px-4 py-3 rounded hover:bg-white/10 transition"><i class="fas fa-sign-out-alt me-3"></i><span>Deconnexion</span></button>
     </form>
 @endsection
 
@@ -26,7 +26,7 @@
             <a href="{{ route('coach.classes.edit', $classModel) }}" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">
                  Modifier
             </a>
-            <form method="POST" action="{{ route('coach.classes.destroy', $classModel) }}" class="inline" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce cours ? Tous les membres seront désinscrits. Cette action est irréversible.')">
+            <form method="POST" action="{{ route('coach.classes.destroy', $classModel) }}" class="inline" onsubmit="return confirm('Êtes-vous sur de vouloir supprimer ce cours ? Tous les membres seront desinscrits. Cette action est irreversible.')">
                 @csrf
                 @method('DELETE')
                 <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600">
@@ -38,11 +38,11 @@
 
     <div class="grid grid-cols-3 gap-4">
         <div class="bg-orange-50 p-4 rounded-lg">
-            <p class="text-gray-600 text-sm">Capacité</p>
+            <p class="text-gray-600 text-sm">Capacite</p>
             <p class="text-2xl font-bold text-orange-600">{{ $classModel->capacity }} personnes</p>
         </div>
         <div class="bg-blue-50 p-4 rounded-lg">
-            <p class="text-gray-600 text-sm">Durée</p>
+            <p class="text-gray-600 text-sm">Duree</p>
             <p class="text-2xl font-bold text-blue-600">{{ $classModel->duration }} min</p>
         </div>
         <div class="bg-green-50 p-4 rounded-lg">
@@ -58,7 +58,7 @@
         <h3 class="text-xl font-bold mb-4"> Horaires</h3>
         
         @if($classModel->schedules->isEmpty())
-            <p class="text-gray-500 mb-4">Aucun horaire défini</p>
+            <p class="text-gray-500 mb-4">Aucun horaire defini</p>
         @else
             <div class="space-y-2 mb-4">
                 @foreach($classModel->schedules as $schedule)
@@ -123,4 +123,5 @@
     </div>
 </div>
 @endsection
+
 

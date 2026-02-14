@@ -72,7 +72,7 @@
 
             <div>
 
-                <label class="block text-gray-800 font-semibold mb-2"> Prénom</label>
+                <label class="block text-gray-800 font-semibold mb-2"> Prenom</label>
 
                 <input type="text" name="first_name" value="{{ old('first_name') }}" 
 
@@ -138,7 +138,7 @@
 
             <div>
 
-                <label class="block text-gray-800 font-semibold mb-2"> Téléphone</label>
+                <label class="block text-gray-800 font-semibold mb-2"> Telephone</label>
 
                 <input type="text" name="phone" value="{{ old('phone') }}" 
 
@@ -168,7 +168,7 @@
 
                       class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none transition"
 
-                      placeholder="Adresse complète du membre">{{ old('address') }}</textarea>
+                      placeholder="Adresse complete du membre">{{ old('address') }}</textarea>
 
             @error('address')
 
@@ -228,15 +228,15 @@
 
         <div class="mb-6">
 
-            <label class="block text-gray-800 font-semibold mb-2"> Cours à s'abonner (optionnel)</label>
+            <label class="block text-gray-800 font-semibold mb-2"> Cours a s'abonner (optionnel)</label>
 
-            <p class="text-sm text-gray-600 mb-3">Sélectionnez un ou plusieurs cours auxquels ce membre souhaite s'abonner</p>
+            <p class="text-sm text-gray-600 mb-3">Selectionnez un ou plusieurs cours auxquels ce membre souhaite s'abonner</p>
 
             @if(isset($classes) && $classes->isEmpty())
 
                 <div class="bg-yellow-50 border-2 border-yellow-300 text-yellow-800 px-4 py-3 rounded-lg">
 
-                    <p class="text-sm"> Aucun cours disponible pour le moment. Les cours doivent être créés par les coachs.</p>
+                    <p class="text-sm"> Aucun cours disponible pour le moment. Les cours doivent etre crees par les coachs.</p>
 
                 </div>
 
@@ -262,9 +262,9 @@
 
                                     Coach: {{ $class->coach->name ?? 'N/A' }} | 
 
-                                    Capacité: {{ $class->capacity }} | 
+                                    Capacite: {{ $class->capacity }} | 
 
-                                    Durée: {{ $class->duration }} min
+                                    Duree: {{ $class->duration }} min
 
                                 </p>
 
@@ -304,7 +304,7 @@
 
             <button type="submit" class="btn-primary text-white px-8 py-3 rounded-lg font-semibold shadow-lg hover:shadow-xl transition">
 
-                 Créer le Membre
+                 Creer le Membre
 
             </button>
 
@@ -321,5 +321,6 @@
 </div>
 
 @endsection
+
 
 

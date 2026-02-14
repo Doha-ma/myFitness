@@ -57,6 +57,14 @@ Route::middleware(['auth'])->get('/dashboard', function () {
 // Admin Routes
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
+
+    // Staff management
+    Route::get('/staff', [AdminController::class, 'staffIndex'])->name('staff.index');
+    Route::get('/staff/create', [AdminController::class, 'staffCreate'])->name('staff.create');
+    Route::post('/staff', [AdminController::class, 'staffStore'])->name('staff.store');
+    Route::get('/staff/{user}/edit', [AdminController::class, 'staffEdit'])->name('staff.edit');
+    Route::put('/staff/{user}', [AdminController::class, 'staffUpdate'])->name('staff.update');
+    Route::delete('/staff/{user}', [AdminController::class, 'staffDestroy'])->name('staff.destroy');
     
     Route::get('/members', [AdminController::class, 'membersIndex'])->name('members.index');
     Route::get('/members/create', [AdminController::class, 'membersCreate'])->name('members.create');
@@ -116,6 +124,9 @@ Route::middleware(['auth', 'role:receptionist'])->prefix('receptionist')->name('
     Route::post('/members', [ReceptionistController::class, 'membersStore'])->name('members.store');
     Route::get('/members/{member}/edit', [ReceptionistController::class, 'membersEdit'])->name('members.edit');
     Route::put('/members/{member}', [ReceptionistController::class, 'membersUpdate'])->name('members.update');
+    Route::post('/members/{member}/renew', [ReceptionistController::class, 'renewSubscription'])->name('members.renew');
+    Route::patch('/members/{member}/subscription-end-date', [ReceptionistController::class, 'updateSubscriptionEndDate'])->name('members.subscription-end-date');
+    Route::post('/members/{member}/mark-paid', [ReceptionistController::class, 'markAsPaid'])->name('members.mark-paid');
     Route::delete('/members/{member}', [ReceptionistController::class, 'membersDestroy'])->name('members.destroy');
     
     Route::get('/payments', [ReceptionistController::class, 'paymentsIndex'])->name('payments.index');

@@ -37,7 +37,7 @@ class SubscriptionReminderEmail extends Mailable implements ShouldQueue
     {
         return new Envelope(
             from: new Address(config('mail.from.address'), config('mail.from.name')),
-            subject: 'Rappel d\'expiration d\'abonnement - ' . config('app.name'),
+            subject: 'Rappel de paiement - abonnement expire | MyFitness',
         );
     }
 

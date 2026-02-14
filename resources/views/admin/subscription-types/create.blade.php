@@ -8,7 +8,7 @@
     <a href="{{ route('admin.subscription-types.index') }}" class="block px-4 py-3 rounded hover:bg-white/10 transition bg-white/10"> Types d'Abonnement</a>
     <form method="POST" action="{{ route('logout') }}">
         @csrf
-        <button type="submit" class="block w-full text-left px-4 py-3 rounded hover:bg-white/10 transition mt-4"> Déconnexion</button>
+        <button type="submit" class="block w-full text-left px-4 py-3 rounded hover:bg-white/10 transition mt-4"> Deconnexion</button>
     </form>
 @endsection
 
@@ -38,7 +38,7 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="duration_days" class="form-label">Durée (jours) <span class="text-danger">*</span></label>
+                                    <label for="duration_days" class="form-label">Duree (jours) <span class="text-danger">*</span></label>
                                     <input type="number" class="form-control @error('duration_days') is-invalid @enderror" 
                                            id="duration_days" name="duration_days" value="{{ old('duration_days', 30) }}" min="1" required>
                                     @error('duration_days')
@@ -72,7 +72,7 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="mb-3">
-                                    <label for="discount_type" class="form-label">Type de réduction <span class="text-danger">*</span></label>
+                                    <label for="discount_type" class="form-label">Type de reduction <span class="text-danger">*</span></label>
                                     <select class="form-select @error('discount_type') is-invalid @enderror" 
                                             id="discount_type" name="discount_type" required>
                                         <option value="percentage" {{ old('discount_type') == 'percentage' ? 'selected' : '' }}>Pourcentage (%)</option>
@@ -85,7 +85,7 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="mb-3">
-                                    <label for="discount_value" class="form-label">Valeur de réduction <span class="text-danger">*</span></label>
+                                    <label for="discount_value" class="form-label">Valeur de reduction <span class="text-danger">*</span></label>
                                     <input type="number" class="form-control @error('discount_value') is-invalid @enderror" 
                                            id="discount_value" name="discount_value" value="{{ old('discount_value', 0) }}" 
                                            step="0.01" min="0" required>
@@ -108,7 +108,7 @@
 
                         <!-- Price Preview -->
                         <div class="alert alert-info">
-                            <h6><i class="fas fa-calculator"></i> Aperçu du prix final</h6>
+                            <h6><i class="fas fa-calculator"></i> Apercu du prix final</h6>
                             <div id="pricePreview">
                                 <span class="fw-bold">Prix final: </span>
                                 <span id="finalPrice" class="fw-bold text-success">0.00 DH</span>
@@ -154,3 +154,4 @@
     calculateFinalPrice();
 </script>
 @endpush
+

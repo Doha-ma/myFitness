@@ -43,8 +43,8 @@ class NewCourseCreated extends Notification
     public function toArray(object $notifiable): array
     {
         return [
-            'title' => 'Nouveau cours créé',
-            'message' => "{$this->coach->name} a créé un nouveau cours : {$this->course->name}",
+            'title' => 'Nouveau cours cree',
+            'message' => "{$this->coach->name} a cree un nouveau cours : {$this->course->name}",
             'action_type' => 'new_course',
             'performed_by' => $this->coach->name,
             'course_id' => $this->course->id,
@@ -56,3 +56,4 @@ class NewCourseCreated extends Notification
         ];
     }
 }
+

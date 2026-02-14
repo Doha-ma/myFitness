@@ -144,9 +144,9 @@
 
                         <div class="mb-8">
 
-                            <h1 class="text-2xl font-bold" style="color: var(--gym-primary);">GYM MANAGER</h1>
+                            <h1 class="text-2xl font-bold" style="color: var(--gym-primary);">MyFitness</h1>
 
-                            <p class="text-sm text-gray-300 mt-1">Système de gestion</p>
+                            <p class="text-sm text-gray-300 mt-1">Systeme de gestion</p>
 
                         </div>
 
@@ -172,7 +172,7 @@
 
             @else
 
-                <!-- Navigation corrigée sans composants Blade -->
+                <!-- Navigation corrigee sans composants Blade -->
 
                 <nav x-data="{ open: false }" class="bg-white border-b border-gray-100">
 
@@ -188,7 +188,7 @@
 
                                     <a href="{{ route('dashboard') }}">
 
-                                        <span class="text-xl font-bold text-orange-500">GYM MANAGER</span>
+                                        <span class="text-xl font-bold text-orange-500">MyFitness</span>
 
                                     </a>
 
@@ -198,7 +198,7 @@
 
                                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
 
-                                    <a href="{{ route('dashboard') }}" class="{{ request()->routeIs('dashboard') ? 'text-orange-500' : 'text-gray-700' }} px-3 py-2 rounded-md text-sm font-medium hover:text-orange-600">Dashboard</a>
+                                    <a href="{{ route('dashboard') }}" class="{{ request()->routeIs('dashboard') ? 'text-orange-500' : 'text-gray-700' }} px-3 py-2 rounded-md text-sm font-medium hover:text-orange-600">Tableau de bord</a>
 
                                 </div>
 
@@ -228,13 +228,13 @@
 
                                     <div x-show="open" @click.away="open = false" class="absolute right-0 mt-2 w-48 bg-white border rounded-md shadow-lg py-1 z-50">
 
-                                        <a href="{{ route('profile.edit') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profile</a>
+                                        <a href="{{ route('profile.edit') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profil</a>
 
                                         <form method="POST" action="{{ route('logout') }}">
 
                                             @csrf
 
-                                            <button type="submit" class="w-full text-left block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Log Out</button>
+                                            <button type="submit" class="w-full text-left block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Deconnexion</button>
 
                                         </form>
 
@@ -276,7 +276,7 @@
 
                         <div class="pt-2 pb-3 space-y-1">
 
-                            <a href="{{ route('dashboard') }}" class="{{ request()->routeIs('dashboard') ? 'text-orange-500' : 'text-gray-700' }} block px-3 py-2 rounded-md text-base font-medium hover:text-orange-600">Dashboard</a>
+                            <a href="{{ route('dashboard') }}" class="{{ request()->routeIs('dashboard') ? 'text-orange-500' : 'text-gray-700' }} block px-3 py-2 rounded-md text-base font-medium hover:text-orange-600">Tableau de bord</a>
 
                         </div>
 
@@ -296,7 +296,7 @@
 
                             <div class="mt-3 space-y-1">
 
-                                <a href="{{ route('profile.edit') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-100">Profile</a>
+                                <a href="{{ route('profile.edit') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-100">Profil</a>
 
 
 
@@ -304,7 +304,7 @@
 
                                     @csrf
 
-                                    <button type="submit" class="w-full text-left block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-100">Log Out</button>
+                                    <button type="submit" class="w-full text-left block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-100">Deconnexion</button>
 
                                 </form>
 
@@ -361,4 +361,6 @@
     @stack('scripts')
 
 </html>
+
+
 

@@ -41,7 +41,7 @@
         <div class="text-center py-12">
             <i class="fas fa-user-tie text-6xl text-gray-300 mb-4"></i>
             <h3 class="text-xl font-semibold text-gray-600 mb-2">Aucun coach</h3>
-            <p class="text-gray-500">Aucun coach n'a encore été ajouté au système.</p>
+            <p class="text-gray-500">Aucun coach n'a encore ete ajoute au systeme.</p>
             <div class="mt-4">
                 <a href="{{ route('admin.coaches.create') }}" class="btn btn-primary">
                     <i class="fas fa-plus"></i> Ajouter le premier coach
@@ -55,9 +55,9 @@
                     <tr>
                         <th>Nom</th>
                         <th>Email</th>
-                        <th>Téléphone</th>
+                        <th>Telephone</th>
                         <th>Cours</th>
-                        <th>Date de création</th>
+                        <th>Date de creation</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -75,10 +75,10 @@
                                     <span class="badge bg-info">{{ $coach->email }}</span>
                                     <br><small class="text-muted">{{ $coach->email }}</small>
                                 @else
-                                    <span class="badge bg-secondary">Non renseigné</span>
+                                    <span class="badge bg-secondary">Non renseigne</span>
                                 @endif
                             </td>
-                            <td>{{ $coach->phone ?? 'Non renseigné' }}</td>
+                            <td>{{ $coach->phone ?? 'Non renseigne' }}</td>
                             <td>{{ $coach->classes_as_coach_count ?? 0 }}</td>
                             <td>{{ $coach->created_at->format('d/m/Y') }}</td>
                             <td>
@@ -110,3 +110,4 @@
     @endif
 </div>
 @endsection
+

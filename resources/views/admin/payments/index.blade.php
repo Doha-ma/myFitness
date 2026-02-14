@@ -5,7 +5,7 @@
 @section('content')
 <div class="mb-8">
     <h2 class="text-4xl font-bold text-white mb-2">Paiements</h2>
-    <p class="text-gray-300">Historique de tous les paiements enregistrés</p>
+    <p class="text-gray-300">Historique de tous les paiements enregistres</p>
 </div>
 
 <div class="card p-6">
@@ -25,7 +25,7 @@
         <div class="text-center py-12">
             <i class="fas fa-money-bill-wave text-6xl text-gray-300 mb-4"></i>
             <h3 class="text-xl font-semibold text-gray-600 mb-2">Aucun paiement</h3>
-            <p class="text-gray-500">Aucun paiement n'a encore été enregistré.</p>
+            <p class="text-gray-500">Aucun paiement n'a encore ete enregistre.</p>
         </div>
     @else
         <div class="table-responsive">
@@ -35,8 +35,8 @@
                         <th>Date</th>
                         <th>Membre</th>
                         <th>Montant</th>
-                        <th>Méthode</th>
-                        <th>Réceptionniste</th>
+                        <th>Methode</th>
+                        <th>Receptionniste</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -60,7 +60,7 @@
                             </td>
                             <td>
                                 <div class="btn-group" role="group">
-                                    <button type="button" class="btn btn-sm btn-outline-primary" title="Voir les détails">
+                                    <button type="button" class="btn btn-sm btn-outline-primary" title="Voir les details">
                                         <i class="fas fa-eye"></i>
                                     </button>
                                 </div>
@@ -95,3 +95,4 @@ $(document).ready(function() {
 });
 </script>
 @endpush
+
