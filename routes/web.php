@@ -124,6 +124,7 @@ Route::middleware(['auth', 'role:receptionist'])->prefix('receptionist')->name('
     Route::post('/members', [ReceptionistController::class, 'membersStore'])->name('members.store');
     Route::get('/members/{member}/edit', [ReceptionistController::class, 'membersEdit'])->name('members.edit');
     Route::put('/members/{member}', [ReceptionistController::class, 'membersUpdate'])->name('members.update');
+    Route::post('/members/{member}/subscription', [ReceptionistController::class, 'membersUpdateSubscription'])->name('members.subscription.update');
     Route::post('/members/{member}/renew', [ReceptionistController::class, 'renewSubscription'])->name('members.renew');
     Route::patch('/members/{member}/subscription-end-date', [ReceptionistController::class, 'updateSubscriptionEndDate'])->name('members.subscription-end-date');
     Route::post('/members/{member}/mark-paid', [ReceptionistController::class, 'markAsPaid'])->name('members.mark-paid');

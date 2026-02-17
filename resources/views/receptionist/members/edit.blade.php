@@ -16,6 +16,23 @@
 <div class="card p-8 max-w-5xl">
     <h2 class="text-2xl font-bold mb-6">Fiche membre</h2>
 
+    @if(session('success'))
+        <div class="mb-6 bg-green-50 border border-green-300 text-green-700 px-4 py-3 rounded-lg">
+            {{ session('success') }}
+        </div>
+    @endif
+
+    @if($errors->any())
+        <div class="mb-6 bg-red-50 border border-red-300 text-red-700 px-4 py-3 rounded-lg">
+            <p class="font-semibold">Veuillez corriger les erreurs suivantes :</p>
+            <ul class="list-disc list-inside mt-2">
+                @foreach($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <div>
             <form method="POST" action="{{ route('receptionist.members.update', $member) }}">
@@ -68,6 +85,50 @@
                     <input type="date" name="subscription_end_date" value="{{ old('subscription_end_date', optional($member->subscription_end_date)->format('Y-m-d')) }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
                 </div>
 
+                <div class="mb-6">
+                    <label class="block text-gray-700 font-semibold mb-2">Cours choisis (abonnement)</label>
+                    <p class="text-sm text-gray-600 mb-3">Selectionnez les cours a associer a ce membre.</p>
+
+                    @php
+                        $selectedClasses = collect(old('classes', $member->classes->pluck('id')->all()))
+                            ->map(fn ($id) => (string) $id)
+                            ->all();
+                    @endphp
+
+                    @if(isset($classes) && $classes->isEmpty())
+                        <div class="bg-yellow-50 border border-yellow-300 text-yellow-800 px-4 py-3 rounded-lg">
+                            Aucun cours approuve disponible pour le moment.
+                        </div>
+                    @else
+                        <div class="border border-gray-300 rounded-lg p-3 max-h-64 overflow-y-auto space-y-2">
+                            @foreach($classes as $class)
+                                <label class="flex items-start gap-3 p-3 rounded-lg border border-gray-200 hover:bg-gray-50 cursor-pointer">
+                                    <input
+                                        type="checkbox"
+                                        name="classes[]"
+                                        value="{{ $class->id }}"
+                                        class="mt-1"
+                                        {{ in_array((string) $class->id, $selectedClasses, true) ? 'checked' : '' }}
+                                    >
+                                    <div>
+                                        <p class="font-semibold text-gray-800">{{ $class->name }}</p>
+                                        <p class="text-xs text-gray-600">
+                                            Coach: {{ $class->coach->name ?? 'N/A' }} | Capacite: {{ $class->capacity }} | Duree: {{ $class->duration }} min
+                                        </p>
+                                    </div>
+                                </label>
+                            @endforeach
+                        </div>
+                    @endif
+
+                    @error('classes')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                    @error('classes.*')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                </div>
+
                 <div class="flex gap-3">
                     <button type="submit" class="btn-primary text-white px-6 py-3 rounded-lg font-semibold">
                         Enregistrer les modifications
@@ -88,9 +149,55 @@
                 @else
                     <span class="inline-flex px-3 py-1 rounded-full text-sm bg-red-100 text-red-800">Abonnement expire</span>
                 @endif
+                <p class="text-sm text-gray-600 mt-2">
+                    Type actuel :
+                    <span class="font-semibold">{{ $member->latestSubscriptionPayment?->subscriptionType?->name ?? 'Non defini' }}</span>
+                </p>
             </div>
 
             <div class="space-y-4">
+                <form method="POST" action="{{ route('receptionist.members.subscription.update', $member) }}" class="p-4 bg-white rounded-lg border border-gray-200">
+                    @csrf
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Changer le type d'abonnement</label>
+                    <select name="subscription_type_id" class="w-full px-3 py-2 border border-gray-300 rounded-lg mb-3" required>
+                        <option value="">Selectionner un abonnement</option>
+                        @foreach($subscriptionTypes as $subscriptionType)
+                            <option
+                                value="{{ $subscriptionType->id }}"
+                                {{ (string) old('subscription_type_id', optional($member->latestSubscriptionPayment?->subscriptionType)->id) === (string) $subscriptionType->id ? 'selected' : '' }}
+                            >
+                                {{ $subscriptionType->name }} - {{ $subscriptionType->formatted_price }} ({{ $subscriptionType->duration_days }} jours)
+                            </option>
+                        @endforeach
+                    </select>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-2 mb-3">
+                        <input
+                            type="date"
+                            name="payment_date"
+                            value="{{ old('payment_date', now()->format('Y-m-d')) }}"
+                            class="px-3 py-2 border border-gray-300 rounded-lg"
+                            required
+                        >
+                        <select name="method" class="px-3 py-2 border border-gray-300 rounded-lg" required>
+                            <option value="cash" {{ old('method', 'cash') === 'cash' ? 'selected' : '' }}>Especes</option>
+                            <option value="card" {{ old('method') === 'card' ? 'selected' : '' }}>Carte</option>
+                            <option value="transfer" {{ old('method') === 'transfer' ? 'selected' : '' }}>Virement</option>
+                        </select>
+                    </div>
+
+                    <textarea
+                        name="notes"
+                        rows="2"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-lg mb-3"
+                        placeholder="Notes (optionnel)"
+                    >{{ old('notes') }}</textarea>
+
+                    <button type="submit" class="bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded-lg font-semibold">
+                        Mettre a jour l'abonnement
+                    </button>
+                </form>
+
                 <form method="POST" action="{{ route('receptionist.members.renew', $member) }}" class="p-4 bg-white rounded-lg border border-gray-200">
                     @csrf
                     <label class="block text-sm font-semibold text-gray-700 mb-2">Renouveler (jours)</label>

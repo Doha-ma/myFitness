@@ -116,7 +116,7 @@
                             </td>
                             <td class="py-3 px-4">
                                 <div class="flex gap-2">
-                                    <a href="{{ route('receptionist.members.edit', $member) }}" class="text-blue-500 hover:text-blue-700">Fiche membre</a>
+                                    <a href="{{ route('receptionist.members.edit', $member) }}" class="text-blue-500 hover:text-blue-700">Modifier infos & abonnement</a>
                                     <form method="POST" action="{{ route('receptionist.members.destroy', $member) }}" class="inline" onsubmit="return confirm('Confirmer la suppression de ce membre ?')">
                                         @csrf
                                         @method('DELETE')
