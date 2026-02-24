@@ -896,13 +896,12 @@ class AdminController extends Controller
         $admins = User::where('role', 'admin')->get();
 
         foreach ($admins as $admin) {
-            $alreadyNotified = $admin->unreadNotifications->contains(function ($notification) use ($today, $expiredCount) {
-                return ($notification->data['action_type'] ?? null) === 'expired_subscriptions'
-                    && ($notification->data['date'] ?? null) === $today
-                    && (int) ($notification->data['expired_count'] ?? 0) === $expiredCount;
-            });
+            $alreadyNotifiedToday = $admin->notifications()
+                ->where('type', ExpiredSubscriptionsNotification::class)
+                ->whereDate('created_at', $today)
+                ->exists();
 
-            if (!$alreadyNotified) {
+            if (!$alreadyNotifiedToday) {
                 $admin->notify(new ExpiredSubscriptionsNotification($expiredCount));
             }
         }
