@@ -17,9 +17,7 @@
                 <p class="text-4xl font-bold mt-3" style="color: var(--gym-primary);">{{ $totalMembers }}</p>
                 <p class="text-xs text-gray-500 mt-1">Total actif</p>
             </div>
-            <div class="w-14 h-14 rounded-2xl bg-orange-100 text-orange-600 flex items-center justify-center text-2xl shadow-sm">
-                <i class="fas fa-users"></i>
-            </div>
+            <div class="text-6xl opacity-20">👥</div>
         </div>
     </a>
 
@@ -30,9 +28,7 @@
                 <p class="text-4xl font-bold mt-3" style="color: var(--gym-secondary);">{{ $totalClasses }}</p>
                 <p class="text-xs text-gray-500 mt-1">En activite</p>
             </div>
-            <div class="w-14 h-14 rounded-2xl bg-blue-100 text-blue-600 flex items-center justify-center text-2xl shadow-sm">
-                <i class="fas fa-dumbbell"></i>
-            </div>
+            <div class="text-6xl opacity-20">💪</div>
         </div>
     </a>
 
@@ -43,9 +39,7 @@
                 <p class="text-4xl font-bold mt-3" style="color: var(--gym-accent);">{{ $totalReceptionists }}</p>
                 <p class="text-xs text-gray-500 mt-1">En service</p>
             </div>
-            <div class="w-14 h-14 rounded-2xl bg-amber-100 text-amber-600 flex items-center justify-center text-2xl shadow-sm">
-                <i class="fas fa-clipboard-list"></i>
-            </div>
+            <div class="text-6xl opacity-20">📋</div>
         </div>
     </a>
 
@@ -56,9 +50,7 @@
                 <p class="text-4xl font-bold mt-3" style="color: var(--gym-success);">{{ $totalCoaches }}</p>
                 <p class="text-xs text-gray-500 mt-1">Disponibles</p>
             </div>
-            <div class="w-14 h-14 rounded-2xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-2xl shadow-sm">
-                <i class="fas fa-user-tie"></i>
-            </div>
+            <div class="text-6xl opacity-20">🏃</div>
         </div>
     </a>
 </div>
@@ -73,9 +65,7 @@
                     <p class="text-gray-700 text-sm font-medium">Total Paiements</p>
                     <p class="text-3xl font-bold text-green-700 mt-2">{{ number_format($totalPayments, 2) }} DH</p>
                 </div>
-                <div class="w-14 h-14 rounded-2xl bg-green-200 text-green-700 flex items-center justify-center text-2xl shadow-sm">
-                    <i class="fas fa-money-bill-wave"></i>
-                </div>
+                <div class="text-5xl">💰</div>
             </div>
         </a>
 
@@ -85,9 +75,7 @@
                     <p class="text-gray-700 text-sm font-medium">Ce Mois</p>
                     <p class="text-3xl font-bold text-blue-700 mt-2">{{ number_format($paymentsThisMonth, 2) }} DH</p>
                 </div>
-                <div class="w-14 h-14 rounded-2xl bg-blue-200 text-blue-700 flex items-center justify-center text-2xl shadow-sm">
-                    <i class="fas fa-calendar-days"></i>
-                </div>
+                <div class="text-5xl">📅</div>
             </div>
         </a>
 
@@ -97,9 +85,7 @@
                     <p class="text-gray-700 text-sm font-medium">Aujourd'hui</p>
                     <p class="text-3xl font-bold text-orange-700 mt-2">{{ number_format($paymentsToday, 2) }} DH</p>
                 </div>
-                <div class="w-14 h-14 rounded-2xl bg-orange-200 text-orange-700 flex items-center justify-center text-2xl shadow-sm">
-                    <i class="fas fa-chart-line"></i>
-                </div>
+                <div class="text-5xl">📊</div>
             </div>
         </a>
 
@@ -109,9 +95,7 @@
                     <p class="text-gray-700 text-sm font-medium">Nombre Paiements</p>
                     <p class="text-3xl font-bold text-purple-700 mt-2">{{ $totalPaymentsCount }}</p>
                 </div>
-                <div class="w-14 h-14 rounded-2xl bg-purple-200 text-purple-700 flex items-center justify-center text-2xl shadow-sm">
-                    <i class="fas fa-receipt"></i>
-                </div>
+                <div class="text-5xl">🧾</div>
             </div>
         </a>
     </div>
@@ -140,7 +124,7 @@
                 <p class="text-gray-400 text-sm mt-2">Les paiements apparaitront ici</p>
             </div>
         @else
-            <div class="space-y-3 max-h-[30rem] overflow-y-auto pr-2">
+            <div class="space-y-3 max-h-96 overflow-y-auto">
                 @foreach($recentPayments as $payment)
                     <div class="flex justify-between items-center bg-gradient-to-r from-gray-50 to-orange-50 p-4 rounded-lg border border-orange-100 hover:shadow-md transition">
                         <div>
@@ -161,3 +145,4 @@
     </div>
 </div>
 @endsection
+

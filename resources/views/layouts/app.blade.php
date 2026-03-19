@@ -80,7 +80,7 @@
 
             * { font-family: 'Figtree', sans-serif; }
 
-            body { background: linear-gradient(135deg, var(--gym-dark) 0%, var(--gym-secondary) 100%); min-height: 100vh; scrollbar-gutter: stable both-edges; }
+            body { background: linear-gradient(135deg, var(--gym-dark) 0%, var(--gym-secondary) 100%); min-height: 100vh; }
 
             .card { background: white; border-radius: 1rem; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15); transition: transform 0.3s, box-shadow 0.3s; }
 
@@ -90,7 +90,7 @@
 
             .btn-primary:hover { background: #ff8555; transform: translateY(-2px); box-shadow: 0 10px 20px rgba(255, 107, 53, 0.4); }
 
-            .sidebar { background: linear-gradient(180deg, var(--gym-dark) 0%, var(--gym-secondary) 100%); box-shadow: 4px 0 15px rgba(0, 0, 0, 0.2); overflow-y: auto; }
+            .sidebar { background: linear-gradient(180deg, var(--gym-dark) 0%, var(--gym-secondary) 100%); box-shadow: 4px 0 15px rgba(0, 0, 0, 0.2); }
 
             .sidebar a { transition: all 0.3s; border-radius: 0.5rem; display: block; }
 
@@ -121,33 +121,6 @@
             .pagination a:hover { background: var(--gym-primary); color: white; }
 
             .pagination span { background: var(--gym-primary); color: white; border: 2px solid var(--gym-primary); }
-            .sidebar {
-                scrollbar-width: thin;
-                scrollbar-color: rgba(255, 107, 53, 0.95) rgba(255, 107, 53, 0.2);
-            }
-            .app-main {
-                scrollbar-width: thin;
-                scrollbar-color: rgba(255, 107, 53, 0.45) rgba(255, 255, 255, 0.08);
-            }
-            .sidebar::-webkit-scrollbar, .app-main::-webkit-scrollbar {
-                width: 10px;
-                height: 10px;
-            }
-            .sidebar::-webkit-scrollbar-track, .app-main::-webkit-scrollbar-track {
-                background: rgba(255, 255, 255, 0.08);
-                border-radius: 9999px;
-            }
-            .sidebar::-webkit-scrollbar-track {
-                background: rgba(255, 107, 53, 0.2);
-            }
-            .sidebar::-webkit-scrollbar-thumb, .app-main::-webkit-scrollbar-thumb {
-                background: linear-gradient(180deg, rgba(255, 107, 53, 0.85) 0%, rgba(247, 147, 30, 0.85) 100%);
-                border-radius: 9999px;
-            }
-            .sidebar::-webkit-scrollbar-thumb {
-                background: #FF6B35;
-            }
-            .app-main { overflow-x: hidden; scroll-behavior: smooth; scrollbar-gutter: stable; }
             .receptionist-content { max-width: calc(100vw - 16rem); overflow-x: hidden; }
             .receptionist-content .card { width: 100%; }
             .receptionist-content .overflow-x-auto { overflow-x: auto; }
@@ -167,7 +140,7 @@
 
                     <!-- Sidebar -->
 
-                    <aside class="sidebar w-64 text-white min-h-screen p-4 fixed left-0 top-0 bottom-0 overflow-y-auto">
+                    <aside class="sidebar w-64 text-white min-h-screen p-4 fixed left-0 top-0 bottom-0">
 
                         <div class="mb-8">
 
@@ -189,7 +162,7 @@
 
                     <!-- Main Content -->
 
-                    <main class="app-main flex-1 p-8 ml-64 {{ request()->routeIs('receptionist.members.*') || request()->routeIs('receptionist.payments.*') ? 'receptionist-content' : '' }}">
+                    <main class="flex-1 p-8 ml-64 {{ request()->routeIs('receptionist.members.*') || request()->routeIs('receptionist.payments.*') ? 'receptionist-content' : '' }}">
 
                         @yield('content')
 

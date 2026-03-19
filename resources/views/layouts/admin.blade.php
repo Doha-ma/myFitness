@@ -152,36 +152,6 @@
             background: linear-gradient(180deg, var(--gym-bg-primary) 0%, var(--gym-bg-secondary) 100%); 
             box-shadow: 4px 0 20px rgba(0, 0, 0, 0.3);
         }
-
-        .sidebar,
-        .main-content {
-            scrollbar-width: thin;
-            scrollbar-color: rgba(255, 107, 53, 0.45) rgba(255, 255, 255, 0.08);
-        }
-
-        .sidebar::-webkit-scrollbar,
-        .main-content::-webkit-scrollbar {
-            width: 10px;
-            height: 10px;
-        }
-
-        .sidebar::-webkit-scrollbar-track,
-        .main-content::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.08);
-            border-radius: 9999px;
-        }
-
-        .sidebar::-webkit-scrollbar-thumb,
-        .main-content::-webkit-scrollbar-thumb {
-            background: linear-gradient(180deg, rgba(255, 107, 53, 0.85) 0%, rgba(247, 147, 30, 0.85) 100%);
-            border-radius: 9999px;
-        }
-
-        .main-content {
-            overflow-x: hidden;
-            scroll-behavior: smooth;
-            scrollbar-gutter: stable;
-        }
         
         .sidebar a { 
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
@@ -438,7 +408,7 @@
 <body class="font-sans antialiased">
     <div class="flex h-screen">
         <!-- Sidebar -->
-        <div class="sidebar w-64 min-h-screen p-6 overflow-y-auto">
+        <div class="sidebar w-64 min-h-screen p-6">
             <div class="mb-8">
                 <h1 class="text-2xl font-bold text-white mb-2 flex items-center gap-2">
                     <i class="fas fa-dumbbell"></i>
