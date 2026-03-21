@@ -151,6 +151,33 @@
         .sidebar { 
             background: linear-gradient(180deg, var(--gym-bg-primary) 0%, var(--gym-bg-secondary) 100%); 
             box-shadow: 4px 0 20px rgba(0, 0, 0, 0.3);
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .sidebar::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .sidebar::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .sidebar::-webkit-scrollbar-thumb {
+            background: rgba(255, 107, 53, 0.5);
+            border-radius: 3px;
+        }
+        
+        .sidebar::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 107, 53, 0.7);
+        }
+        
+        .sidebar .sticky {
+            backdrop-filter: blur(10px);
+            background: linear-gradient(180deg, rgba(26, 26, 46, 0.95) 0%, rgba(0, 78, 137, 0.95) 100%);
         }
         
         .sidebar a { 
@@ -403,13 +430,21 @@
                 font-size: 0.875rem;
             }
         }
+        
+        /* Main content margin for desktop */
+        @media (min-width: 769px) {
+            .main-content {
+                margin-left: 16rem; /* 256px = 16rem */
+            }
+        }
     </style>
 </head>
 <body class="font-sans antialiased">
     <div class="flex h-screen">
         <!-- Sidebar -->
-        <div class="sidebar w-64 min-h-screen p-6">
-            <div class="mb-8">
+        <div class="sidebar w-64 min-h-screen flex flex-col">
+            <!-- Fixed Header -->
+            <div class="p-6 pb-4 sticky top-0 bg-gradient-to-b from-gym-bg-primary to-gym-bg-secondary z-10">
                 <h1 class="text-2xl font-bold text-white mb-2 flex items-center gap-2">
                     <i class="fas fa-dumbbell"></i>
                     <span>MyFitness</span>
@@ -417,65 +452,70 @@
                 <p class="text-gray-300 text-sm">Panel d'Administration</p>
             </div>
             
-            @if(auth()->check() && auth()->user()->role === 'admin')
-                @section('sidebar')
-                    <a href="{{ route('admin.dashboard') }}" class="{{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
-                        <i class="fas fa-tachometer-alt me-3"></i> 
-                        <span>Dashboard</span>
-                    </a>
-                    <a href="{{ route('admin.members.index') }}" class="{{ request()->routeIs('admin.members.*') ? 'active' : '' }}">
-                        <i class="fas fa-user me-3"></i> 
-                        <span>Membres</span>
-                    </a>
-                    <a href="{{ route('admin.coaches.index') }}" class="{{ request()->routeIs('admin.coaches.*') ? 'active' : '' }}">
-                        <i class="fas fa-user-tie me-3"></i> 
-                        <span>Coachs</span>
-                    </a>
-                    <a href="{{ route('admin.receptionists.index') }}" class="{{ request()->routeIs('admin.receptionists.*') ? 'active' : '' }}">
-                        <i class="fas fa-clipboard me-3"></i> 
-                        <span>Receptionnistes</span>
-                    </a>
-                    <a href="{{ route('admin.subscription-types.index') }}" class="{{ request()->routeIs('admin.subscription-types.*') ? 'active' : '' }}">
-                        <i class="fas fa-credit-card me-3"></i> 
-                        <span>Types d'Abonnement</span>
-                    </a>
-                    <a href="{{ route('admin.classes.index') }}" class="{{ request()->routeIs('admin.classes.*') ? 'active' : '' }}">
-                        <i class="fas fa-dumbbell me-3"></i> 
-                        <span>Gestion de cours</span>
-                    </a>
-                    <a href="{{ route('admin.classes.pending') }}" class="{{ request()->routeIs('admin.classes.pending') ? 'active' : '' }}">
-                        <i class="fas fa-check-circle me-3"></i> 
-                        <span>Validation des Cours</span>
-                    </a>
-                    <a href="{{ route('admin.payments.index') }}" class="{{ request()->routeIs('admin.payments.*') ? 'active' : '' }}">
-                        <i class="fas fa-money-bill-wave me-3"></i> 
-                        <span>Paiements</span>
-                    </a>
-                    <a href="{{ route('admin.notifications.index') }}" class="{{ request()->routeIs('admin.notifications.*') ? 'active' : '' }}">
-                        <i class="fas fa-bell me-3"></i> 
-                        <span>Notifications</span>
-                        @php
-                            $unreadNotifications = auth()->user()->unreadNotifications;
-                            $expiredMembersBadgeCount = $unreadNotifications
-                                ->filter(fn ($notification) => ($notification->data['action_type'] ?? null) === 'expired_subscriptions')
-                                ->sum(fn ($notification) => (int) ($notification->data['expired_count'] ?? 0));
-                            $badgeCount = $expiredMembersBadgeCount > 0 ? $expiredMembersBadgeCount : $unreadNotifications->count();
-                        @endphp
-                        @if($badgeCount > 0)
-                            <span class="badge badge-danger ml-auto">
-                                {{ $badgeCount }}
-                            </span>
-                        @endif
-                    </a>
-                    <form method="POST" action="{{ route('logout') }}">
-                        @csrf
-                        <button type="submit" class="text-red-300 hover:text-red-200">
-                            <i class="fas fa-sign-out-alt me-3"></i> 
-                            <span>Deconnexion</span>
-                        </button>
-                    </form>
-                @show
-            @endif
+            <!-- Scrollable Navigation -->
+            <div class="flex-1 px-6 pb-6 overflow-y-auto">
+                @if(auth()->check() && auth()->user()->role === 'admin')
+                    @section('sidebar')
+                        <nav class="space-y-2">
+                            <a href="{{ route('admin.dashboard') }}" class="{{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
+                                <i class="fas fa-tachometer-alt me-3"></i> 
+                                <span>Dashboard</span>
+                            </a>
+                            <a href="{{ route('admin.members.index') }}" class="{{ request()->routeIs('admin.members.*') ? 'active' : '' }}">
+                                <i class="fas fa-user me-3"></i> 
+                                <span>Membres</span>
+                            </a>
+                            <a href="{{ route('admin.coaches.index') }}" class="{{ request()->routeIs('admin.coaches.*') ? 'active' : '' }}">
+                                <i class="fas fa-user-tie me-3"></i> 
+                                <span>Coachs</span>
+                            </a>
+                            <a href="{{ route('admin.receptionists.index') }}" class="{{ request()->routeIs('admin.receptionists.*') ? 'active' : '' }}">
+                                <i class="fas fa-clipboard me-3"></i> 
+                                <span>Receptionnistes</span>
+                            </a>
+                            <a href="{{ route('admin.subscription-types.index') }}" class="{{ request()->routeIs('admin.subscription-types.*') ? 'active' : '' }}">
+                                <i class="fas fa-credit-card me-3"></i> 
+                                <span>Types d'Abonnement</span>
+                            </a>
+                            <a href="{{ route('admin.classes.index') }}" class="{{ request()->routeIs('admin.classes.*') ? 'active' : '' }}">
+                                <i class="fas fa-dumbbell me-3"></i> 
+                                <span>Gestion de cours</span>
+                            </a>
+                            <a href="{{ route('admin.classes.pending') }}" class="{{ request()->routeIs('admin.classes.pending') ? 'active' : '' }}">
+                                <i class="fas fa-check-circle me-3"></i> 
+                                <span>Validation des Cours</span>
+                            </a>
+                            <a href="{{ route('admin.payments.index') }}" class="{{ request()->routeIs('admin.payments.*') ? 'active' : '' }}">
+                                <i class="fas fa-money-bill-wave me-3"></i> 
+                                <span>Paiements</span>
+                            </a>
+                            <a href="{{ route('admin.notifications.index') }}" class="{{ request()->routeIs('admin.notifications.*') ? 'active' : '' }}">
+                                <i class="fas fa-bell me-3"></i> 
+                                <span>Notifications</span>
+                                @php
+                                    $unreadNotifications = auth()->user()->unreadNotifications;
+                                    $expiredMembersBadgeCount = $unreadNotifications
+                                        ->filter(fn ($notification) => ($notification->data['action_type'] ?? null) === 'expired_subscriptions')
+                                        ->sum(fn ($notification) => (int) ($notification->data['expired_count'] ?? 0));
+                                    $badgeCount = $expiredMembersBadgeCount > 0 ? $expiredMembersBadgeCount : $unreadNotifications->count();
+                                @endphp
+                                @if($badgeCount > 0)
+                                    <span class="badge badge-danger ml-auto">
+                                        {{ $badgeCount }}
+                                    </span>
+                                @endif
+                            </a>
+                            <form method="POST" action="{{ route('logout') }}">
+                                @csrf
+                                <button type="submit" class="text-red-300 hover:text-red-200 w-full text-left flex items-center gap-3">
+                                    <i class="fas fa-sign-out-alt"></i> 
+                                    <span>Deconnexion</span>
+                                </button>
+                            </form>
+                        </nav>
+                    @show
+                @endif
+            </div>
         </div>
 
         <!-- Main Content -->

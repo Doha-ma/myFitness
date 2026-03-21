@@ -43,6 +43,7 @@
                         <th class="text-left py-3 px-4">Methode</th>
                         <th class="text-left py-3 px-4">Enregistre par</th>
                         <th class="text-left py-3 px-4">Notes</th>
+                        <th class="text-left py-3 px-4">Email</th>
                         <th class="text-left py-3 px-4">Actions</th>
                     </tr>
                 </thead>
@@ -71,12 +72,37 @@
                             <td class="py-3 px-4">{{ $payment->receptionist->name ?? 'N/A' }}</td>
                             <td class="py-3 px-4 text-sm text-gray-600">{{ Str::limit($payment->notes ?? '', 30) }}</td>
                             <td class="py-3 px-4">
-                                <a href="{{ route('receptionist.payments.invoice', $payment) }}" 
-                                   class="btn-primary text-white px-4 py-2 rounded-lg text-sm font-semibold hover:shadow-lg transition inline-block"
-                                   target="_blank"
-                                   title="Telecharger la facture PDF">
-                                     PDF
-                                </a>
+                                @if($payment->email_status === 'sent')
+                                    <span class="px-2 py-1 rounded-full text-sm bg-green-100 text-green-800" title="Envoyé le {{ $payment->email_sent_at?->format('d/m/Y H:i') }}">
+                                        <i class="fas fa-check-circle me-1"></i>Envoyé
+                                    </span>
+                                @elseif($payment->email_status === 'failed')
+                                    <span class="px-2 py-1 rounded-full text-sm bg-red-100 text-red-800" title="{{ $payment->email_error }}">
+                                        <i class="fas fa-exclamation-circle me-1"></i>Échec
+                                    </span>
+                                @else
+                                    <span class="px-2 py-1 rounded-full text-sm bg-gray-100 text-gray-800">
+                                        <i class="fas fa-clock me-1"></i>En attente
+                                    </span>
+                                @endif
+                            </td>
+                            <td class="py-3 px-4">
+                                <div class="flex gap-2">
+                                    <a href="{{ route('receptionist.payments.invoice', $payment) }}" 
+                                       class="btn-primary text-white px-3 py-2 rounded-lg text-sm font-semibold hover:shadow-lg transition inline-block"
+                                       target="_blank"
+                                       title="Telecharger la facture PDF">
+                                         PDF
+                                    </a>
+                                    
+                                    @if($payment->member->email && $payment->email_status !== 'sent')
+                                        <button onclick="resendEmail({{ $payment->id }})" 
+                                                class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 rounded-lg text-sm font-semibold transition inline-block"
+                                                title="Renvoyer l'email au client">
+                                            <i class="fas fa-envelope"></i>
+                                        </button>
+                                    @endif
+                                </div>
                             </td>
                         </tr>
                     @endforeach
@@ -89,6 +115,39 @@
         </div>
     @endif
 </div>
+
+@csrf
+<script>
+function resendEmail(paymentId) {
+    if (!confirm('Voulez-vous renvoyer l\'email de confirmation au client ?')) {
+        return;
+    }
+    
+    const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    
+    fetch(`/receptionist/payments/${paymentId}/resend-email`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': token
+        },
+        body: JSON.stringify({})
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Email renvoyé avec succès !');
+            location.reload();
+        } else {
+            alert('Erreur lors de l\'envoi de l\'email : ' + data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Erreur lors de l\'envoi de l\'email');
+    });
+}
+</script>
 @endsection
 
 

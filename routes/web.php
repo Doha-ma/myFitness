@@ -135,6 +135,10 @@ Route::middleware(['auth', 'role:receptionist'])->prefix('receptionist')->name('
     Route::post('/payments', [ReceptionistController::class, 'paymentsStore'])->name('payments.store');
     // PDF invoice generation route
     Route::get('/payments/{payment}/invoice', [ReceptionistController::class, 'paymentsInvoice'])->name('payments.invoice');
+    // Receipt view route
+    Route::get('/payments/{payment}/receipt', [ReceptionistController::class, 'paymentsReceipt'])->name('payments.receipt');
+    // Resend email route
+    Route::post('/payments/{payment}/resend-email', [ReceptionistController::class, 'paymentsResendEmail'])->name('payments.resend-email');
 });
 
 // Coach Routes

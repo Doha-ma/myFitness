@@ -10,8 +10,12 @@ use App\Models\SubscriptionType;
 use App\Models\User;
 use App\Notifications\NewMemberRegistered;
 use App\Notifications\PaymentValidated;
+use App\Services\PaymentEmailService;
+use App\Mail\PaymentConfirmationEmail;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
@@ -365,6 +369,7 @@ class ReceptionistController extends Controller
             'payment_date' => 'required|date',
             'method' => 'required|in:cash,card,transfer',
             'notes' => 'nullable|string',
+            'send_email' => 'nullable|boolean',
         ]);
 
         if ($request->filled('subscription_type_id')) {
@@ -394,8 +399,152 @@ class ReceptionistController extends Controller
             $admin->notify(new PaymentValidated($payment, auth()->user()));
         });
 
+        // Envoyer l'email de reçu au client si coché
+        $sendEmail = $request->boolean('send_email', true);
+        $emailResult = ['success' => false, 'message' => ''];
+        
+        if ($sendEmail && !empty($payment->member->email)) {
+            try {
+                \Log::info('Tentative envoi email pour paiement ID: ' . $payment->id);
+                \Log::info('Email client : ' . $payment->member->email);
+                
+                // Préparer les données pour l'email
+                $emailData = [
+                    'member' => $payment->member,
+                    'payment' => $payment,
+                    'receiptNumber' => str_pad($payment->id, 6, '0', STR_PAD_LEFT),
+                    'receiptUrl' => route('receptionist.payments.receipt', $payment),
+                ];
+                
+                // Envoyer l'email avec la classe Mailable
+                Mail::to($payment->member->email)->send(new PaymentConfirmationEmail($emailData));
+                
+                \Log::info('Email envoyé avec succès à : ' . $payment->member->email);
+                
+                // Mettre à jour le statut d'email dans la base
+                $payment->update([
+                    'email_sent_at' => now(),
+                    'email_status' => 'sent'
+                ]);
+                
+                $emailResult = [
+                    'success' => true,
+                    'message' => 'Email de confirmation envoyé au client avec succès.'
+                ];
+                
+            } catch (\Exception $e) {
+                \Log::error('Erreur lors de l\'envoi d\'email au client: ' . $e->getMessage());
+                
+                // Mettre à jour le statut d'échec
+                $payment->update([
+                    'email_status' => 'failed',
+                    'email_error' => $e->getMessage()
+                ]);
+                
+                $emailResult = [
+                    'success' => false,
+                    'message' => 'Erreur lors de l\'envoi d\'email: ' . $e->getMessage()
+                ];
+            }
+        } elseif ($sendEmail && empty($payment->member->email)) {
+            \Log::warning('Membre sans email - ID: ' . $payment->member->id);
+            
+            // Mettre à jour le statut d'échec
+            $payment->update([
+                'email_status' => 'failed',
+                'email_error' => 'Email du membre manquant'
+            ]);
+            
+            $emailResult = [
+                'success' => false,
+                'message' => 'Email non envoyé: le membre n\'a pas d\'adresse email.'
+            ];
+        } else {
+            // Utilisateur a choisi de ne pas envoyer d'email
+            $emailResult = [
+                'success' => true,
+                'message' => 'Email non envoyé selon la demande.'
+            ];
+        }
+
+        // Construire le message de succès
+        $successMessage = 'Le paiement a été enregistré avec succès.';
+        if ($emailResult['success']) {
+            $successMessage .= ' ' . $emailResult['message'];
+        }
+
         return redirect()->route('receptionist.payments.index')
-            ->with('success', 'Le paiement a ete enregistre avec succes.');
+            ->with('success', $successMessage);
+    }
+
+    /**
+     * Display payment receipt
+     */
+    public function paymentsReceipt(Payment $payment)
+    {
+        $payment->load(['member', 'receptionist', 'subscriptionType']);
+        
+        return view('payments.receipt', compact('payment'));
+    }
+
+    /**
+     * Resend payment confirmation email
+     */
+    public function paymentsResendEmail(Payment $payment)
+    {
+        try {
+            if (empty($payment->member->email)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Le membre n\'a pas d\'adresse email.'
+                ]);
+            }
+
+            // Préparer les données pour l'email
+            $emailData = [
+                'member' => $payment->member,
+                'payment' => $payment,
+                'receiptNumber' => str_pad($payment->id, 6, '0', STR_PAD_LEFT),
+                'receiptUrl' => route('receptionist.payments.receipt', $payment),
+            ];
+            
+            // Envoyer l'email
+            Mail::to($payment->member->email)->send(new PaymentConfirmationEmail($emailData));
+            
+            // Mettre à jour le statut d'email dans la base
+            $payment->update([
+                'email_sent_at' => now(),
+                'email_status' => 'sent',
+                'email_error' => null
+            ]);
+            
+            \Log::info('Email de paiement renvoyé avec succès', [
+                'payment_id' => $payment->id,
+                'member_email' => $payment->member->email
+            ]);
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'Email envoyé avec succès.'
+            ]);
+            
+        } catch (\Exception $e) {
+            \Log::error('Erreur lors du renvoi d\'email de paiement', [
+                'payment_id' => $payment->id,
+                'error' => $e->getMessage()
+            ]);
+            
+            // Mettre à jour le statut d'échec
+            $payment->update([
+                'email_status' => 'failed',
+                'email_error' => $e->getMessage()
+            ]);
+            
+            return response()->json([
+                'success' => false,
+                'message' => 'Erreur lors de l\'envoi: ' . $e->getMessage()
+            ]);
+        }
     }
 
     /**
