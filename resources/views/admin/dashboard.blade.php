@@ -10,47 +10,43 @@
 
 <!-- Statistiques principales -->
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-    <a href="{{ route('admin.members.index') }}" class="card stat-card p-6 block hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+    <a href="{{ route('admin.members.index') }}" class="bg-white border border-gray-200 rounded-lg p-6 block hover:shadow-lg transition-all duration-300">
         <div class="flex items-center justify-between">
             <div>
-                <p class="text-gray-600 text-sm font-medium uppercase tracking-wide">Membres Inscrits</p>
-                <p class="text-4xl font-bold mt-3" style="color: var(--gym-primary);">{{ $totalMembers }}</p>
-                <p class="text-xs text-gray-500 mt-1">Total actif</p>
+                <p class="text-black text-sm font-medium">Membres Inscrits</p>
+                <p class="text-4xl font-bold mt-3 text-black">{{ $totalMembers }}</p>
+                <p class="text-xs text-black mt-1">Total actif</p>
             </div>
-            <div class="text-6xl opacity-20">👥</div>
         </div>
     </a>
 
-    <a href="{{ route('admin.classes.index') }}" class="card stat-card p-6 block hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+    <a href="{{ route('admin.classes.index') }}" class="bg-white border border-gray-200 rounded-lg p-6 block hover:shadow-lg transition-all duration-300">
         <div class="flex items-center justify-between">
             <div>
-                <p class="text-gray-600 text-sm font-medium uppercase tracking-wide">Cours Crees</p>
-                <p class="text-4xl font-bold mt-3" style="color: var(--gym-secondary);">{{ $totalClasses }}</p>
-                <p class="text-xs text-gray-500 mt-1">En activite</p>
+                <p class="text-black text-sm font-medium">Cours Crees</p>
+                <p class="text-4xl font-bold mt-3 text-black">{{ $totalClasses }}</p>
+                <p class="text-xs text-black mt-1">En activite</p>
             </div>
-            <div class="text-6xl opacity-20">💪</div>
         </div>
     </a>
 
-    <a href="{{ route('admin.receptionists.index') }}" class="card stat-card p-6 block hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+    <a href="{{ route('admin.receptionists.index') }}" class="bg-white border border-gray-200 rounded-lg p-6 block hover:shadow-lg transition-all duration-300">
         <div class="flex items-center justify-between">
             <div>
-                <p class="text-gray-600 text-sm font-medium uppercase tracking-wide">Receptionnistes</p>
-                <p class="text-4xl font-bold mt-3" style="color: var(--gym-accent);">{{ $totalReceptionists }}</p>
-                <p class="text-xs text-gray-500 mt-1">En service</p>
+                <p class="text-black text-sm font-medium">Receptionnistes</p>
+                <p class="text-4xl font-bold mt-3 text-black">{{ $totalReceptionists }}</p>
+                <p class="text-xs text-black mt-1">En service</p>
             </div>
-            <div class="text-6xl opacity-20">📋</div>
         </div>
     </a>
 
-    <a href="{{ route('admin.coaches.index') }}" class="card stat-card p-6 block hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+    <a href="{{ route('admin.coaches.index') }}" class="bg-white border border-gray-200 rounded-lg p-6 block hover:shadow-lg transition-all duration-300">
         <div class="flex items-center justify-between">
             <div>
-                <p class="text-gray-600 text-sm font-medium uppercase tracking-wide">Coachs</p>
-                <p class="text-4xl font-bold mt-3" style="color: var(--gym-success);">{{ $totalCoaches }}</p>
-                <p class="text-xs text-gray-500 mt-1">Disponibles</p>
+                <p class="text-black text-sm font-medium">Coachs</p>
+                <p class="text-4xl font-bold mt-3 text-black">{{ $totalCoaches }}</p>
+                <p class="text-xs text-black mt-1">Disponibles</p>
             </div>
-            <div class="text-6xl opacity-20">🏃</div>
         </div>
     </a>
 </div>
@@ -59,43 +55,39 @@
 <div class="mb-8">
     <h3 class="text-2xl font-bold text-white mb-4"> Statistiques de Paiements</h3>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <a href="{{ route('admin.payments.index') }}" class="card p-6 bg-gradient-to-br from-green-50 to-green-100 border-2 border-green-200 block hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+        <a href="{{ route('admin.payments.index') }}" class="bg-white border border-gray-200 rounded-lg p-6 block hover:shadow-lg transition-all duration-300">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-gray-700 text-sm font-medium">Total Paiements</p>
-                    <p class="text-3xl font-bold text-green-700 mt-2">{{ number_format($totalPayments, 2) }} DH</p>
+                    <p class="text-black text-sm font-medium">Total Paiements</p>
+                    <p class="text-3xl font-bold text-black mt-2">{{ number_format($totalPayments, 2) }} DH</p>
                 </div>
-                <div class="text-5xl">💰</div>
             </div>
         </a>
 
-        <a href="{{ route('admin.payments.index') }}" class="card p-6 bg-gradient-to-br from-blue-50 to-blue-100 border-2 border-blue-200 block hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+        <a href="{{ route('admin.payments.index') }}" class="bg-white border border-gray-200 rounded-lg p-6 block hover:shadow-lg transition-all duration-300">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-gray-700 text-sm font-medium">Ce Mois</p>
-                    <p class="text-3xl font-bold text-blue-700 mt-2">{{ number_format($paymentsThisMonth, 2) }} DH</p>
+                    <p class="text-black text-sm font-medium">Ce Mois</p>
+                    <p class="text-3xl font-bold text-black mt-2">{{ number_format($paymentsThisMonth, 2) }} DH</p>
                 </div>
-                <div class="text-5xl">📅</div>
             </div>
         </a>
 
-        <a href="{{ route('admin.payments.index') }}" class="card p-6 bg-gradient-to-br from-orange-50 to-orange-100 border-2 border-orange-200 block hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+        <a href="{{ route('admin.payments.index') }}" class="bg-white border border-gray-200 rounded-lg p-6 block hover:shadow-lg transition-all duration-300">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-gray-700 text-sm font-medium">Aujourd'hui</p>
-                    <p class="text-3xl font-bold text-orange-700 mt-2">{{ number_format($paymentsToday, 2) }} DH</p>
+                    <p class="text-black text-sm font-medium">Aujourd'hui</p>
+                    <p class="text-3xl font-bold text-black mt-2">{{ number_format($paymentsToday, 2) }} DH</p>
                 </div>
-                <div class="text-5xl">📊</div>
             </div>
         </a>
 
-        <a href="{{ route('admin.payments.index') }}" class="card p-6 bg-gradient-to-br from-purple-50 to-purple-100 border-2 border-purple-200 block hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+        <a href="{{ route('admin.payments.index') }}" class="bg-white border border-gray-200 rounded-lg p-6 block hover:shadow-lg transition-all duration-300">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-gray-700 text-sm font-medium">Nombre Paiements</p>
-                    <p class="text-3xl font-bold text-purple-700 mt-2">{{ $totalPaymentsCount }}</p>
+                    <p class="text-black text-sm font-medium">Nombre Paiements</p>
+                    <p class="text-3xl font-bold text-black mt-2">{{ $totalPaymentsCount }}</p>
                 </div>
-                <div class="text-5xl">🧾</div>
             </div>
         </a>
     </div>

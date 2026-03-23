@@ -1,0 +1,271 @@
+/* ─── ICONS STYLES ─────────────────────────── */
+
+/* Base styles for all SVG icons */
+svg {
+    display: inline-block;
+    vertical-align: middle;
+    flex-shrink: 0;
+}
+
+/* Icon colors for different contexts */
+.icon-primary {
+    color: var(--gym-primary, #3498DB);
+}
+
+.icon-secondary {
+    color: var(--gym-secondary, #2ECC71);
+}
+
+.icon-accent {
+    color: var(--gym-accent, #E67E22);
+}
+
+.icon-success {
+    color: var(--gym-success, #27AE60);
+}
+
+.icon-error {
+    color: var(--gym-error, #E74C3C);
+}
+
+.icon-warning {
+    color: var(--gym-warning, #F39C12);
+}
+
+.icon-info {
+    color: var(--gym-info, #9B59B6);
+}
+
+.icon-gray {
+    color: #6B7280;
+}
+
+.icon-white {
+    color: #FFFFFF;
+}
+
+/* Icon sizes */
+.icon-xs {
+    width: 1rem;
+    height: 1rem;
+}
+
+.icon-sm {
+    width: 1.25rem;
+    height: 1.25rem;
+}
+
+.icon-md {
+    width: 1.5rem;
+    height: 1.5rem;
+}
+
+.icon-lg {
+    width: 2rem;
+    height: 2rem;
+}
+
+.icon-xl {
+    width: 2.5rem;
+    height: 2.5rem;
+}
+
+.icon-2xl {
+    width: 3rem;
+    height: 3rem;
+}
+
+.icon-3xl {
+    width: 4rem;
+    height: 4rem;
+}
+
+/* Icon animations */
+.icon-spin {
+    animation: spin 1s linear infinite;
+}
+
+.icon-pulse {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.icon-bounce {
+    animation: bounce 1s infinite;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(-25%);
+        animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+    50% {
+        transform: none;
+        animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+}
+
+/* Icon hover effects */
+.icon-hover:hover {
+    transform: scale(1.1);
+    transition: transform 0.2s ease-in-out;
+}
+
+.icon-hover-primary:hover {
+    color: var(--gym-primary, #3498DB);
+    transform: scale(1.1);
+    transition: all 0.2s ease-in-out;
+}
+
+.icon-hover-success:hover {
+    color: var(--gym-success, #27AE60);
+    transform: scale(1.1);
+    transition: all 0.2s ease-in-out;
+}
+
+.icon-hover-error:hover {
+    color: var(--gym-error, #E74C3C);
+    transform: scale(1.1);
+    transition: all 0.2s ease-in-out;
+}
+
+/* Icon groups */
+.icon-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.icon-group-vertical {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* Icon badges */
+.icon-badge {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.icon-badge::after {
+    content: '';
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: var(--gym-error, #E74C3C);
+    border: 2px solid white;
+}
+
+.icon-badge-success::after {
+    background-color: var(--gym-success, #27AE60);
+}
+
+.icon-badge-warning::after {
+    background-color: var(--gym-warning, #F39C12);
+}
+
+/* Icon buttons */
+.icon-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem;
+    border: none;
+    background: none;
+    cursor: pointer;
+    border-radius: 0.375rem;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.icon-btn:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.icon-btn-primary:hover {
+    background-color: rgba(52, 152, 219, 0.1);
+}
+
+.icon-btn-success:hover {
+    background-color: rgba(39, 174, 96, 0.1);
+}
+
+.icon-btn-error:hover {
+    background-color: rgba(231, 76, 60, 0.1);
+}
+
+/* Responsive icons */
+@media (max-width: 640px) {
+    .icon-xs {
+        width: 0.875rem;
+        height: 0.875rem;
+    }
+    
+    .icon-sm {
+        width: 1rem;
+        height: 1rem;
+    }
+    
+    .icon-md {
+        width: 1.25rem;
+        height: 1.25rem;
+    }
+    
+    .icon-lg {
+        width: 1.5rem;
+        height: 1.5rem;
+    }
+    
+    .icon-xl {
+        width: 1.75rem;
+        height: 1.75rem;
+    }
+    
+    .icon-2xl {
+        width: 2rem;
+        height: 2rem;
+    }
+    
+    .icon-3xl {
+        width: 2.5rem;
+        height: 2.5rem;
+    }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+    .icon-gray {
+        color: #9CA3AF;
+    }
+    
+    .icon-btn:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+    }
+    
+    .icon-badge::after {
+        border-color: #1F2937;
+    }
+}

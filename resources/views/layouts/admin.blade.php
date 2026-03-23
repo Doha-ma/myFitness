@@ -26,6 +26,9 @@
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
+    <!-- Custom Icons CSS -->
+    <link rel="stylesheet" href="{{ asset('css/icons.css') }}">
+    
     <style>
         :root {
             --gym-bg-primary: #1A1A2E;
@@ -156,23 +159,13 @@
             left: 0;
             top: 0;
             z-index: 1000;
+            overflow-y: auto;
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none; /* IE and Edge */
         }
         
         .sidebar::-webkit-scrollbar {
-            width: 6px;
-        }
-        
-        .sidebar::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.1);
-        }
-        
-        .sidebar::-webkit-scrollbar-thumb {
-            background: rgba(255, 107, 53, 0.5);
-            border-radius: 3px;
-        }
-        
-        .sidebar::-webkit-scrollbar-thumb:hover {
-            background: rgba(255, 107, 53, 0.7);
+            display: none; /* Chrome, Safari, Opera */
         }
         
         .sidebar .sticky {
@@ -333,6 +326,8 @@
             overflow: hidden;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             border: 1px solid var(--gym-secondary-bg);
+            width: 100%;
+            table-layout: fixed;
         }
         
         .table thead th { 
@@ -344,13 +339,120 @@
             font-size: 0.875rem;
             letter-spacing: 0.025em;
             padding: 1rem;
+            white-space: nowrap;
+        }
+        
+        .table tbody td { 
+            padding: 0.875rem 1rem; 
+            border-bottom: 1px solid var(--gym-secondary-bg); 
+            vertical-align: middle;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .table tbody tr:hover { 
+            background: var(--gym-secondary-bg); 
+        }
+        
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        /* Main content adjustments */
+        .main-content {
+            padding: 1.5rem;
+            height: 100vh;
+            overflow-y: auto;
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none; /* IE and Edge */
+            width: calc(100% - 16rem); /* Full width minus sidebar */
+            margin-left: 16rem; /* Same as sidebar width */
+        }
+        
+        .main-content::-webkit-scrollbar {
+            display: none; /* Chrome, Safari, Opera */
+        }
+        
+        /* Card adjustments for better fit */
+        .card {
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+            width: 100%;
+            max-width: 100%;
+        }
+        
+        .card-body {
+            padding: 1.5rem;
+        }
+        
+        /* Table adjustments for sidebar visibility */
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        .table {
+            background: white; 
+            border-radius: 0.75rem; 
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--gym-secondary-bg);
+            width: 100%;
+            table-layout: auto;
+            min-width: 800px; /* Ensure minimum width for readability */
+        }
+        
+        .table thead th { 
+            background: linear-gradient(135deg, var(--gym-bg-primary) 0%, var(--gym-bg-secondary) 100%); 
+            color: var(--gym-text); 
+            border: none; 
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.875rem;
+            letter-spacing: 0.025em;
+            padding: 1rem;
+            white-space: nowrap;
+        }
+        
+        .table tbody td { 
+            padding: 0.875rem 1rem; 
+            border-bottom: 1px solid var(--gym-secondary-bg); 
+            vertical-align: middle;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .table tbody tr:hover { 
+            background: var(--gym-secondary-bg); 
+        }
+        
+        /* List adjustments */
+        .list-group {
+            border-radius: 0.75rem;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            width: 100%;
+        }
+        
+        .list-group-item {
+            border: none;
+            border-bottom: 1px solid var(--gym-secondary-bg);
+            padding: 1rem 1.5rem;
+        }
+        
+        .list-group-item:last-child {
+            border-bottom: none;
+        }
         }
         
         .table tbody tr { 
             transition: all 0.2s ease;
             border-bottom: 1px solid var(--gym-secondary-bg);
-        }
-        
         .table tbody tr:hover { 
             background: linear-gradient(90deg, rgba(255, 107, 53, 0.05) 0%, rgba(255, 107, 53, 0.02) 100%);
             transform: scale(1.01);
@@ -386,16 +488,9 @@
             justify-content: center; 
             align-items: center; 
             gap: 0.5rem; 
-            margin-top: 2rem;
-        }
-        
-        .pagination a, .pagination span { 
-            padding: 0.625rem 1rem; 
-            border-radius: 0.5rem; 
-            text-decoration: none; 
-            transition: all 0.3s ease;
             font-weight: 500;
-            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            text-decoration: none;
         }
         
         .pagination a:hover {
@@ -415,14 +510,23 @@
             
             .main-content {
                 margin-left: 0;
+                padding: 1rem;
+                width: 100%;
             }
             
             .card {
                 margin: 1rem;
+                width: 100%;
             }
             
             .table {
                 font-size: 0.875rem;
+                min-width: 600px;
+            }
+            
+            .table-responsive {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
             }
             
             .btn {
@@ -431,10 +535,24 @@
             }
         }
         
+        @media (max-width: 1024px) and (min-width: 769px) {
+            .main-content {
+                width: calc(100% - 16rem);
+                margin-left: 16rem;
+                padding: 1rem;
+            }
+            
+            .table {
+                min-width: 700px;
+            }
+        }
+        
         /* Main content margin for desktop */
-        @media (min-width: 769px) {
+        @media (min-width: 1025px) {
             .main-content {
                 margin-left: 16rem; /* 256px = 16rem */
+                width: calc(100% - 16rem);
+                padding: 1.5rem;
             }
         }
     </style>

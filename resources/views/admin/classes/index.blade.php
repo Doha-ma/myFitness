@@ -89,18 +89,18 @@
                                 </span>
                             </td>
                             <td>
-                                <div class="btn-group" role="group">
-                                    <a href="{{ route('admin.classes.show', $class) }}" class="btn btn-sm btn-info">
-                                        <i class="fas fa-eye"></i> Voir
+                                <div class="flex gap-3">
+                                    <a href="{{ route('admin.classes.show', $class) }}" class="text-green-600 hover:text-green-800 font-medium">
+                                        <i class="fas fa-eye mr-1"></i> Voir
                                     </a>
-                                    <a href="{{ route('admin.classes.edit', $class) }}" class="btn btn-sm btn-warning">
-                                        <i class="fas fa-edit"></i> Modifier
+                                    <a href="{{ route('admin.classes.edit', $class) }}" class="text-blue-600 hover:text-blue-800 font-medium">
+                                        <i class="fas fa-edit mr-1"></i> Modifier
                                     </a>
                                     <form method="POST" action="{{ route('admin.classes.destroy', $class) }}" class="inline">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-sm btn-danger">
-                                            <i class="fas fa-trash"></i> Supprimer
+                                        <button type="submit" class="text-red-600 hover:text-red-800 font-medium">
+                                            <i class="fas fa-trash mr-1"></i> Supprimer
                                         </button>
                                     </form>
                                 </div>

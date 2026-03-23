@@ -9,8 +9,8 @@
         @if(auth()->user()->unreadNotifications->count() > 0)
             <form method="POST" action="{{ route('admin.notifications.read-all') }}" class="inline">
                 @csrf
-                <button type="submit" class="btn btn-sm btn-outline-primary">
-                    <i class="fas fa-check-double me-2"></i>Marquer toutes comme lues
+                <button type="submit" class="text-green-600 hover:text-green-800 font-medium">
+                    <i class="fas fa-check-double mr-2"></i>Marquer toutes comme lues
                 </button>
             </form>
         @endif

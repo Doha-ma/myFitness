@@ -58,12 +58,6 @@
 
         
 
-        <!-- Custom Icons CSS -->
-
-        <link rel="stylesheet" href="{{ asset('css/icons.css') }}">
-
-        
-
         <style>
 
             :root {

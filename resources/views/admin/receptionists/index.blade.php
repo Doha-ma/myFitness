@@ -82,15 +82,15 @@
                             <td>{{ $receptionist->paymentsAsReceptionist->count() }}</td>
                             <td>{{ $receptionist->created_at->format('d/m/Y') }}</td>
                             <td>
-                                <div class="btn-group" role="group">
-                                    <a href="{{ route('admin.receptionists.edit', $receptionist) }}" class="btn btn-sm btn-info">
-                                        <i class="fas fa-edit"></i> Modifier
+                                <div class="flex gap-3">
+                                    <a href="{{ route('admin.receptionists.edit', $receptionist) }}" class="text-blue-600 hover:text-blue-800 font-medium">
+                                        <i class="fas fa-edit mr-1"></i> Modifier
                                     </a>
                                     <form method="POST" action="{{ route('admin.receptionists.destroy', $receptionist) }}" class="inline">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-sm btn-danger">
-                                            <i class="fas fa-trash"></i> Supprimer
+                                        <button type="submit" class="text-red-600 hover:text-red-800 font-medium">
+                                            <i class="fas fa-trash mr-1"></i> Supprimer
                                         </button>
                                     </form>
                                 </div>

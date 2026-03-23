@@ -21,7 +21,7 @@
     </a>
 </div>
 
-@if(session('success'))
+            @if(session('success'))
     <div class="alert alert-success">
         <div class="flex items-center gap-2">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -104,67 +104,47 @@
                     @forelse($subscriptionTypes as $subscriptionType)
                         <tr>
                             <td>
-                                <div class="font-medium text-gray-900">{{ $subscriptionType->name }}</div>
+                                {{ $subscriptionType->name }}
                                 @if($subscriptionType->description)
-                                    <div class="text-sm text-gray-400 mt-1">{{ Str::limit($subscriptionType->description, 80) }}</div>
+                                    <br><small class="text-muted">{{ Str::limit($subscriptionType->description, 50) }}</small>
                                 @endif
                             </td>
-                            <td>
-                                <div class="font-medium text-gray-900">{{ number_format($subscriptionType->base_price, 2, ',', ' ') }} DH</div>
-                            </td>
+                            <td>{{ number_format($subscriptionType->base_price, 2, ',', ' ') }} DH</td>
                             <td>
                                 @if($subscriptionType->discount_value > 0)
                                     @if($subscriptionType->discount_type === 'percentage')
-                                        <span class="badge badge-warning">
-                                            {{ $subscriptionType->discount_value }}%
-                                        </span>
+                                        {{ $subscriptionType->discount_value }}%
                                     @else
-                                        <span class="badge badge-warning">
-                                            {{ number_format($subscriptionType->discount_value, 2, ',', ' ') }} DH
-                                        </span>
+                                        {{ number_format($subscriptionType->discount_value, 2, ',', ' ') }} DH
                                     @endif
                                 @else
-                                    <span class="text-gray-400">-</span>
+                                    -
                                 @endif
                             </td>
-                            <td>
-                                <div class="font-bold text-success">{{ $subscriptionType->formatted_price }}</div>
+                            <td class="fw-bold text-success">
+                                {{ $subscriptionType->formatted_price }}
                             </td>
-                            <td>
-                                <div class="flex items-center gap-2">
-                                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                                    </svg>
-                                    <span class="text-gray-900">{{ $subscriptionType->duration_days }} jours</span>
-                                </div>
-                            </td>
+                            <td>{{ $subscriptionType->duration_days }} jours</td>
                             <td>
                                 @if($subscriptionType->is_active)
-                                    <span class="badge badge-success">
-                                        Actif
-                                    </span>
+                                    <span class="badge bg-success">Actif</span>
                                 @else
-                                    <span class="badge badge-gray">
-                                        Inactif
-                                    </span>
+                                    <span class="badge bg-secondary">Inactif</span>
                                 @endif
                             </td>
                             <td>
-                                <div class="flex gap-3">
+                                <div class="btn-group" role="group">
                                     <a href="{{ route('admin.subscription-types.edit', $subscriptionType) }}" 
-                                       class="text-blue-600 hover:text-blue-800 font-medium">
-                                        <i class="fas fa-edit mr-1"></i>
-                                        Modifier
+                                       class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-edit"></i>
                                     </a>
                                     <form action="{{ route('admin.subscription-types.destroy', $subscriptionType) }}" 
                                           method="POST" 
-                                          class="inline"
                                           onsubmit="return confirm('Êtes-vous sur de vouloir supprimer ce type d\'abonnement ?');">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="text-red-600 hover:text-red-800 font-medium">
-                                            <i class="fas fa-trash mr-1"></i>
-                                            Supprimer
+                                        <button type="submit" class="btn btn-sm btn-outline-danger">
+                                            <i class="fas fa-trash"></i>
                                         </button>
                                     </form>
                                 </div>
@@ -172,9 +152,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="7" class="text-center text-gray-400 py-8">
-                                Aucun type d'abonnement trouvé
-                            </td>
+                            <td colspan="7" class="text-center">Aucun type d'abonnement trouve</td>
                         </tr>
                     @endforelse
                 </tbody>
@@ -182,35 +160,81 @@
         </div>
     </div>
 </div>
+                                            @if($subscriptionType->description)
+                                                <br><small class="text-muted">{{ Str::limit($subscriptionType->description, 50) }}</small>
+                                            @endif
+                                        </td>
+                                        <td>{{ number_format($subscriptionType->base_price, 2, ',', ' ') }} DH</td>
+                                        <td>
+                                            @if($subscriptionType->discount_value > 0)
+                                                @if($subscriptionType->discount_type === 'percentage')
+                                                    {{ $subscriptionType->discount_value }}%
+                                                @else
+                                                    {{ number_format($subscriptionType->discount_value, 2, ',', ' ') }} DH
+                                                @endif
+                                            @else
+                                                -
+                                            @endif
+                                        </td>
+                                        <td class="fw-bold text-success">
+                                            {{ $subscriptionType->formatted_price }}
+                                        </td>
+                                        <td>{{ $subscriptionType->duration_days }} jours</td>
+                                        <td>
+                                            @if($subscriptionType->is_active)
+                                                <span class="badge bg-success">Actif</span>
+                                            @else
+                                                <span class="badge bg-secondary">Inactif</span>
+                                            @endif
+                                        </td>
+                                        <td>
+                                            <div class="btn-group" role="group">
+                                                <a href="{{ route('admin.subscription-types.edit', $subscriptionType) }}" 
+                                                   class="btn btn-sm btn-outline-primary">
+                                                    <i class="fas fa-edit"></i>
+                                                </a>
+                                                <form action="{{ route('admin.subscription-types.destroy', $subscriptionType) }}" 
+                                                      method="POST" 
+                                                      onsubmit="return confirm('Êtes-vous sur de vouloir supprimer ce type d\'abonnement ?');">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn btn-sm btn-outline-danger">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="7" class="text-center">Aucun type d'abonnement trouve</td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
 
-<!-- Pagination -->
-@if($subscriptionTypes->hasPages())
-    <div class="flex justify-between items-center mt-6">
-        <div class="text-sm text-gray-400">
-            Affichage de {{ $subscriptionTypes->firstItem() }} à {{ $subscriptionTypes->lastItem() }} sur {{ $subscriptionTypes->total() }} types d'abonnement
-        </div>
-        <div>
-            {{ $subscriptionTypes->links() }}
-        </div>
-    </div>
-@endif
+            <!-- Pagination -->
+            @if($subscriptionTypes->hasPages())
+                <div class="d-flex justify-content-center">
+                    {{ $subscriptionTypes->links() }}
+                </div>
+            @endif
 @endsection
 
 @push('scripts')
 <script>
     $(document).ready(function() {
-        // Initialize DataTable if needed
-        if ($.fn.DataTable) {
-            $('.table').DataTable({
-                language: {
-                    url: '//cdn.datatables.net/plug-ins/1.10.20/i18n/French.json'
-                },
-                pageLength: 25,
-                order: [[0, 'asc']],
-                responsive: true,
-                dom: '<"row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>rtip'
-            });
-        }
+        $('#subscriptionTypesTable').DataTable({
+            language: {
+                url: '//cdn.datatables.net/plug-ins/1.10.20/i18n/French.json'
+            },
+            pageLength: 25,
+            order: [[0, 'asc']]
+        });
     });
 </script>
 @endpush
+

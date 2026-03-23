@@ -36,8 +36,7 @@
                         <th>Membre</th>
                         <th>Montant</th>
                         <th>Methode</th>
-                        <th>Receptionniste</th>
-                        <th>Actions</th>
+                        <th>Réceptionniste</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -57,13 +56,6 @@
                             <td>
                                 <span class="badge bg-info">{{ $payment->receptionist->name }}</span>
                                 <br><small class="text-muted">{{ $payment->receptionist->email }}</small>
-                            </td>
-                            <td>
-                                <div class="btn-group" role="group">
-                                    <button type="button" class="btn btn-sm btn-outline-primary" title="Voir les details">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                </div>
                             </td>
                         </tr>
                     @endforeach
