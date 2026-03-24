@@ -37,14 +37,14 @@
         </div>
     @else
         <div class="table-responsive">
-            <table class="table table-striped table-hover">
+            <table class="table table-striped table-hover compact-table">
                 <thead class="table-dark">
                     <tr>
                         <th>Nom</th>
                         <th>Email</th>
-                        <th>Telephone</th>
-                        <th>Type d'abonnement</th>
-                        <th>Date de fin</th>
+                        <th>Téléphone</th>
+                        <th>Abonnement</th>
+                        <th>Fin</th>
                         <th>Statut</th>
                         <th>Actions</th>
                     </tr>
@@ -56,11 +56,11 @@
                             $endDate = $member->resolved_subscription_end_date;
                         @endphp
                         <tr>
-                            <td><strong>{{ $member->full_name }}</strong></td>
-                            <td>{{ $member->email }}</td>
+                            <td><strong>{{ Str::limit($member->full_name, 20) }}</strong></td>
+                            <td>{{ Str::limit($member->email, 25) }}</td>
                             <td>{{ $member->phone ?: '-' }}</td>
-                            <td>{{ $subscription?->name ?? '-' }}</td>
-                            <td>{{ $endDate ? $endDate->format('d/m/Y') : '-' }}</td>
+                            <td>{{ Str::limit($subscription?->name ?? '-', 15) }}</td>
+                            <td>{{ $endDate ? $endDate->format('d/m/y') : '-' }}</td>
                             <td>
                                 @if($member->subscription_state === 'active')
                                     <span class="badge badge-success">Actif</span>

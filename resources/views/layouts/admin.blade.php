@@ -403,7 +403,8 @@
             border: 1px solid var(--gym-secondary-bg);
             width: 100%;
             table-layout: auto;
-            min-width: 800px; /* Ensure minimum width for readability */
+            min-width: auto; /* Remove minimum width */
+            font-size: 0.875rem; /* Smaller font size */
         }
         
         .table thead th { 
@@ -412,23 +413,54 @@
             border: none; 
             font-weight: 600;
             text-transform: uppercase;
-            font-size: 0.875rem;
+            font-size: 0.75rem; /* Smaller header font */
             letter-spacing: 0.025em;
-            padding: 1rem;
+            padding: 0.75rem 0.5rem; /* Reduced padding */
             white-space: nowrap;
         }
         
         .table tbody td { 
-            padding: 0.875rem 1rem; 
+            padding: 0.5rem; /* Reduced padding */
             border-bottom: 1px solid var(--gym-secondary-bg); 
             vertical-align: middle;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            font-size: 0.8rem; /* Smaller text */
         }
         
         .table tbody tr:hover { 
             background: var(--gym-secondary-bg); 
+        }
+        
+        /* Compact table styles */
+        .compact-table {
+            font-size: 0.8rem;
+        }
+        
+        .compact-table thead th {
+            padding: 0.6rem 0.4rem !important;
+            font-size: 0.7rem !important;
+        }
+        
+        .compact-table tbody td {
+            padding: 0.4rem 0.3rem !important;
+            font-size: 0.75rem !important;
+        }
+        
+        .compact-table .badge {
+            font-size: 0.65rem;
+            padding: 0.2rem 0.4rem;
+        }
+        
+        .compact-table .flex {
+            gap: 0.25rem !important;
+        }
+        
+        .compact-table .flex a,
+        .compact-table .flex button {
+            font-size: 0.7rem;
+            padding: 0.2rem 0.4rem;
         }
         
         /* List adjustments */
@@ -520,8 +552,18 @@
             }
             
             .table {
-                font-size: 0.875rem;
-                min-width: 600px;
+                font-size: 0.75rem;
+                min-width: auto;
+            }
+            
+            .table thead th {
+                font-size: 0.7rem;
+                padding: 0.5rem 0.25rem;
+            }
+            
+            .table tbody td {
+                font-size: 0.7rem;
+                padding: 0.4rem 0.25rem;
             }
             
             .table-responsive {
@@ -543,7 +585,18 @@
             }
             
             .table {
-                min-width: 700px;
+                min-width: auto;
+                font-size: 0.8rem;
+            }
+            
+            .table thead th {
+                font-size: 0.7rem;
+                padding: 0.6rem 0.4rem;
+            }
+            
+            .table tbody td {
+                font-size: 0.75rem;
+                padding: 0.45rem 0.4rem;
             }
         }
         

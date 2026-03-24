@@ -44,14 +44,14 @@
         </div>
     @else
         <div class="table-responsive">
-            <table class="table table-striped table-hover" id="classesTable">
+            <table class="table table-striped table-hover compact-table" id="classesTable">
                 <thead class="table-dark">
                     <tr>
-                        <th>Nom du cours</th>
+                        <th>Cours</th>
                         <th>Coach</th>
-                        <th>Capacite</th>
+                        <th>Capacité</th>
                         <th>Inscrits</th>
-                        <th>Duree</th>
+                        <th>Durée</th>
                         <th>Statut</th>
                         <th>Actions</th>
                     </tr>
@@ -60,23 +60,17 @@
                     @foreach($classes as $class)
                         <tr>
                             <td>
-                                <strong>{{ $class->name }}</strong>
+                                <strong>{{ Str::limit($class->name, 25) }}</strong>
                                 @if($class->description)
-                                    <br><small class="text-muted">{{ \Illuminate\Support\Str::limit($class->description, 50) }}</small>
+                                    <br><small class="text-muted">{{ Str::limit($class->description, 30) }}</small>
                                 @endif
                             </td>
                             <td>
-                                <span class="badge bg-info">{{ $class->coach->name }}</span>
-                                <br><small class="text-muted">{{ $class->coach->email }}</small>
+                                <span class="badge bg-info">{{ Str::limit($class->coach->name, 15) }}</span>
+                                <br><small class="text-muted">{{ Str::limit($class->coach->email, 20) }}</small>
                             </td>
-                            <td>
-                                <span class="badge bg-primary">{{ $class->capacity }} pers.</span>
-                            </td>
-                            <td>
-                                <span class="badge {{ $class->enrollments_count >= $class->capacity ? 'bg-warning' : 'bg-success' }}">
-                                    {{ $class->enrollments_count }} / {{ $class->capacity }}
-                                </span>
-                            </td>
+                            <td>{{ $class->capacity }}</td>
+                            <td>{{ $class->enrollments_count ?? 0 }}</td>
                             <td>{{ $class->duration }} min</td>
                             <td>
                                 <span class="badge 

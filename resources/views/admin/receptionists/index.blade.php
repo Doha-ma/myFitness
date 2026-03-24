@@ -50,14 +50,14 @@
         </div>
     @else
         <div class="table-responsive">
-            <table class="table table-striped table-hover" id="receptionistsTable">
+            <table class="table table-striped table-hover compact-table" id="receptionistsTable">
                 <thead class="table-dark">
                     <tr>
                         <th>Nom</th>
                         <th>Email</th>
-                        <th>Telephone</th>
-                        <th>Paiements traites</th>
-                        <th>Date de creation</th>
+                        <th>Téléphone</th>
+                        <th>Paiements</th>
+                        <th>Création</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -65,22 +65,16 @@
                     @foreach($receptionists as $receptionist)
                         <tr>
                             <td>
-                                <strong>{{ $receptionist->name }}</strong>
+                                <strong>{{ Str::limit($receptionist->name, 20) }}</strong>
                                 @if($receptionist->email)
-                                    <br><small class="text-muted">{{ $receptionist->email }}</small>
-                                @endif
-                            </td>
-                            <td>
-                                @if($receptionist->email)
-                                    <span class="badge bg-info">{{ $receptionist->email }}</span>
-                                    <br><small class="text-muted">{{ $receptionist->email }}</small>
+                                    <br><small class="text-muted">{{ Str::limit($receptionist->email, 25) }}</small>
                                 @else
-                                    <span class="badge bg-secondary">Non renseigne</span>
+                                    <span class="badge bg-secondary">Non renseigné</span>
                                 @endif
                             </td>
-                            <td>{{ $receptionist->phone ?? 'Non renseigne' }}</td>
+                            <td>{{ Str::limit($receptionist->phone ?? 'Non renseigné', 15) }}</td>
                             <td>{{ $receptionist->paymentsAsReceptionist->count() }}</td>
-                            <td>{{ $receptionist->created_at->format('d/m/Y') }}</td>
+                            <td>{{ $receptionist->created_at->format('d/m/y') }}</td>
                             <td>
                                 <div class="flex gap-3">
                                     <a href="{{ route('admin.receptionists.edit', $receptionist) }}" class="text-blue-600 hover:text-blue-800 font-medium">
